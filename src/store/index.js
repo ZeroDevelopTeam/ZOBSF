@@ -1,11 +1,14 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from 'vue'
+import Vuex from 'vuex'
+
 Vue.use(Vuex);
 
-import test from './test/'
+import user from './User';
+import role from './Role';
 
-export default  new Vuex.Store({
+export default new Vuex.Store({
     modules: {
-        test
+        user,
+        role
     }
 });

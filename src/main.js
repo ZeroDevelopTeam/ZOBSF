@@ -1,23 +1,21 @@
 import Vue from 'vue'
 import App from './App'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
-import VueRouter from 'vue-router'
-import store from './store/'
 import Vuex from 'vuex'
-//import NProgress from 'nprogress'
-//import 'nprogress/nprogress.css'
-import routes from './routes'
+import VueRouter from 'vue-router'
+import ElementUI from 'element-ui'
+import babelpolyfill from 'babel-polyfill'
 import 'font-awesome/css/font-awesome.min.css'
-
-Vue.use(ElementUI)
+import 'element-ui/lib/theme-default/index.css'
+import routes from './router'
+import store from './store'
 Vue.use(VueRouter)
 Vue.use(Vuex)
-
-//NProgress.configure({ showSpinner: false });
-
+Vue.use(ElementUI)
+Vue.config.productionTip = false;
+Vue.config.debug = true; 
+Vue.config.devtools = true;
 const router = new VueRouter({
-	mode: 'history',
+  mode: 'history',
   routes
 })
 
@@ -34,16 +32,11 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-//router.afterEach(transition => {
-//NProgress.done();
-//});
-
+/* eslint-disable no-new */
 new Vue({
-  //el: '#app',
-  //template: '<App/>',
+  el: '#app',
   router,
   store,
-  //components: { App }
-  render: h => h(App)
-}).$mount('#app')
-
+  template: '<App/>',
+  components: { App }
+})
