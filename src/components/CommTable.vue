@@ -26,6 +26,18 @@
 						</el-button>
 					</template>
 				</el-table-column>
+				<el-table-column v-else-if="item.handelLink" 
+					:prop="item.prop" 
+					:label="item.label" 
+					:width="item.width" 
+					:key="item.prop" 
+					:align="item.align">
+					<template scope="scope">
+					  <span class="link-type" @click='item.handelLink(scope.row)'>
+						{{scope.row[item.prop]}}
+					  </span>
+					</template>
+				</el-table-column>
 				<el-table-column v-else 
 					:prop="item.prop" 
 					:label="item.label" 
@@ -48,7 +60,6 @@
 		      style="float:right;">
 		    </el-pagination>
 	  	</el-col>
-	  	{{tableConfig.params.pageNum}}
 	</div>
 </template>
 
@@ -114,3 +125,12 @@
 		}
 	}
 </script>
+<style scoped lang="scss">
+.link-type,.link-type:focus {
+  color: #337ab7;
+  cursor: pointer;
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+</style>
