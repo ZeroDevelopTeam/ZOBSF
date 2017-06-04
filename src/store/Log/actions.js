@@ -1,64 +1,64 @@
-import {ROLELIST,ROLEINFO} from './types'
+import {LOGLIST,LOGINFO} from './types'
 import {get,post} from '../../api/api'
 
 export default {
-	//获取所有角色
-	getRoleList({commit},params){
+	//获取所有
+	getLogList({commit},params){
 		return new Promise((resolve, reject) => {
-			get('role/getByPage',params)
+			get('log/getByPage',params)
 	        .then(res => {
-	        	commit(ROLELIST, res)
+	        	commit(LOGLIST, res)
 	            resolve(res);
 	        })
 	    });
 	},
 	
-	//获取角色信息
-	getRole({commit},params){
+	//获取用户信息
+	getLog({commit},params){
 		return new Promise((resolve, reject) => {
-			get('role/info',params)
+			get('log/info',params)
 	        .then(res => {
-	        	commit(ROLEINFO, res)
+	        	commit(LOGINFO, res)
 	            resolve(res);
 	        })
 	    });
 	},
 	
 	//新增
-	addRole({commit},params){
+	addLog({commit},params){
 		return new Promise((resolve, reject) => {
-			post('role/add',params)
+			post('log/add',params)
 	        .then(res => {
 	            resolve(res);
 	        })
 	    });
 	},
 	//修改
-	editRole({commit},params){
+	editLog({commit},params){
 		return new Promise((resolve, reject) => {
-			post('role/edit',params)
+			post('log/edit',params)
 	        .then(res => {
 	            resolve(res);
 	        })
 	    });
 	},
 	//删除
-	removeRole({commit},params){
+	removeLog({commit},params){
 		return new Promise((resolve, reject) => {
-			get('role/delete',params)
+			get('log/delete',params)
 	        .then(res => {
 	            resolve(res);
 	        })
 	    });
 	},
 	//启用or停用
-	changeState({commit},params){
+	changeLogState({commit},params){
 		return new Promise((resolve, reject) => {
-			get('role/changeRoleState',params)
+			get('log/changeState',params)
 	        .then(res => {
 	            resolve(res);
 	        })
 	    });
-	}
+	},
 }
 

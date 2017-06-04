@@ -18,23 +18,24 @@
 			</el-form>
 		</el-col>
 		<el-col :span="8" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters">
+			<el-form :inline="true" :model="filters" ref="search">
 				<el-form-item>
 					<el-input v-model="filters.keyWord" placeholder="关键字查询"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
+					<el-button type="primary" v-on:click="getRoles">查询</el-button>
+					<el-button type="primary" @click="resetForm()">重置</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 		<!--列表-->
-		<MyTable :dataList="roleList" :config="config"></MyTable>
+		<CommTable  :tableConfig="tableConfig"></CommTable>
 	</section>
 	
 </template>
 
 <script>
-	import MyTable from '../../../../components/MyTable';
+	import CommTable from '../../../../components/CommTable';
   import { mapGetters } from 'vuex'
 	export default {
 		computed: {
@@ -84,22 +85,21 @@
 					  	}
 				  	]
 		        }];
-		        //方法名
-		        const dispatch = 'getRoleList';
-		        //参数
-		        const paramas ={
-					pageNum: 1,
+		        //查询参数
+		        let params = {
+		        	pageNum: 1,
 					pageSize:10,
-					keyWord:'',
-				}
+					keyWord: ''
+		        };
+		        const dispatch='getRoleList';
 			return {
-				config:{
-					columns:columns,
+				tableConfig:{
+					dataList:[],
+					columns,
+					params,
 					dispatch:dispatch,
-					paramas:paramas,
 					rowOptions:this.handleSelectionChange,
 				},
-				
 				filters: {
 					keyWord: ''
 				},
@@ -111,6 +111,12 @@
 			formatState: function (row, column) {
 				return row.state == 1 ? '启用' : row.state == 0 ? '停用' : '未知';
 			},
+			//重置
+			resetForm() {
+		        this.$refs.search.resetFields();
+		        this.filters.keyWord='';
+		        this.getRoles();
+		    },
 			//获取角色列表
 			getRoles() {
 				let para = {
@@ -130,13 +136,13 @@
 				}).then(() => {
 					this.listLoading = true;
 					let para = { ids: row.id };
-					this.$store.dispatch('removeUser',para).then((res) => {  
+					this.$store.dispatch('removeRole',para).then((res) => {  
 						this.listLoading = false;
 						this.$message({
 							message: '删除角色成功',
 							type: 'success'
 						});
-						this.getUsers();
+						this.getRoles();
 			        });  
 				}).catch(() => {
 
@@ -165,11 +171,18 @@
 					let para = { ids: ids };
 					this.$store.dispatch('removeRole',para).then((res) => {  
 						this.listLoading = false;
-						this.$message({
-							message: '删除角色成功',
-							type: 'success'
-						});
-						this.getUsers();
+						if(res.status==1){
+							this.$message({
+								message: res.msg,
+								type: 'success'
+							});
+							this.getRoles();
+						}else{
+							this.$message({
+								message: res.msg,
+								type: 'error'
+							});
+						}
 			        });  
 				}).catch(() => {
 
@@ -184,14 +197,20 @@
 					this.listLoading = true;
 					//NProgress.start();
 					let para = { ids: ids,state:1 };
-					this.$store.dispatch('changeState',para).then((res) => {  
+					this.$store.dispatch('changeRoleState',para).then((res) => {  
 						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '成功启用选中角色',
-							type: 'success'
-						});
-						this.getRoles();
+						if(res.status==1){
+							this.$message({
+								message: res.msg,
+								type: 'success'
+							});
+							this.getRoles();
+						}else{
+							this.$message({
+								message: res.msg,
+								type: 'error'
+							});
+						}
 			        });  
 				}).catch(() => {
 
@@ -206,30 +225,49 @@
 					this.listLoading = true;
 					//NProgress.start();
 					let para = { ids: ids,state:0 };
-					this.$store.dispatch('changeState',para).then((res) => {  
+					this.$store.dispatch('changeRoleState',para).then((res) => {  
 						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '成功停用选中角色',
-							type: 'success'
-						});
-						this.getRoles();
+						if(res.status==1){
+							this.$message({
+								message: res.msg,
+								type: 'success'
+							});
+							this.getRoles();
+						}else{
+							this.$message({
+								message: res.msg,
+								type: 'error'
+							});
+						}
 			        });  
 				}).catch(() => {
 
 				});
 			}
 		},
+		watch:{
+		  	roleList(){
+		  		this.$set(this.tableConfig, "dataList", this.roleList);
+		  	},
+		  	filters:{
+		  		 handler(val,oldval){  
+                    this.$set(this.tableConfig.params, "keyWord", val.keyWord);
+                },  
+                deep:true//对象内部的属性监听，也叫深度监听  
+　　　　　　 },
+		},
 		mounted() {
 			this.getRoles();
 		},
 		components: {
-			MyTable
+			CommTable
 		}
 	}
 
 </script>
 
 <style scoped>
-
+.toolbar{
+	background: white;
+}
 </style>

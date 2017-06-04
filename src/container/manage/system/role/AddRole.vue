@@ -1,5 +1,5 @@
 <template>
-	<section class="add-user">
+	<section class="add-role">
 		<el-card class="box-card">
 		  <div slot="header" class="clearfix">
 		    <span style="line-height: 20px;">新增用户</span>
@@ -54,15 +54,10 @@
 				},
 				//新增界面数据
 				addForm: {
-					userCode:'',
-					password: '',
-					rePassword:'',
-					userName:'',
-					phone: '',
-					email: '',
-					state: '',
-					roleName:'',
-					address: ''
+					roleCode:'',
+					roleName: '',
+					descript:'',
+					state:''
 				}
 			}
 		},
@@ -74,14 +69,22 @@
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							this.addLoading = true;
 							let para = Object.assign({}, this.addForm);
-							this.$store.dispatch('addUser',para).then((res) => {  
+							this.$store.dispatch('addRole',para).then((res) => {  
 								this.addLoading = false;
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
+								if(res.status==1){
+									this.$message({
+										message: res.msg,
+										type: 'success'
+									});
+									this.getRoles();
+								}else{
+									this.$message({
+										message: res.msg,
+										type: 'error'
+									});
+								}
 								this.$refs['addForm'].resetFields();
-								this.$router.push({ path: '/system/user' });
+								this.$router.push({ path: '/system/role' });
 					        });  
 						});
 					}
@@ -104,7 +107,7 @@
 .footer-button{
 	text-align: center;
 }
-.add-user{
+.add-role{
 	padding-top: 50px;
 	width:600px;
     margin: auto;

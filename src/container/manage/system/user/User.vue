@@ -30,6 +30,7 @@
 		</el-col>
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
+		<UserInfo :dialog="dialogFormVisible"></UserInfo>
 	</section>
 	
 </template>
@@ -37,6 +38,7 @@
 <script>
 	import util from '../../../../util/util'
 	import CommTable from '../../../../components/CommTable';
+	import UserInfo from './UserInfo';
   import { mapGetters } from 'vuex'
 	export default {
 		computed: {
@@ -105,6 +107,7 @@
 					keyWord: ''
 		        }
 			return {
+				dialogFormVisible:false,
 				tableConfig:{
 					dataList:[],
 					columns,
@@ -184,16 +187,21 @@
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
-					//NProgress.start();
 					let para = { ids: ids };
 					this.$store.dispatch('removeUser',para).then((res) => {  
 						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
+						if(res.status==1){
+							this.$message({
+								message: res.msg,
+								type: 'success'
+							});
+							this.getRoles();
+						}else{
+							this.$message({
+								message: res.msg,
+								type: 'error'
+							});
+						}
 			        });  
 				}).catch(() => {
 
@@ -234,7 +242,6 @@
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
-					//NProgress.start();
 					let para = { ids: ids,state:0 };
 					this.$store.dispatch('changeUserState',para).then((res) => {  
 						this.listLoading = false;
@@ -265,26 +272,21 @@
                     this.$set(this.tableConfig.params, "keyWord", val.keyWord);
                 },  
                 deep:true//对象内部的属性监听，也叫深度监听  
-　　　　　　　　   },
-			'tableConfig.params.pageNum':1,
-			params:{
-		  		 handler(val,oldval){  
-		  		 	console.log(val);
-                    this.$set(this.tableConfig, "params", val);
-                },  
-                deep:true//对象内部的属性监听，也叫深度监听  
-　　　　　　　　  }
+　　　　　　 },
 		},
 		mounted() {
 			this.getUsers();
 		},
 		components: {
-			CommTable
+			CommTable,
+			UserInfo
 		}
 	}
 
 </script>
 
 <style scoped>
-
+.toolbar{
+	background: white;
+}
 </style>

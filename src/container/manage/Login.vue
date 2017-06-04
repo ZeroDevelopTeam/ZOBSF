@@ -38,7 +38,7 @@
       handleReset2() {
         this.$refs.ruleForm2.resetFields();
       },
-      handleSubmit2(ev) {
+      /*handleSubmit2(ev) {
         var _this = this;
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
@@ -62,10 +62,17 @@
             return false;
           }
         });
-      }
+      }*/
+     
+     
+     handleSubmit2(ev) {
+        var _this = this;
+        var loginParams = { id: this.ruleForm2.account, password: this.ruleForm2.checkPass };
+        sessionStorage.setItem('user', JSON.stringify(loginParams));
+        this.$router.push({ path: '/system/user' });
+  		}
+}
     }
-  }
-
 </script>
 
 <style lang="scss" scoped>
