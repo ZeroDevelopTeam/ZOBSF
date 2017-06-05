@@ -30,16 +30,15 @@
 		</el-col>
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
-		<UserInfo :dialog="dialogFormVisible"></UserInfo>
+		<UserInfo :dialogFormVisible="dialogFormVisible" :userInfo="userInfo"></UserInfo>
 	</section>
 	
 </template>
 
 <script>
-	import util from '../../../../util/util'
 	import CommTable from '../../../../components/CommTable';
 	import UserInfo from './UserInfo';
-  import { mapGetters } from 'vuex'
+  	import { mapGetters } from 'vuex'
 	export default {
 		computed: {
 		 ...mapGetters([
@@ -51,6 +50,7 @@
 					key:1,
 			        label:'用户账号',
 			        prop:'userCode',
+			        handelLink:this.clickLick,
 		        },
 		        {
 				  	key:2,
@@ -107,6 +107,7 @@
 					keyWord: ''
 		        }
 			return {
+				userInfo:'',
 				dialogFormVisible:false,
 				tableConfig:{
 					dataList:[],
@@ -126,6 +127,11 @@
 			//状态显示转换
 			formatState: function (row, column) {
 				return row.state == 1 ? '启用' : row.state == 0 ? '停用' : '未知';
+			},
+			//点击链接显示详情
+			clickLick(row){
+				this.dialogFormVisible=true;
+				this.userInfo=row;
 			},
 			//重置
 			resetForm() {

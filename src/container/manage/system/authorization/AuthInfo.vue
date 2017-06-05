@@ -36,8 +36,7 @@
 		},
 		computed: {
 		 ...mapGetters([
-		 	'showInfo'
-	   		 ])
+	   		])
 	    },
 		mounted() {
 		},
