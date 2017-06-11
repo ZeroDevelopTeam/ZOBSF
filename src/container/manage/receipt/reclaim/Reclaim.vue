@@ -12,18 +12,18 @@
 		</div>
 		<!--新增界面-->
 		<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false" class="recl-addForm">
-			<el-form :model="addForm" label-width="100px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="回收单编号:" prop="retrieveId">
+			<el-form :model="addForm" label-width="110px" :rules="addFormRules" ref="addForm">
+				<el-form-item label="回收单编号：" prop="retrieveId">
 					<el-input disabled="true" v-model="addForm.retrieveId" auto-complete="off" class="recl-input"></el-input>
 					<span class="rel-note">(自动生成)</span>
 				</el-form-item>
-				<el-form-item label="回收人:" prop="retriever">
+				<el-form-item label="回收人：" prop="retriever">
 					<el-input v-model="addForm.retriever" auto-complete="off" class="recl-input"></el-input>
 				</el-form-item>
-				<el-form-item label="回收时间:">
+				<el-form-item label="回收时间：">
 					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.retrieveDate"></el-date-picker>
 				</el-form-item>
-				<el-form-item label="回收类型:" prop="retrieveType">
+				<el-form-item label="回收类型：" prop="retrieveType">
 				    <el-select v-model="addForm.retrieveType" placeholder="请选择回收类型">
 					    <el-option label="手动回收" value="0"></el-option>
 					    <el-option label="自动回收" value="1"></el-option>
