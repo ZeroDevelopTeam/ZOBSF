@@ -11,11 +11,14 @@ const Main = resolve => require(['../container/Main.vue'], resolve);
 //货物管理
 //图书管理
 const Book = resolve => require.ensure([], () => resolve(require('../container/manage/goods/books/Book.vue')), 'group-book');
+//新增图书
+const AddBook = resolve => require.ensure([], () => resolve(require('../container/manage/goods/books/AddBook.vue')), 'group-book');
 //分类管理
 const BookType = resolve => require.ensure([], () => resolve(require('../container/manage/goods/bookTypes/BookType.vue')), 'group-bookType');
 //单据管理
 //订单管理
 const Order = resolve => require.ensure([], () => resolve(require('../container/manage/receipt/orders/Order.vue')), 'group-order');
+const EditOrder = resolve => require.ensure([], () => resolve(require('../container/manage/receipt/orders/EditOrder.vue')), 'group-order');
 //回收管理
 const Reclaim = resolve => require.ensure([], () => resolve(require('../container/manage/receipt/reclaim/Reclaim.vue')), 'group-reclaim');
 //系统管理
@@ -55,6 +58,7 @@ let routes = [
         iconCls: 'fa fa-book',//图标样式class
         children: [
             { path: '/goods/book', component: Book, name: '图书管理' },
+            { path: '/goods/book/addBook', component: AddBook, name:'新增图书', hidden: true },
             { path: '/goods/bookType', component: BookType, name: '分类管理' }
         ]
     },
@@ -65,6 +69,7 @@ let routes = [
         iconCls: 'fa fa-files-o',//图标样式class
         children: [
             { path: '/receipt/order', component: Order, name: '订单管理' },
+            { path: '/receipt/order/editOrder', component: EditOrder, name: '修改订单',hidden: true },
             { path: '/receipt/reclaim', component: Reclaim, name: '回收管理' }
         ]
     },
