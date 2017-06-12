@@ -8,7 +8,7 @@ import role from './Role';
 import log from './Log';
 import authorization from './Authorization';
 import books from './Books';
-import bookTypes './BookTypes';
+import bookTypes from './BookTypes';
 import orders from './Orders';
 import reclaim from './Reclaim';
 
