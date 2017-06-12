@@ -56,7 +56,7 @@
 		      :page-sizes="[10, 20, 30, 40]"
 		      :page-size="params.pageSize"
 		      layout="total, sizes, prev, pager, next, jumper"
-		      :total="dataList.total"
+		      :total="dataList.total? undefined: 0"
 		      style="float:right;">
 		    </el-pagination>
 	  	</el-col>
@@ -70,12 +70,12 @@
 		],
 		data() {
 			return {
-				dataList: [],
-				columns:[],
-				params:'',
-				multipleSelection: [],
+				dataList: this.tableConfig.dataList,
+				columns: this.tableConfig.columns,
+				params: this.tableConfig.params,
+		        total: this.tableConfig.total,
+		        rowOptions:this.tableConfig.handleSelectionChange,
 		        listLoading:false,
-		        rowOptions:[],
 			}
 		},
 		watch:{
