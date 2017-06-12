@@ -1,2 +1,1 @@
-export const LOGLIST = 'LOGLIST';
-export const LOGINFO = 'LOGINFO';
+export const XXX = 'XXX';
