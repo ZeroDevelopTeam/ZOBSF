@@ -31,6 +31,9 @@
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
 		<UserInfo :dialogFormVisible="dialogFormVisible" :userInfo="userInfo"></UserInfo>
+		<transition name="fade" mode="out-in">
+							<router-view></router-view>
+						</transition>
 	</section>
 	
 </template>
@@ -158,7 +161,7 @@
 				}).then(() => {
 					this.listLoading = true;
 					//NProgress.start();
-					let para = { ids: row.id };
+					let para = { str_userCode: row.userCode };
 					this.$store.dispatch('removeUser',para).then((res) => {  
 						this.listLoading = false;
 						//NProgress.done();
@@ -180,7 +183,7 @@
 			
 			//显示编辑界面
 			handleEdit: function (index, row,scope) {
-				this.$router.push({ path: '/system/user/editUser', query: { id: row.id }});
+				this.$router.push({ path: '/system/user/editUser', query: { id: row.userCode }});
 			},
 			
 			handleSelectionChange(val) {
@@ -188,12 +191,12 @@
 	      	},
 			//批量删除
 			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
+				var ids = this.sels.map(item => item.userCode).toString();
 				this.$confirm('确认删除选中记录吗？', '提示', {
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
-					let para = { ids: ids };
+					let para = { str_userCode: ids };
 					this.$store.dispatch('removeUser',para).then((res) => {  
 						this.listLoading = false;
 						if(res.status==1){
@@ -215,7 +218,7 @@
 			},
 			//启用用户
 			start:function(){
-				var ids = this.sels.map(item => item.id).toString();
+				var ids = this.sels.map(item => item.userCode).toString();
 				this.$confirm('确认启用选中记录吗？', '提示', {
 					type: 'warning'
 				}).then(() => {

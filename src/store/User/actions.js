@@ -16,7 +16,7 @@ export default {
 	//获取用户信息
 	getUser({commit},params){
 		return new Promise((resolve, reject) => {
-			get('user/info',params)
+			get('user/getUserByUserCode',params)
 	        .then(res => {
 	        	commit(USERINFO, res)
 	            resolve(res);
@@ -27,7 +27,7 @@ export default {
 	//新增
 	addUser({commit},params){
 		return new Promise((resolve, reject) => {
-			post('user/add',params)
+			post('user/addUser',params)
 	        .then(res => {
 	            resolve(res);
 	        })
@@ -36,7 +36,7 @@ export default {
 	//修改
 	editUser({commit},params){
 		return new Promise((resolve, reject) => {
-			post('user/edit',params)
+			post('user/editUser',params)
 	        .then(res => {
 	            resolve(res);
 	        })
@@ -45,7 +45,7 @@ export default {
 	//删除
 	removeUser({commit},params){
 		return new Promise((resolve, reject) => {
-			get('user/delete',params)
+			get('user/deleteUsers',params)
 	        .then(res => {
 	            resolve(res);
 	        })
@@ -54,7 +54,7 @@ export default {
 	//启用or停用
 	changeUserState({commit},params){
 		return new Promise((resolve, reject) => {
-			get('user/changeState',params)
+			get('user/changeUserState',params)
 	        .then(res => {
 	            resolve(res);
 	        })
