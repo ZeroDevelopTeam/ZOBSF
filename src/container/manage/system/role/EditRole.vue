@@ -7,23 +7,23 @@
 		  <div>
 		<!--编辑界面-->
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="角色编号">
-					<el-input v-model="editForm.roleCode" readonly auto-complete="off"></el-input><!-- input中加入autocomplete="off" 来关闭记录,默认on -->
+				<el-form-item label="角色编号" prop="roleId">
+					<el-input v-model="editForm.roleId" readonly auto-complete="off"></el-input><!-- input中加入autocomplete="off" 来关闭记录,默认on -->
 				</el-form-item>
-				<el-form-item label="角色名称">
+				<el-form-item label="角色名称" prop="roleName">
 					<el-input v-model="editForm.roleName"></el-input>
 				</el-form-item>
-				<el-form-item label="备注">
-					<el-input v-model="editForm.descripte"></el-input>
-				</el-form-item>
-				<el-form-item label="角色状态">
+				<el-form-item label="角色状态" prop="state">
 				    <el-select v-model="editForm.state" placeholder="请选择状态类型">
 					    <el-option label="启用" value="0"></el-option>
 					    <el-option label="停用" value="1"></el-option>
 				    </el-select>
 				</el-form-item>
+				<el-form-item label="备注" prop="roleDesc">
+					<el-input type="textarea" v-model="editForm.roleDesc"></el-input>
+				</el-form-item>
 			</el-form>
-			<div slot="footer" class="dialog-footer">
+			<div slot="footer" class="footer-button">
 				<el-button @click.native="back()">取消</el-button>
 				<el-button type="primary" @click.native="editSubmit" >提交</el-button>
 			</div>
@@ -40,7 +40,7 @@
 		data() {
 			return {
 				editFormRules: {
-					roleCode: [
+					roleId: [
 						{ required: true, message: '请输入角色编号', trigger: 'blur' }
 					],
 					roleName: [
@@ -110,15 +110,17 @@
 </script>
 
 <style scoped>
-.footer-button{
-	text-align: center;
-}
+
 .edit-role{
 	padding-top: 50px;
 	width:600px;
     margin: auto;
+    .footer-button{
+		text-align: center;
+	}
+	.clearfix{
+		text-align: center;
+	}
 }
-.clearfix{
-	text-align: center;
-}
+
 </style>

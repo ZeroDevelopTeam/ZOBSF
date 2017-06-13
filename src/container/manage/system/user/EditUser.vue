@@ -11,13 +11,13 @@
 					<el-input v-model="editForm.userCode" readonly auto-complete="off"></el-input><!-- input中加入autocomplete="off" 来关闭记录,默认on -->
 				</el-form-item>
 				<el-form-item label="密码">
-					<el-input v-model="editForm.userPsw" prop="userPsw">
+					<el-input type="password" v-model="editForm.userPsw" prop="userPsw">
 						<template slot="append" v-if="showTexts">
 							<font :color="colors">{{showTexts}}</font>
 						</template>
 					</el-input>
 				</el-form-item>
-				<el-form-item label="确认密码" prop="reUserPsw">
+				<el-form-item type="password" label="确认密码" prop="reUserPsw">
 					<el-input v-model="editForm.reUserPsw"></el-input>
 				</el-form-item>
 				<el-form-item label="用户名称" prop="userName">
@@ -31,8 +31,8 @@
 				</el-form-item>
 				<el-form-item label="用户状态" prop="state">
 				    <el-select v-model="editForm.state" placeholder="请选择状态类型">
-					    <el-option label="启用" :value="1"></el-option>
-					    <el-option label="停用" :value="0"></el-option>
+					    <el-option label="启用" value="1"></el-option>
+					    <el-option label="停用" value="0"></el-option>
 				    </el-select>
 				</el-form-item>
 				<!--<el-form-item label="用户角色" prop="roleName">
@@ -45,7 +45,7 @@
 					<el-input type="textarea" v-model="editForm.address"></el-input>
 				</el-form-item>
 			</el-form>
-			<div slot="footer" class="dialog-footer">
+			<div slot="footer" class="footer-button">
 				<el-button @click.native="back()">取消</el-button>
 				<el-button type="primary" @click.native="editSubmit" >提交</el-button>
 			</div>
@@ -65,8 +65,8 @@
 		          callback(new Error('请输入密码'));
 		        } else {
 		        	this.passwordStrong(value);
-		          if (this.addForm.reUserPsw !== '') {
-		            this.$refs.addForm.validateField('reUserPsw');
+		          if (this.editForm.reUserPsw !== '') {
+		            this.$refs.editForm.validateField('reUserPsw');
 		          }
 		          callback();
 		        }
@@ -74,7 +74,7 @@
 		      const validatePass2 = (rule, value, callback) => {
 		        if (value === '') {
 		          callback(new Error('请再次输入密码'));
-		        } else if (value !== this.addForm.userPsw) {
+		        } else if (value !== this.editForm.userPsw) {
 		          callback(new Error('两次输入密码不一致!'));
 		        } else {
 		          callback();
@@ -186,7 +186,7 @@
 	   		 ]),
 	   		 //将用户信息复制给editForm，避免v-model直接修改userInfo
 		 	editForm () {
-		        return this.userInfo;
+		        return Object.assign({reUserPsw:this.userInfo.userPsw}, this.userInfo);
 		    }
 	    },
 		mounted() {
@@ -199,15 +199,17 @@
 </script>
 
 <style scoped>
-.footer-button{
-	text-align: center;
-}
+
 .edit-user{
 	padding-top: 50px;
 	width:600px;
     margin: auto;
+    .footer-button{
+		text-align: center;
+	}
+	.clearfix{
+		text-align: center;
+	}
 }
-.clearfix{
-	text-align: center;
-}
+
 </style>

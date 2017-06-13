@@ -74,7 +74,7 @@
 				columns: this.tableConfig.columns,
 				params: this.tableConfig.params,
 		        total: this.tableConfig.total,
-		        rowOptions:this.tableConfig.handleSelectionChange,
+		        rowOptions:this.tableConfig.rowOptions,
 		        listLoading:false,
 			}
 		},
@@ -118,10 +118,6 @@
 	        		this.listLoading = false;
 		    	});
 			},
-			//全选
-	      	handleSelectionChange(val) {
-		        this.multipleSelection = val;
-	      	},
 		}
 	}
 </script>

@@ -1,27 +1,27 @@
 <template>
 	 <el-dialog title="用户详情" :visible.sync="dialogFormVisible">
-        <el-form style="width:60%;min-width:100%"
-                 label-width="120px"
+        <el-form style="width:600px;margin: auto;"
+                 label-width="320px"
                  :model="userInfo">
-            <el-form-item label="用户账号" prop='userCode'>
+            <el-form-item label="用户账号：" prop='userCode'>
 				{{userInfo.userCode}}
 			</el-form-item>
-			<el-form-item label="用户名称" prop='userName'>
+			<el-form-item label="用户名称：" prop='userName'>
 				{{userInfo.userName}}
 			</el-form-item>
-			<el-form-item label="手机号" prop='phone'>
+			<el-form-item label="手机号：" prop='phone'>
 				{{userInfo.phone}}
 			</el-form-item>
-			<el-form-item label="用户邮箱" prop='email'>
+			<el-form-item label="用户邮箱：" prop='email'>
 				{{userInfo.email}}
 			</el-form-item>
-			<el-form-item label="用户状态" prop='state'>
+			<el-form-item label="用户状态：" prop='state'>
 			    {{userInfo.state=='1'?'启用':'停用'}}
 			</el-form-item>
-			<el-form-item label="用户角色" prop='roleName'>
+			<el-form-item label="用户角色：" prop='roleName'>
 			    {{userInfo.roleName}}
 			</el-form-item>
-			<el-form-item label="常用地址" prop='address'>
+			<el-form-item label="常用地址：" prop='address'>
 				{{userInfo.address}}
 			</el-form-item>
         </el-form>

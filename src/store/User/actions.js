@@ -42,8 +42,17 @@ export default {
 	        })
 	    });
 	},
-	//删除
+	//单个删除
 	removeUser({commit},params){
+		return new Promise((resolve, reject) => {
+			get('user/deleteUser',params)
+	        .then(res => {
+	            resolve(res);
+	        })
+	    });
+	},
+	//批量删除
+	removeUsers({commit},params){
 		return new Promise((resolve, reject) => {
 			get('user/deleteUsers',params)
 	        .then(res => {

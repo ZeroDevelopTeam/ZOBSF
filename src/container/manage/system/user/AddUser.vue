@@ -36,9 +36,9 @@
 				    </el-select>
 				</el-form-item>
 				<el-form-item label="用户角色">
-				    <el-select v-model="addForm.roleName" placeholder="请选择用户角色">
-					    <el-option label="角色一" value="0"></el-option>
-					    <el-option label="角色二" value="1"></el-option>
+				    <el-select v-model="addForm.roles" placeholder="请选择用户角色">
+					    <el-option label="角色一" value="001"></el-option>
+					    <el-option label="角色二" value="002"></el-option>
 				    </el-select>
 				</el-form-item>
 				<el-form-item label="常用地址" >
@@ -117,14 +117,14 @@
 				},
 				//新增界面数据
 				addForm: {
-					userCode:'',
-					userPsw: '',
-					reUserPsw:'',
-					userName:'',
-					phone: '',
-					email: '',
+					userCode:'1',
+					userPsw: '111111',
+					reUserPsw:'111111',
+					userName:'1',
+					phone: '13111111111',
+					email: '123@qq.com',
 					state: '',
-					//roleName:'',
+					roles:'',
 					address: ''
 				}
 			}

@@ -30,6 +30,19 @@ export function get(url, params) {
     });
 }
 
+export function del(url, params) {
+	return new Promise((resolve, reject) => {
+        api.delete(url, params)
+        .then(response => {
+            resolve(response.data);
+        })
+        .catch((error) => {
+          console.log(error)
+           reject(error)
+        })
+    });
+}
+
 
 
 
