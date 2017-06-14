@@ -110,17 +110,19 @@
 	   		 ])
 	    },
 		data() {
-		       
 		        //方法名
 		        const dispatch = 'getLogList';
 		        //查询参数
 		        let params = {
 		        	pageNum: 1,
 					pageSize:10,
+					type:0,
 					keyWord: ''
 		        }
 			return {
 				activeName2: 'columnsOperate',
+				//日志分类（0=操作日志；1=数据库日志；2=系统日志）
+		        type:0,
 				tableConfig:{
 					dataList:[],
 					columns:columnsOperate,
@@ -139,14 +141,14 @@
 			handleClick(tab, event) {
 				console.log(tab.name);
 				if(tab.name=='columnsOperate'){
-					console.log(columnsOperate);
 					this.tableConfig.columns=columnsOperate;
+					this.type=0;
 				}else if(tab.name=='columnsDb'){
-					console.log(columnsDb);
 					this.tableConfig.columns=columnsDb;
+					this.type=1;
 				}else{
-					console.log(columnsSys);
 					this.tableConfig.columns=columnsSys;
+					this.type=2;
 				}
 		     },
 			//重置
@@ -160,34 +162,13 @@
 				let para = {
 					pageNum: 1,
 					pageSize:10,
+					type:0,
 					keyWord: this.filters.keyWord
 				};
 				this.listLoading = true;
 				this.$store.dispatch('getLogList',para).then((res) => {  
 					this.listLoading = false;
 		        });  
-			},
-			//删除
-			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: row.id };
-					this.$store.dispatch('removeLog',para).then((res) => {  
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getLogs();
-						//NProgress.done();
-			        });  
-				}).catch(() => {
-
-				});
 			},
 			handleSelectionChange(val) {
 		        this.sels = val;
@@ -202,14 +183,17 @@
                     this.$set(this.tableConfig.params, "keyWord", val.keyWord);
                 },  
                 deep:true//对象内部的属性监听，也叫深度监听  
-　　　　　　 },
+　　　　　　 	},
+			type(){
+                this.$set(this.tableConfig.params, "type", this.type);
+			},
 			columns:{
 		  		 handler(val,oldval){  
 		  		 	console.log(val);
                     this.$set(this.tableConfig, "columns", val);
                 },  
                 deep:true//对象内部的属性监听，也叫深度监听  
-　　　　　　 },
+　　　　　　 	},
 		},
 		mounted() {
 			this.getLogs();

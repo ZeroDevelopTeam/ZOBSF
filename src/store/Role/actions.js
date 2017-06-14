@@ -1,5 +1,5 @@
 import {ROLELIST,ROLEINFO} from './types'
-import {get,post} from '../../api/api'
+import {get,post,del} from '../../api/api'
 
 export default {
 	//获取所有角色
@@ -16,7 +16,7 @@ export default {
 	//获取角色信息
 	getRole({commit},params){
 		return new Promise((resolve, reject) => {
-			get('role/info',params)
+			get('role/getRoleByRoleId',params)
 	        .then(res => {
 	        	commit(ROLEINFO, res)
 	            resolve(res);
@@ -26,8 +26,10 @@ export default {
 	
 	//新增
 	addRole({commit},params){
+		const purviews = params.purviews;
+		delete params.purviews;
 		return new Promise((resolve, reject) => {
-			post('role/add',params)
+			post('role/addRole?purviews='+purviews,params)
 	        .then(res => {
 	            resolve(res);
 	        })
@@ -35,24 +37,37 @@ export default {
 	},
 	//修改
 	editRole({commit},params){
+		const purviews = params.purviews;
+		delete params.purviews;
+		delete params.createDate;
+		delete params.updateDate;
 		return new Promise((resolve, reject) => {
-			post('role/edit',params)
+			post('role/editRole?purviews='+purviews,params)
 	        .then(res => {
 	            resolve(res);
 	        })
 	    });
 	},
-	//删除
+	//单个删除
 	removeRole({commit},params){
 		return new Promise((resolve, reject) => {
-			get('role/delete',params)
+			del('role/removeRole',params)
+	        .then(res => {
+	            resolve(res);
+	        })
+	    });
+	},
+	//批量删除
+	removeRoles({commit},params){
+		return new Promise((resolve, reject) => {
+			get('role/removeRole',params)
 	        .then(res => {
 	            resolve(res);
 	        })
 	    });
 	},
 	//启用or停用
-	changeState({commit},params){
+	changeRoleState({commit},params){
 		return new Promise((resolve, reject) => {
 			get('role/changeRoleState',params)
 	        .then(res => {

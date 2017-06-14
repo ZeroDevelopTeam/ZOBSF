@@ -38,6 +38,9 @@ const EditAuth = resolve => require.ensure([], () => resolve(require('../contain
 const Log = resolve => require.ensure([], () => resolve(require('../container/manage/system/log/Log.vue')), 'group-log');
 
 const upload = resolve => require(['../container/manage/Upload/Upload.vue'], resolve);
+
+//前台
+const HomePlatForm = resolve => require(['../container/platform/Home.vue'], resolve);
 let routes = [
     {
         path: '/login',
@@ -104,7 +107,13 @@ let routes = [
         path: '*',
         hidden: true,
         redirect: { path: '/404' }
-    }
+    },
+    {
+        path: '/homePlatForm',
+        component: HomePlatForm,
+        children: [
+        ]
+    },
 ];
 
 export default routes;

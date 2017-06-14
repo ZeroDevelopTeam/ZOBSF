@@ -9,7 +9,7 @@
 			  :on-icon-click="handleSearch">
 			</el-input>
 		</div>
-		<CommTable  :tableConfig="tableConfig" :mycolumns="columns" :tableData="tableData" :myrowOptions="rowOptions"></CommTable>
+		<CommTable  :tableConfig="tableConfig"></CommTable>
 	</div>
 </template>
 
@@ -86,15 +86,18 @@ export default {
 	    	deliveryDate: '2016-10-06', 
 	    	state: '待配送'
 	    }];
+	    //查询参数
+        let params = {
+        	pageNum: 1,
+			pageSize:10,
+			keyWord: ''
+        }
         return {
-        	columns,
-			tableData: souData,
-			rowOptions: this.handleSelectionChange,
       		tableConfig: {
 		      	columns,
+		      	params,
 		      	actionType: 'increment',
-		      	paramData: null,
-		      	tableData: souData,
+		      	dataList: souData,
 		      	total:0,
 		      	rowOptions:this.handleSelectionChange
     		},

@@ -2,14 +2,14 @@
 	<el-row style="margin-top: 10px;">
 		 <el-col :span="4">
 		 	<el-tree
-		  :data="data2"
-		  :props="defaultProps"
-		  node-key="id"
-		  default-expand-all
-		  :expand-on-click-node="false"
-		  highlight-current="true"
-		  @node-click="handleClick"
-		  >
+			  :data="data2"
+			  :props="defaultProps"
+			  node-key="id"
+			  default-expand-all
+			  :expand-on-click-node="false"
+			  highlight-current="true"
+			  @node-click="handleClick"
+		  	>
 		</el-tree>
 		 </el-col>
 		 <el-col :span="19" style="margin-left: 5px;">
@@ -23,14 +23,14 @@
 				  :on-icon-click="handleSearch">
 				</el-input>
 			</div>
-			<CommTable  :tableConfig="tableConfig" :mycolumns="columns" :tableData="tableData" :myrowOptions="rowOptions"></CommTable>
+			<CommTable  :tableConfig="tableConfig"></CommTable>
 		 </el-col>
 	</el-row>
 </template>
 
 <script>
 import CommTable from '../../../../components/CommTable'
-let id = 1000;
+import { mapGetters } from 'vuex'
  export default {
  	components:{
  		CommTable
@@ -85,6 +85,7 @@ let id = 1000;
 		        	}
 		        ]
 	        }];
+	    /*模拟数据  */
 	    let souData = [{
           bookId: '20160502',
           bookName: '葵花宝典',
@@ -94,60 +95,74 @@ let id = 1000;
           storeHose: '黑木崖',
           storeNum: '100'
         }]
+	    //查询参数
+        let params = {
+        	pageNum: 1,
+			pageSize:10,
+			keyWord: ''
+        }
       return {
-      		columns,
-			tableData:souData,
-			rowOptions:this.handleSelectionChange,
       		tableConfig: {
 		      	columns,
-		      	actionType: 'increment',
-		      	paramData: null,
-		      	tableData:souData,
-		      	total:0,
+		      	dispatch: 'increment',
+		      	params,
+		      	dataList: [],
 		      	rowOptions:this.handleSelectionChange,
     		},
-    		searchVaule:null,//检索值
+    		searchVaule: '',//检索值
     		sels: [],//列表选中列
+    		/*模拟数据*/
 	        data2: [{
 	          id: 1,
 	          label: '一级 1',
-	      children: [{
-	        id: 4,
-	        label: '二级 1-1',
-	        children: [{
-	          id: 9,
-	          label: '三级 1-1-1'
-	        }, {
-	          id: 10,
-	          label: '三级 1-1-2'
-	        }]
-	      }]
-		    }, {
-		      id: 2,
-		      label: '一级 2',
 		      children: [{
-		        id: 5,
-		        label: '二级 2-1'
-		      }, {
-		        id: 6,
-		        label: '二级 2-2'
+		        id: 4,
+		        label: '二级 1-1',
+		        children: [{
+		          id: 9,
+		          label: '三级 1-1-1'
+		        }, {
+		          id: 10,
+		          label: '三级 1-1-2'
+		        }]
 		      }]
-		    }, {
-		      id: 3,
-		      label: '一级 3',
-		      children: [{
-		        id: 7,
-		        label: '二级 3-1'
-		      }, {
-		        id: 8,
-		        label: '二级 3-2'
-		      }]
-		    }],
+			    }, {
+			      id: 2,
+			      label: '一级 2',
+			      children: [{
+			        id: 5,
+			        label: '二级 2-1'
+			      }, {
+			        id: 6,
+			        label: '二级 2-2'
+			      }]
+			    }, {
+			      id: 3,
+			      label: '一级 3',
+			      children: [{
+			        id: 7,
+			        label: '二级 3-1'
+			      }, {
+			        id: 8,
+			        label: '二级 3-2'
+			    }]
+			}],
 		    defaultProps: {
 		      	children: 'children',
 		      	label: 'label'
 		    }
   		}
+	},
+	computed: {
+	 	...mapGetters([
+			'getByPage'
+   		])
+	},
+	watch: {
+		getByPage(){
+		  	this.$set(this.tableConfig, "dataList", this.getByPage.list);
+		  	this.$set(this.tableConfig, "params", this.params);
+		},
 	},
 	methods: {
 		//点击分类
@@ -203,7 +218,16 @@ let id = 1000;
 	    handleAction(index, row) {
 	    	alert("上架");
 	    },
-	}
+	},
+	mounted() {
+		let para = {
+			pageNum: 1,
+			pageSize:10,
+			keyWord: this.searchVaule
+		};
+		this.para = Object.assign{{},this.para, para}
+		this.$store.dispatch('getByPage',para);
+	},
 };
 </script>
 
