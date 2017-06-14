@@ -19,6 +19,16 @@
 					    <el-option label="停用" value="1"></el-option>
 				    </el-select>
 				</el-form-item>
+				<el-form-item label="角色权限" prop="purviews">
+				    <el-select v-model="editForm.purviews" multiple placeholder="请选择角色权限">
+					    <el-option
+					      v-for="item in purviewList.list"
+					      :key="item.purviewId"
+					      :label="item.purviewName"
+					      :value="item.purviewId">
+					    </el-option>
+					</el-select>
+				</el-form-item>
 				<el-form-item label="备注" prop="roleDesc">
 					<el-input type="textarea" v-model="editForm.roleDesc"></el-input>
 				</el-form-item>
@@ -53,12 +63,6 @@
 			}
 		},
 		methods: {
-			//获取角色信息
-			getRoleInfo(id){
-				this.$store.dispatch('getRole',{id:id}).then((res) => {  
-					console.log(res);
-	        	});
-			},
 			//编辑
 			editSubmit: function () {
 				this.$refs.editForm.validate((valid) => {
@@ -71,7 +75,6 @@
 										message: res.msg,
 										type: 'success'
 									});
-									this.getRoles();
 								}else{
 									this.$message({
 										message: res.msg,
@@ -93,16 +96,22 @@
 		},
 		computed: {
 		 ...mapGetters([
-			'roleInfo'
+			'roleInfo',
+			'purviewList'
 	   		 ]),
 	   		 //将角色信息复制给editForm，避免v-model直接修改roleInfo
 		 	editForm () {
-		        return this.roleInfo;
+		 		let purviews = [];
+		 		if(this.roleInfo.purviews){
+		 			purviews = this.roleInfo.purviews.map(item => item.purviewId);
+		 		}
+		        return Object.assign( this.roleInfo,{purviews:purviews});
 		    }
 	    },
 		mounted() {
 			const id=this.$route.query.id;
-			this.getRoleInfo(id);
+			this.$store.dispatch('getRole',{roleId:id});
+			this.$store.dispatch('getPurviewList',{pageNum:1,pageSize:10,keyWord:''});
 		},
 		components: {
 		}

@@ -140,7 +140,11 @@
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							let para = Object.assign({}, this.editForm);
 							this.$store.dispatch('editUser',para).then((res) => {  
+<<<<<<< HEAD
 								if(res.status==1){
+=======
+								if(res.status==200){
+>>>>>>> 104bf16188ae32b34461c1ee14543fb59811e487
 									this.$message({
 										message: res.msg,
 										type: 'success'

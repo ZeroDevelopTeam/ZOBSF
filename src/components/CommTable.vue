@@ -19,10 +19,10 @@
 							size="small" 
 							v-for="tag in item.operations" 
 							:key="tag.label"
-							type="danger"
+							:type="tag.type"
 							@click="tag.func(scope.$index, scope.row,scope)"
 						>
-							{{tag.label}}
+							{{tag.flag=='state'?(scope.row.state==1?'停用':'启用'):tag.label}}
 						</el-button>
 					</template>
 				</el-table-column>
@@ -48,7 +48,7 @@
         		</el-table-column>
 			</template>
 		</el-table>
-		<el-col :span="24" class="toolbar">
+		<el-col :span="24" style="padding-top: 25px;">
 	  		<el-pagination
 		      @size-change="handleSizeChange"
 		      @current-change="handleCurrentChange"
