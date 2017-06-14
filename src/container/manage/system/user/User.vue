@@ -30,7 +30,39 @@
 		</el-col>
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
-		<UserInfo :dialogFormVisible="dialogFormVisible" :userInfo="userInfo"></UserInfo>
+		<!--<UserInfo :dialogFormVisible="dialogFormVisible" :userInfo="userInfo"></UserInfo>-->
+		
+		<!--用户详情-->
+		<el-dialog title="用户详情" :visible.sync="dialogFormVisible">
+	        <el-form style="width:600px;margin: auto;"
+	                 label-width="320px"
+	                 :model="userInfo">
+	            <el-form-item label="用户账号：" prop='userCode'>
+					{{userInfo.userCode}}
+				</el-form-item>
+				<el-form-item label="用户名称：" prop='userName'>
+					{{userInfo.userName}}
+				</el-form-item>
+				<el-form-item label="手机号：" prop='phone'>
+					{{userInfo.phone}}
+				</el-form-item>
+				<el-form-item label="用户邮箱：" prop='email'>
+					{{userInfo.email}}
+				</el-form-item>
+				<el-form-item label="用户状态：" prop='state'>
+				    {{userInfo.state=='1'?'启用':'停用'}}
+				</el-form-item>
+				<el-form-item label="用户角色：" prop='roleName'>
+				    {{userInfo.roleName}}
+				</el-form-item>
+				<el-form-item label="常用地址：" prop='address'>
+					{{userInfo.address}}
+				</el-form-item>
+	        </el-form>
+	        <span slot="footer" class="dialog-footer">
+	            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+	        </span>
+	    </el-dialog>
 	</section>
 	
 </template>
@@ -157,17 +189,21 @@
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: row.id };
+					let para = { userCode: row.userCode };
 					this.$store.dispatch('removeUser',para).then((res) => {  
 						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-						//NProgress.done();
+						if(res.status==200){
+							this.$message({
+								message: res.msg,
+								type: 'success'
+							});
+							this.getUsers();
+						}else{
+							this.$message({
+								message: res.msg,
+								type: 'error'
+							});
+						}
 			        });  
 				}).catch(() => {
 
@@ -180,7 +216,7 @@
 			
 			//显示编辑界面
 			handleEdit: function (index, row,scope) {
-				this.$router.push({ path: '/system/user/editUser', query: { id: row.id }});
+				this.$router.push({ path: '/system/user/editUser', query: { id: row.userCode }});
 			},
 			
 			handleSelectionChange(val) {
@@ -188,42 +224,50 @@
 	      	},
 			//批量删除
 			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					let para = { ids: ids };
-					this.$store.dispatch('removeUser',para).then((res) => {  
-						this.listLoading = false;
-						if(res.status==1){
-							this.$message({
-								message: res.msg,
-								type: 'success'
-							});
-							this.getRoles();
-						}else{
-							this.$message({
-								message: res.msg,
-								type: 'error'
-							});
-						}
-			        });  
-				}).catch(() => {
-
-				});
+				const states = this.sels.map(item => item.state);
+				if(states.indexOf(1)>-1){
+					this.$message({
+						message: '启用状态的用户不能删除！',
+						type: 'error'
+					});
+				}else{
+					var userCodes = this.sels.map(item => item.userCode).toString();
+					this.$confirm('确认删除选中记录吗？', '提示', {
+						type: 'warning'
+					}).then(() => {
+						this.listLoading = true;
+						let para = { str_userCode: userCodes };
+						this.$store.dispatch('removeUsers',para).then((res) => {  
+							this.listLoading = false;
+							if(res.status==200){
+								this.$message({
+									message: res.msg,
+									type: 'success'
+								});
+								this.getUsers();
+							}else{
+								this.$message({
+									message: res.msg,
+									type: 'error'
+								});
+							}
+				        });  
+					}).catch(() => {
+	
+					});	
+				}
 			},
 			//启用用户
 			start:function(){
-				var ids = this.sels.map(item => item.id).toString();
+				var userCodes = this.sels.map(item => item.userCode).toString();
 				this.$confirm('确认启用选中记录吗？', '提示', {
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
-					let para = { ids: ids,state:1 };
+					let para = { userCodes: userCodes,state:1 };
 					this.$store.dispatch('changeUserState',para).then((res) => {
 						this.listLoading = false;
-						if(res.status==1){
+						if(res.status==200){
 							this.$message({
 								message: res.msg,
 								type: 'success'
@@ -243,15 +287,15 @@
 			},
 			//停用用户
 			stop:function(){
-				var ids = this.sels.map(item => item.id).toString();
+				var userCodes = this.sels.map(item => item.userCode).toString();
 				this.$confirm('确认停用选中记录吗？', '提示', {
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
-					let para = { ids: ids,state:0 };
+					let para = { userCodes: userCodes,state:0 };
 					this.$store.dispatch('changeUserState',para).then((res) => {  
 						this.listLoading = false;
-						if(res.status==1){
+						if(res.status==200){
 							this.$message({
 								message: res.msg,
 								type: 'success'

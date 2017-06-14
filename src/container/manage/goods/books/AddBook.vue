@@ -4,7 +4,7 @@
 		    <strong style="line-height: 5px;">新增图书</strong>
 		</div>
 		<el-form :model="addBookForm" label-width="100px" :rules="formRules" ref="addBookForm">
-			<el-row style="margin-top: 10px;">
+			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="图书编号：" prop="bookId">
 						<el-input v-model="addBookForm.bookId" auto-complete="off"></el-input>
@@ -16,7 +16,7 @@
 					</el-form-item>
 				 </el-col>
 			</el-row>
-			<el-row style="margin-top: 10px;">
+			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="作者：" prop="author">
 						<el-input v-model="addBookForm.author" auto-complete="off"></el-input>
@@ -28,7 +28,7 @@
 					</el-form-item>
 				 </el-col>
 			</el-row>
-			<el-row style="margin-top: 10px;">
+			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="折扣：" prop="discount">
 						<el-input v-model="addBookForm.discount" auto-complete="off"></el-input>
@@ -40,7 +40,7 @@
 					</el-form-item>
 				 </el-col>
 			</el-row>
-			<el-row style="margin-top: 10px;">
+			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="出版时间：" prop="publishTime">
 						<el-date-picker type="date" placeholder="选择日期" v-model="addBookForm.publishTime"></el-date-picker>
@@ -52,7 +52,7 @@
 					</el-form-item>
 				 </el-col>
 			</el-row>
-			<el-row style="margin-top: 10px;">
+			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="页数：" prop="pageNum">
 						<el-input v-model="addBookForm.pageNum" auto-complete="off"></el-input>
@@ -64,7 +64,7 @@
 					</el-form-item>
 				 </el-col>
 			</el-row>
-			<el-row style="margin-top: 10px;">
+			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="印刷时间：" prop="printTime">
 						<el-date-picker type="date" placeholder="选择日期" v-model="addBookForm.printTime"></el-date-picker>
@@ -76,7 +76,7 @@
 					</el-form-item>
 				 </el-col>
 			</el-row>
-			<el-row style="margin-top: 10px;">
+			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="纸质：" prop="paper">
 						<el-input v-model="addBookForm.paper" auto-complete="off"></el-input>
@@ -88,7 +88,7 @@
 					</el-form-item>
 				 </el-col>
 			</el-row>
-			<el-row style="margin-top: 10px;">
+			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="小图路径：" prop="image_s">
 						<el-input v-model="addBookForm.image_s" auto-complete="off"></el-input>
@@ -100,7 +100,7 @@
 					</el-form-item>
 				 </el-col>
 			</el-row>
-			<el-row style="margin-top: 10px;">
+			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="仓库位置：" prop="storeHose">
 						<el-input v-model="addBookForm.storeHose" auto-complete="off"></el-input>
@@ -112,7 +112,7 @@
 					</el-form-item>
 				 </el-col>
 			</el-row>
-			<el-row style="margin-top: 10px;">
+			<el-row>
 				 <el-col :span="12">
 					<el-form-item label="状态：">
 						<el-select  placeholder="请选择状态" v-model="addBookForm.state">
@@ -136,10 +136,32 @@
 </template>
 
 <script>
+import util from '../../../../util/util'
 export default {
 	data() {
 		return {
-			addBookForm: {},
+			addBookForm: {
+				bookId: '',
+				bookName: '',
+				author: '',
+				price: '',
+				discount: '',
+				press: '',
+				publishTime: '',
+				edition: '',
+				pageNum: '',
+				wordNum: '',
+				printTime: '',
+				bookSize: '',
+				paper: '',
+				image_l: '',
+				image_s: '',
+				orderBy: '',
+				storeHose: '',
+				storeNum: '',
+				state: '',
+				bookDesc: ''
+			},
 			addLoading: false,
 			formRules: {
 				bookId: [
@@ -161,18 +183,29 @@ export default {
 		}
 	},
 	methods: {
-		//提交
 		addSubmit() {
 			this.$refs.addBookForm.validate((valid) => {
 				if (valid) {
 					this.addLoading = true;
-					this.$confirm('确认提交吗？', '提示', {}).then(() => {
-						let para = Object.assign({}, this.addBookForm);
-//						para.time = (!para.time || para.time == '') ? '' : util.formatDate.format(new Date(para.time), 'yyyy-MM-dd');
+					let para = Object.assign({}, this.addBookForm);
+					para.publishTime = (!para.publishTime || para.publishTime == '') ? '' : util.formatDate.format(new Date(para.publishTime), 'yyyy-MM-dd');
+					para.printTime = (!para.printTime || para.printTime == '') ? '' : util.formatDate.format(new Date(para.printTime), 'yyyy-MM-dd');
+					this.$store.dispatch('addBook',para).then((res) => {
 						this.addLoading = false;
-						this.$refs['addBookForm'].resetFields();
-						this.$router.push({ path: '/goods/book' });
-					});
+						if(res.status==200){
+							this.$message({
+								message: res.msg,
+								type: 'success'
+							});
+							this.$refs['addBookForm'].resetFields();
+							this.$router.push({ path: '/goods/book' });
+						}else{
+							this.$message({
+								message: res.msg,
+								type: 'error'
+							});
+						}
+				    });  
 				}
 			});
 		},
@@ -185,7 +218,7 @@ export default {
 	
 </script>
 <style scoped lang="scss">
-.addBook-card{
+.addBook-card {
 	width:65%;
     margin: auto;
 	.clearfix:before,
@@ -195,6 +228,9 @@ export default {
   	}
 	.clearfix:after {
 	    clear: both
+	}
+	.el-row {
+		margin-top: 10px;
 	}
 }
 </style>

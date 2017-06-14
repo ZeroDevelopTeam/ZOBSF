@@ -115,7 +115,7 @@
 		        this.$store.dispatch(this.tableConfig.dispatch,para).then((res) => {  
 	        		this.listLoading = false;
 		    	});
-			}
+			},
 		}
 	}
 </script>
