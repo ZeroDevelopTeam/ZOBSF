@@ -56,7 +56,7 @@
 		      :page-sizes="[10, 20, 30, 40]"
 		      :page-size="params.pageSize"
 		      layout="total, sizes, prev, pager, next, jumper"
-		      :total="dataList.total? undefined: 0"
+		      :total="dataList.total==undefined? 0: dataList.total"
 		      style="float:right;">
 		    </el-pagination>
 	  	</el-col>
@@ -73,8 +73,7 @@
 				dataList: this.tableConfig.dataList,
 				columns: this.tableConfig.columns,
 				params: this.tableConfig.params,
-		        total: this.tableConfig.total,
-		        rowOptions:this.tableConfig.handleSelectionChange,
+		        rowOptions:this.tableConfig.rowOptions,
 		        listLoading:false,
 			}
 		},
@@ -83,7 +82,6 @@
 			tableConfig:{
 				handler(){
 					this.dataList = this.tableConfig.dataList;
-					this.total = this.tableConfig.total;
 					this.columns =  this.tableConfig.columns;
 					this.rowOptions =  this.tableConfig.rowOptions;
 					this.params =  this.tableConfig.params;
@@ -117,11 +115,7 @@
 		        this.$store.dispatch(this.tableConfig.dispatch,para).then((res) => {  
 	        		this.listLoading = false;
 		    	});
-			},
-			//全选
-	      	handleSelectionChange(val) {
-		        this.multipleSelection = val;
-	      	},
+			}
 		}
 	}
 </script>
