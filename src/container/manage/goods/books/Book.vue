@@ -225,7 +225,7 @@ import { mapGetters } from 'vuex'
 			pageSize:10,
 			keyWord: this.searchVaule
 		};
-		this.para = Object.assign{{},this.para, para}
+		this.para = Object.assign({},this.para, para);
 		this.$store.dispatch('getByPage',para);
 	},
 };
