@@ -66,7 +66,7 @@
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							let para = Object.assign({}, this.editForm);
 							this.$store.dispatch('editRole',para).then((res) => {  
-								if(res.status==1){
+								if(res.status==200){
 									this.$message({
 										message: res.msg,
 										type: 'success'

@@ -9,12 +9,6 @@
 				<el-form-item>
 					<el-button type="primary" @click="batchRemove" :disabled="this.sels.length===0">删除</el-button>
 				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="start" :disabled="this.sels.length===0">启用</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="stop" :disabled="this.sels.length===0">停用</el-button>
-				</el-form-item>
 			</el-form>
 		</el-col>
 		<el-col :span="8" class="toolbar" style="padding-bottom: 0px;">
@@ -93,16 +87,19 @@
 			 	 	key:3,
 		          	label:'手机号',
 		          	prop:'phone',
+		          	width:120
 		        },
 		        {
 			 	 	key:4,
 		          	label:'邮箱',
 		          	prop:'email',
+		          	width:150
 		        },
 		        {
 				  	key:5,
 		          	label:'创建时间',
-		          	prop:'createdate',
+		          	prop:'createDate',
+		          	width:180
 		        },
 		        {
 				  	key:6,
@@ -122,11 +119,18 @@
 				  	operations:[
 					  	{
 					  		func :this.handleEdit,
-					  		label:'编辑'
+					  		label:'编辑',
+					  		type:'info'
 					  	},
 					  	{
 					  		func :this.handleDel,
-					  		label:'删除'
+					  		label:'删除',
+					  		type:'info'
+					  	},
+					  	{
+					  		func :this.changeState,
+					  		flag:'state',
+					  		type:'danger'
 					  	}
 				  	]
 		        }];
@@ -257,14 +261,20 @@
 					});	
 				}
 			},
-			//启用用户
-			start:function(){
-				var userCodes = this.sels.map(item => item.userCode).toString();
-				this.$confirm('确认启用选中记录吗？', '提示', {
+			//修改用户状态
+			changeState:function(index, row,scope){
+				let para ='';
+				if(row.state==1){//目前是启用状态,改为停用
+					para = { userCodes: row.userCode,state:0 };
+				}else{
+					para = { userCodes: row.userCode,state:1 };
+				}
+				console.log(para);
+				console.log(row.state);
+				this.$confirm(row.state==1?'确认停用选中记录吗？':'确认启用选中记录吗？', '提示', {
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
-					let para = { userCodes: userCodes,state:1 };
 					this.$store.dispatch('changeUserState',para).then((res) => {
 						this.listLoading = false;
 						if(res.status==200){
@@ -279,39 +289,11 @@
 								type: 'error'
 							});
 						}
-						
 			        });  
 				}).catch(() => {
 
 				});
 			},
-			//停用用户
-			stop:function(){
-				var userCodes = this.sels.map(item => item.userCode).toString();
-				this.$confirm('确认停用选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					let para = { userCodes: userCodes,state:0 };
-					this.$store.dispatch('changeUserState',para).then((res) => {  
-						this.listLoading = false;
-						if(res.status==200){
-							this.$message({
-								message: res.msg,
-								type: 'success'
-							});
-							this.getUsers();
-						}else{
-							this.$message({
-								message: res.msg,
-								type: 'error'
-							});
-						}
-			        });  
-				}).catch(() => {
-
-				});
-			}
 		},
 		watch:{
 		  	userList(){
@@ -322,7 +304,7 @@
                     this.$set(this.tableConfig.params, "keyWord", val.keyWord);
                 },  
                 deep:true//对象内部的属性监听，也叫深度监听  
-　　　　　　 },
+　　　　　　	},
 		},
 		mounted() {
 			this.getUsers();
