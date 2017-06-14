@@ -16,7 +16,7 @@ export default {
 	//获取角色信息
 	getRole({commit},params){
 		return new Promise((resolve, reject) => {
-			get('role/info',params)
+			get('role/getRoleByRoleId',params)
 	        .then(res => {
 	        	commit(ROLEINFO, res)
 	            resolve(res);
@@ -26,8 +26,10 @@ export default {
 	
 	//新增
 	addRole({commit},params){
+		const purviews = params.purviews;
+		delete params.purviews;
 		return new Promise((resolve, reject) => {
-			post('role/add',params)
+			post('role/addRole?purviews='+purviews,params)
 	        .then(res => {
 	            resolve(res);
 	        })
@@ -35,8 +37,12 @@ export default {
 	},
 	//修改
 	editRole({commit},params){
+		const purviews = params.purviews;
+		delete params.purviews;
+		delete params.createDate;
+		delete params.updateDate;
 		return new Promise((resolve, reject) => {
-			post('role/edit',params)
+			post('role/editRole?purviews='+purviews,params)
 	        .then(res => {
 	            resolve(res);
 	        })
@@ -61,7 +67,7 @@ export default {
 	    });
 	},
 	//启用or停用
-	changeState({commit},params){
+	changeRoleState({commit},params){
 		return new Promise((resolve, reject) => {
 			get('role/changeRoleState',params)
 	        .then(res => {

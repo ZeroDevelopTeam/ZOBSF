@@ -1,60 +1,60 @@
-import {AUTHLIST,AUTHINFO} from './types'
+import {PURVIEWLIST,PURVIEWINFO} from './types'
 import {get,post} from '../../api/api'
 
 export default {
 	//获取所有
-	getAuthList({commit},params){
+	getPurviewList({commit},params){
 		return new Promise((resolve, reject) => {
-			get('auth/getByPage',params)
+			get('purview/getByPage',params)
 	        .then(res => {
-	        	commit(AUTHLIST, res)
+	        	commit(PURVIEWLIST, res)
 	            resolve(res);
 	        })
 	    });
 	},
 	
 	//获取用户信息
-	getAuth({commit},params){
+	getPurview({commit},params){
 		return new Promise((resolve, reject) => {
-			get('auth/info',params)
+			get('purview/info',params)
 	        .then(res => {
-	        	commit(AUTHINFO, res)
+	        	commit(PURVIEWINFO, res)
 	            resolve(res);
 	        })
 	    });
 	},
 	
 	//新增
-	addAuth({commit},params){
+	addPurview({commit},params){
 		return new Promise((resolve, reject) => {
-			post('auth/add',params)
+			post('purview/add',params)
 	        .then(res => {
 	            resolve(res);
 	        })
 	    });
 	},
 	//修改
-	editAuth({commit},params){
+	editPurview({commit},params){
 		return new Promise((resolve, reject) => {
-			post('auth/edit',params)
+			post('purview/edit',params)
 	        .then(res => {
 	            resolve(res);
 	        })
 	    });
 	},
 	//删除
-	removeAuth({commit},params){
+	removePurview({commit},params){
 		return new Promise((resolve, reject) => {
-			get('auth/delete',params)
+			get('purview/delete',params)
 	        .then(res => {
 	            resolve(res);
 	        })
 	    });
 	},
 	//启用or停用
-	changeAuthState({commit},params){
+	changePurviewState({commit},params){
 		return new Promise((resolve, reject) => {
-			get('auth/changeState',params)
+			get('purview/changeState',params)
 	        .then(res => {
 	            resolve(res);
 	        })

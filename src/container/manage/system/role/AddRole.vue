@@ -19,6 +19,16 @@
 					    <el-option label="停用" value="1"></el-option>
 				    </el-select>
 				</el-form-item>
+				<el-form-item label="角色权限" prop="purviews">
+				    <el-select v-model="addForm.purviews" multiple placeholder="请选择角色权限">
+					    <el-option
+					      v-for="item in purviewList.list"
+					      :key="item.purviewId"
+					      :label="item.purviewName"
+					      :value="item.purviewId">
+					    </el-option>
+					</el-select>
+				</el-form-item>
 				<el-form-item label="备注" prop="roleDesc">
 					<el-input type="textarea" v-model="addForm.roleDesc"></el-input>
 				</el-form-item>
@@ -35,6 +45,11 @@
 <script>
   	import { mapGetters } from 'vuex'
 	export default {
+		computed: {
+		 ...mapGetters([
+		 		'purviewList'
+   			])
+	    },
 		data() {
 			return {
 				addLoading:false,
@@ -54,6 +69,7 @@
 					roleId:'',
 					roleName: '',
 					roleDesc:'',
+					purviews:'',
 					state:''
 				}
 			}
@@ -68,12 +84,11 @@
 							let para = Object.assign({}, this.addForm);
 							this.$store.dispatch('addRole',para).then((res) => {  
 								this.addLoading = false;
-								if(res.status==1){
+								if(res.status==200){
 									this.$message({
 										message: res.msg,
 										type: 'success'
 									});
-									this.getRoles();
 								}else{
 									this.$message({
 										message: res.msg,
@@ -92,10 +107,11 @@
 				this.$refs.addForm.resetFields();
 				this.$router.go(-1);
 			},
-			mounted() {
-			},
-			components: {
-			}
+		},
+		mounted() {
+			this.$store.dispatch('getPurviewList',{pageNum:1,pageSize:10,keyWord:''});
+		},
+		components: {
 		}
 	}
 </script>
