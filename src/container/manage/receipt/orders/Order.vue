@@ -98,7 +98,6 @@ export default {
 		      	params,
 		      	actionType: 'increment',
 		      	dataList: souData,
-		      	total:0,
 		      	rowOptions:this.handleSelectionChange
     		},
     		searchVaule:null,//检索值

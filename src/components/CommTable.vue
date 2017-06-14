@@ -1,11 +1,10 @@
 <template>
 	<div class="block">
-		<el-table :data="tableData" style="width: 100%"
+		<el-table :data="dataList.list" style="width: 100%"
 			v-loading="listLoading"
 			highlight-current-row 
 		    @selection-change="rowOptions">
 		    <el-table-column type="selection" width="55"></el-table-column>
-			<!--<el-table-column type="index" width="60">序号</el-table-column>-->
 			<template v-for="item in columns">
 				<el-table-column v-if="item.operations" 
 					:key="item.prop" 

@@ -14,13 +14,13 @@
 		<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false" class="recl-addForm">
 			<el-form :model="addForm" label-width="110px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="回收单编号：" prop="retrieveId">
-					<el-input disabled="true" v-model="addForm.retrieveId" auto-complete="off" class="recl-input"></el-input>
+					<el-input :disabled="true" v-model="addForm.retrieveId" auto-complete="off" class="recl-input"></el-input>
 					<span class="rel-note">(自动生成)</span>
 				</el-form-item>
 				<el-form-item label="回收人：" prop="retriever">
 					<el-input v-model="addForm.retriever" auto-complete="off" class="recl-input"></el-input>
 				</el-form-item>
-				<el-form-item label="回收时间：">
+				<el-form-item label="回收时间：" prop="retrieveDate">
 					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.retrieveDate"></el-date-picker>
 				</el-form-item>
 				<el-form-item label="回收类型：" prop="retrieveType">
@@ -112,7 +112,6 @@ export default {
 		      	params,
 		      	actionType: 'increment',
 		      	dataList:souData,
-		      	total:0,
 		      	rowOptions:this.handleSelectionChange,
     		},
     		searchVaule:null,//检索值
@@ -121,7 +120,7 @@ export default {
     		addLoading: false,
     		//新增界面数据
 			addForm: {
-				retrieveId: '',
+				retrieveId: 'sd',
 				rretriever: '',
 				retrieveDate: '',
 				retrieveType: '',
@@ -135,7 +134,7 @@ export default {
 					{ required: true, message: '请输入名称', trigger: 'blur' }
 				],
 				retrieveDate: [
-					{ required: true, message: '请选择时间', trigger: 'blur' }
+					{type: 'date', required: true, message: '请选择时间', trigger: 'blur' }
 				],
 				retrieveType: [
 					{ required: true, message: '请选择类型', trigger: 'blur' }
@@ -198,15 +197,9 @@ export default {
 	    },
 	    //显示新增界面
 	    handleAdd: function () {
-				this.addFormVisible = true;
-				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				};
-			},
+			this.addFormVisible = true;
+			//生成编号
+		},
 	}
 }
 
