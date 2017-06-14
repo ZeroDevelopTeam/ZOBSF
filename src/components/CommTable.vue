@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <template>
 	<div class="block">
 		<el-table :data="tableData" style="width: 100%"
@@ -260,4 +259,3 @@
   }
 }
 </style>
->>>>>>> branch 'master' of https://github.com/ZeroDevelopTeam/ZOBSF.git
