@@ -1,6 +1,6 @@
 <template>
 	<div class="block">
-		<el-table :data="dataList.list" style="width: 100%"
+		<el-table :data="tableData" style="width: 100%"
 			v-loading="listLoading"
 			highlight-current-row 
 		    @selection-change="rowOptions">
@@ -19,10 +19,10 @@
 							size="small" 
 							v-for="tag in item.operations" 
 							:key="tag.label"
-							type="danger"
+							:type="tag.butType"
 							@click="tag.func(scope.$index, scope.row,scope)"
 						>
-							{{tag.label}}
+							{{typeof(tag.label)== "string"? tag.label: tag.label(scope.$index, scope.row,scope)}}
 						</el-button>
 					</template>
 				</el-table-column>
@@ -33,11 +33,11 @@
 					:key="item.prop" 
 					:align="item.align">
 					<template scope="scope">
-					  <span class="link-type" @click='item.handelLink(scope.row)'>
-						{{scope.row[item.prop]}}
-					  </span>
-					</template>
-				</el-table-column>
+			          <span class="link-type" @click='item.handelLink(scope.row)'>
+			          	{{scope.row[item.prop]}}
+			          </span>
+			        </template>
+        		</el-table-column>
 				<el-table-column v-else 
 					:prop="item.prop" 
 					:label="item.label" 
@@ -48,7 +48,7 @@
         		</el-table-column>
 			</template>
 		</el-table>
-		<el-col :span="24" class="toolbar">
+		<el-col :span="24" style="padding-top: 25px;">
 	  		<el-pagination
 		      @size-change="handleSizeChange"
 		      @current-change="handleCurrentChange"
@@ -56,7 +56,7 @@
 		      :page-sizes="[10, 20, 30, 40]"
 		      :page-size="params.pageSize"
 		      layout="total, sizes, prev, pager, next, jumper"
-		      :total="dataList.total"
+		      :total="dataList.total==undefined? 0: dataList.total"
 		      style="float:right;">
 		    </el-pagination>
 	  	</el-col>
@@ -70,12 +70,11 @@
 		],
 		data() {
 			return {
-				dataList: [],
-				columns:[],
-				params:'',
-				multipleSelection: [],
+				dataList: this.tableConfig.dataList,
+				columns: this.tableConfig.columns,
+				params: this.tableConfig.params,
+		        rowOptions:this.tableConfig.rowOptions,
 		        listLoading:false,
-		        rowOptions:[],
 			}
 		},
 		watch:{
@@ -83,7 +82,6 @@
 			tableConfig:{
 				handler(){
 					this.dataList = this.tableConfig.dataList;
-					this.total = this.tableConfig.total;
 					this.columns =  this.tableConfig.columns;
 					this.rowOptions =  this.tableConfig.rowOptions;
 					this.params =  this.tableConfig.params;
@@ -118,10 +116,6 @@
 	        		this.listLoading = false;
 		    	});
 			},
-			//全选
-	      	handleSelectionChange(val) {
-		        this.multipleSelection = val;
-	      	},
 		}
 	}
 </script>
