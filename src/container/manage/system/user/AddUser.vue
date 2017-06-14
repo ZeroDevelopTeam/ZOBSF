@@ -36,10 +36,14 @@
 				    </el-select>
 				</el-form-item>
 				<el-form-item label="用户角色">
-				    <el-select v-model="addForm.roles" placeholder="请选择用户角色">
-					    <el-option label="角色一" value="001"></el-option>
-					    <el-option label="角色二" value="002"></el-option>
-				    </el-select>
+					<el-select v-model="addForm.roles" multiple placeholder="请选择用户角色">
+					    <el-option
+					      v-for="item in roleList.list"
+					      :key="item.roleId"
+					      :label="item.roleName"
+					      :value="item.roleId">
+					    </el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="常用地址" >
 					<el-input type="textarea" v-model="addForm.address"></el-input>
@@ -60,7 +64,7 @@
 	export default {
 		computed: {
 		 ...mapGetters([
-		 	
+		 		'roleList'
    			])
 	    },
 		data() {
@@ -130,6 +134,18 @@
 			}
 		},
 		methods: {
+			//获取所有角色
+			getAllRoles(){
+				console.log(111);
+				let para = {
+					pageSize:9999,
+					pageNum:1,
+					keyWord:''
+				}
+				this.$store.dispatch('getRoleList',para).then((res) => {  
+					console.log(res)
+		        });  
+			},
 			//新增
 			addSubmit() {
 				this.$refs.addForm.validate((valid) => {
@@ -189,10 +205,12 @@
 				this.$refs.addForm.resetFields();
 				this.$router.go(-1);
 			},
-			mounted() {
-			},
-			components: {
-			}
+			
+		},
+		mounted() {
+			this.getAllRoles();
+		},
+		components: {
 		}
 	}
 </script>

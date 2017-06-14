@@ -10,15 +10,15 @@
 				<el-form-item label="用户账号" prop="userCode">
 					<el-input v-model="editForm.userCode" readonly auto-complete="off"></el-input><!-- input中加入autocomplete="off" 来关闭记录,默认on -->
 				</el-form-item>
-				<el-form-item label="密码">
-					<el-input type="password" v-model="editForm.userPsw" prop="userPsw">
+				<el-form-item label="密码" prop="userPsw">
+					<el-input type="password" v-model="editForm.userPsw" >
 						<template slot="append" v-if="showTexts">
 							<font :color="colors">{{showTexts}}</font>
 						</template>
 					</el-input>
 				</el-form-item>
-				<el-form-item type="password" label="确认密码" prop="reUserPsw">
-					<el-input v-model="editForm.reUserPsw"></el-input>
+				<el-form-item label="确认密码" prop="reUserPsw">
+					<el-input type="password" v-model="editForm.reUserPsw"></el-input>
 				</el-form-item>
 				<el-form-item label="用户名称" prop="userName">
 					<el-input v-model="editForm.userName"></el-input>
@@ -35,12 +35,16 @@
 					    <el-option label="停用" value="0"></el-option>
 				    </el-select>
 				</el-form-item>
-				<!--<el-form-item label="用户角色" prop="roleName">
-				    <el-select v-model="editForm.roleName" placeholder="请选择用户角色">
-					    <el-option label="角色一" :value="0"></el-option>
-					    <el-option label="角色二" :value="1"></el-option>
-				    </el-select>
-				</el-form-item>-->
+				<el-form-item label="用户角色" >
+					<el-select v-model="editForm.roles" multiple placeholder="请选择用户角色">
+					    <el-option
+					      v-for="item in roleList.list"
+					      :key="item.roleId"
+					      :label="item.roleName"
+					      :value="item.roleId">
+					    </el-option>
+					</el-select>
+				</el-form-item>
 				<el-form-item label="常用地址" prop="address">
 					<el-input type="textarea" v-model="editForm.address"></el-input>
 				</el-form-item>
@@ -114,21 +118,28 @@
 			}
 		},
 		methods: {
+			//获取所有角色
+			getAllRoles(){
+				let para = {
+					pageSize:9999,
+					pageNum:1,
+					keyWord:''
+				}
+				this.$store.dispatch('getRoleList',para);  
+			},
 			//获取用户信息
 			getUserInfo(id){
-				this.$store.dispatch('getUser',{userCode:id}).then((res) => {  
+				this.$store.dispatch('getUser',{userCode:id}).then((res)=>{
 					console.log(res);
-	        	});
+				});
 			},
 			//编辑
 			editSubmit: function () {
 				this.$refs.editForm.validate((valid) => {
 					if (valid) {
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
 							this.$store.dispatch('editUser',para).then((res) => {  
-								//NProgress.done();
 								if(res.status==1){
 									this.$message({
 										message: res.msg,
@@ -182,16 +193,23 @@
 		},
 		computed: {
 		 ...mapGetters([
-			'userInfo'
+			'userInfo',
+			'roleList'
 	   		 ]),
 	   		 //将用户信息复制给editForm，避免v-model直接修改userInfo
 		 	editForm () {
-		        return Object.assign({reUserPsw:this.userInfo.userPsw}, this.userInfo);
+		 		console.log(this.userInfo)
+		 		let roles = [];
+		 		if(this.userInfo.roles){
+		 			roles = this.userInfo.roles.map(item => item.roleId);
+		 		}
+		        return Object.assign( this.userInfo,{reUserPsw:this.userInfo.userPsw,roles:roles});
 		    }
 	    },
 		mounted() {
 			const id=this.$route.query.id;
 			this.getUserInfo(id);
+			this.getAllRoles();
 		},
 		components: {
 		}

@@ -26,8 +26,10 @@ export default {
 	
 	//新增
 	addUser({commit},params){
+		const roles = params.roles;
+		delete params.roles;
 		return new Promise((resolve, reject) => {
-			post('user/addUser',params)
+			post('user/addUser?roles='+roles,params)
 	        .then(res => {
 	            resolve(res);
 	        })
@@ -35,8 +37,12 @@ export default {
 	},
 	//修改
 	editUser({commit},params){
+		const roles = params.roles;
+		delete params.roles;
+		delete params.createDate;
+		delete params.updateDate;
 		return new Promise((resolve, reject) => {
-			post('user/editUser',params)
+			post('user/editUser?roleIds='+roles,params)
 	        .then(res => {
 	            resolve(res);
 	        })
