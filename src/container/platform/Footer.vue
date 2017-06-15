@@ -1,6 +1,9 @@
 <template>
 	<el-row class="footer">
 		<el-col :span="24">
+			<p class="lianjie">
+				<a href="">网站协议</a><span>|</span><a href="">咨询反馈</a><span>|</span><a href="">联系我们</a><span>|</span><a href="">关于我们</a>
+			</p>
 			<p>
 				Copyright © 2016 易公司（eGongSi.cn） All Rights Reserved. 
 			</p>
@@ -41,6 +44,10 @@
 	.footer{
 		background-color: #eee;
 		text-align: center;
+		.lianjie span{
+			margin-right: 25px;
+			margin-left:25px;
+		}
 	}
 }
 </style>

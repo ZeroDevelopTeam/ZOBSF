@@ -79,7 +79,8 @@
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
             this.logining = true;
-            var loginParams = { userCode: this.ruleForm2.account, userPsw: this.ruleForm2.checkPass,status:1};
+            this.$router.push({ path: '/system/user' });
+            /*var loginParams = { userCode: this.ruleForm2.account, userPsw: this.ruleForm2.checkPass,status:1};
             this.$store.dispatch('requestLogin',loginParams).then((data) => {  
 	              this.logining = false;
 	              if (data.status == 200) {
@@ -91,7 +92,7 @@
 	                  type: 'error'
 	                });
 	              }
-		        });  
+		        });  */
           } else {
             console.log('error submit!!');
             return false;

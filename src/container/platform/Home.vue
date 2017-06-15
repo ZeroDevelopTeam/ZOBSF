@@ -2,175 +2,120 @@
 	<section class="home">
 		<Header/>
 		<section class="container">
-			<el-row class="logo">
-				<el-col :span="5" ><img src="../../image/logo.png"/></el-col>
-	  			<el-col :span="19">
-	  				<div class="search">
-		  				<el-input
-							placeholder="请选择书籍"
-							icon="search"
-							v-model="search"
-							:on-icon-click="handleIconClick">
-						</el-input>
-					</div>
-	  			</el-col>
-			</el-row>
-			<el-row class="nav">
-				<el-col :span="5"><div class="type">图书分类</div></el-col>
-	  			<el-col :span="13">
-	  				<div class="menu">
-	  					<el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-						  <el-menu-item index="1"><b>热门书籍</b></el-menu-item>
-						  <el-menu-item index="1"><b>特价书籍</b></el-menu-item>
-						  <el-menu-item index="1"><b>在线回收</b></el-menu-item>
-						</el-menu>
-	  				</div>
-	  			</el-col>
-	  			<el-col :span="6">
-	  				<el-button type="danger">购物车(0)</el-button>
-	  				<el-button>我的订单</el-button>
-	  			</el-col>
-			</el-row>
-			<el-row class="picScroll">
-				<el-col :span="5">
-					<el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-				      <el-submenu index="1">
-				        <template slot="title">分类一</template>
-				          <el-menu-item index="1-1">选项1</el-menu-item>
-				          <el-menu-item index="1-2">选项2</el-menu-item>
-				        <el-submenu index="1-4">
-				          <template slot="title">选项4</template>
-				          <el-menu-item index="1-4-1">选项1</el-menu-item>
-				        </el-submenu>
-				      </el-submenu>
-				      <el-menu-item index="2">分类二</el-menu-item>
-				      <el-menu-item index="3">分类三</el-menu-item>
-				    </el-menu>
-				</el-col>
-	  			<el-col :span="14">
-	  				<el-row class="pic">
-	  					<el-col :span="24">
-						    <el-carousel height="350px">
-						      <el-carousel-item >
-								<img src="../../image/1.png"/>
-						      </el-carousel-item>
-						      <el-carousel-item >
-								<img src="../../image/2.png"/>
-						      </el-carousel-item>
-						      <el-carousel-item >
-								<img src="../../image/3.png"/>
-						      </el-carousel-item>
-						    </el-carousel>
-	  					</el-col>
-	  				</el-row>
-	  			</el-col>
-	  			<el-col :span="5" class="right_news">
-	  				<el-card class="box-card">
-					  <div slot="header" class="clearfix">
-					    <span style="line-height: 36px;">新闻公告</span>
-					  </div>
-					  <div v-for="o in 5" :key="o" class="text item">
-					    {{'列表内容 ' + o }}
-					  </div>
-					</el-card>
-	  			</el-col>
-			</el-row>
-			<el-row>
+			<el-row class="hotBook">
 				<el-col :span="19">
-					<el-row class="hotBook">
-						<el-row class="title">
-							<el-col :span="24" >
-								<h2>畅销书籍</h2>
-								<span></span>
-							</el-col>
-						</el-row>
-						<el-row class="books" :gutter="20">
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-						</el-row>
+					<el-row class="title">
+						<el-col  >
+							<h2>猜您喜欢</h2>
+							<span></span>
+						</el-col>
 					</el-row>
-					<el-row class="newBook">
-						<el-row class="title">
-							<el-col :span="24" >
-								<h2>最新书籍</h2>
-								<span></span>
-							</el-col>
-						</el-row>
-						<el-row class="books" :gutter="20">
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-						</el-row>
-					</el-row>
-					<el-row class="discountBook">
-						<el-row class="title">
-							<el-col :span="24" >
-								<h2>折扣书籍</h2>
-								<span></span>
-							</el-col>
-						</el-row>
-						<el-row class="books" :gutter="20">
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-							<el-col :span="6" >
-								<img src="../../image/hot1.png" />
-							</el-col>
-						</el-row>
+					<el-row class="books" :gutter="20">
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
 					</el-row>
 				</el-col>
-				<el-col :span="5" class="right_top">
+				<el-col :span="5" class="right_news">
 					<el-card class="box-card">
 					  <div slot="header" class="clearfix">
-					    <span style="line-height: 36px;">图书风云榜</span>
+					    <span style="line-height: 5px;">新闻公告</span>
 					  </div>
-					  <div v-for="o in 10" :key="o" class="text item">
-					    {{'列表内容 ' + o }}
-					  </div>
-					</el-card>
-					<el-card class="box-card">
-					  <div slot="header" class="clearfix">
-					    <span style="line-height: 36px;">猜您喜欢</span>
-					  </div>
-					  <div v-for="o in 10" :key="o" class="text item">
+					  <div v-for="o in 7" :key="o" class="text item">
 					    {{'列表内容 ' + o }}
 					  </div>
 					</el-card>
 				</el-col>
 			</el-row>
-		</section>
+			<el-row class="newBook">
+				<div class="book">
+				<el-col :span="19">
+					<el-row class="title">
+						<el-col :span="24" >
+							<h2>图书风云榜</h2>
+							<span></span>
+						</el-col>
+					</el-row>
+					<el-row class="books" :gutter="20">
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
+					</el-row>
+				</el-col>
+				<el-col :span="5" class="right_nos">
+					<el-card class="box-card">
+					  <div slot="header" class="clearfix">
+					    <span style="line-height: 5px;">未知广告</span>
+					  </div>
+					  <div v-for="o in 7" :key="o" class="text item">
+					    {{'列表内容 ' + o }}
+					  </div>
+					</el-card>
+				</el-col>
+			</div>
+			</el-row>
+			<el-row class="hotBook">
+				<el-col :span="19">
+					<el-row class="title">
+						<el-col  >
+							<h2>占个位置</h2>
+							<span></span>
+						</el-col>
+					</el-row>
+					<el-row class="books" :gutter="20">
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
+						<el-col :span="6" >
+							<img src="../../image/hot1.png" />
+						</el-col>
+					</el-row>
+				</el-col>
+				<el-col :span="5" class="right_news">
+					<el-card class="box-card">
+					  <div slot="header" class="clearfix">
+					    <span style="line-height: 5px;">新闻公告</span>
+					  </div>
+					  <div v-for="o in 7" :key="o" class="text item">
+					    {{'列表内容 ' + o }}
+					  </div>
+					</el-card>
+				</el-col>
+			</el-row>	
+		</el-row>
 		<Footer/>
+		</section>
 	</section>
 </template>
 
 <script>
 import Header from './Header';
 import Footer from './Footer';
+import $ from 'jquery'
 	export default {
 		data() {
 		    return {
@@ -189,6 +134,36 @@ import Footer from './Footer';
 		        console.log(ev);
 		    }
   		},
+  		mounted(){
+  			$(function(){	
+				// 导航左侧栏js效果 start
+				$(".pullDownList li").hover(function(){
+					$(".yMenuListCon").fadeIn();
+					var index=$(this).index(".pullDownList li");
+					if (!($(this).hasClass("menulihover")||$(this).hasClass("menuliselected"))) {
+						$($(".yBannerList")[index]).css("display","block").siblings().css("display","none");
+						$($(".yBannerList")[index]).removeClass("ybannerExposure");
+						setTimeout(function(){
+						$($(".yBannerList")[index]).addClass("ybannerExposure");
+						},60)
+					}else{	
+					}
+					$(this).addClass("menulihover").siblings().removeClass("menulihover");
+						$(this).addClass("menuliselected").siblings().removeClass("menuliselected");
+					$($(".yMenuListConin")[index]).fadeIn().siblings().fadeOut();
+				},function(){
+					
+				})
+				$(".pullDown").mouseleave(function(){
+					$(".yMenuListCon").fadeOut();
+					$(".yMenuListConin").fadeOut();
+					$(".pullDownList li").removeClass("menulihover");
+		
+				})
+				// 导航左侧栏js效果  end
+				
+			})
+  		},
   		components: {
 			Header,
 			Footer
@@ -199,60 +174,10 @@ import Footer from './Footer';
 
 <style scoped lang="scss">
 .container{
-	width:80%;
 	margin: auto;
-	position: relative;
-	.head{
-		height: 40px;
-		line-height: 40px;
-	    font-size: 16px;
-	    background-color: #eee;
-	}
-	.logo{
-		margin-left: 25px;
-		height:110px;
-		.search{
-			margin: 15px 0 0 75px;
-			width:70%;
-		}
-	}
-	.nav{
-		border-bottom: 5px solid #c7161c;
-		height: 65px;
-		line-height: 65px;
-		.type{
-			background-color: #c7161c;
-			text-align:center;
-			color: white;
-		    font-size: 18px;
-		    letter-spacing:5px;
-		}
-		.menu{
-			.el-menu{
-				background-color: white;
-				padding-left:50px;
-			}
-			.el-menu--horizontal>.el-menu-item:hover, .el-menu--horizontal>.el-submenu.is-active .el-submenu__title, .el-menu--horizontal>.el-submenu:hover .el-submenu__title {
-			    border-bottom: 5px solid white;
-			    color: #c7161c;
-			    background-color: white;
-			}
-		}
-	}
-	.picScroll{
-		height: 350px;
-		margin-bottom: 50px;
-		.pic{
-			img{
-				width: 100%;
-				height: 100%;
-			}
-		}
-		.types img{
-			height:200px;
-		}
-	}
+
 	.hotBook , .discountBook{
+		width:80%;
 		margin: auto;
 		text-align: center;
 		letter-spacing:2px;
@@ -273,6 +198,10 @@ import Footer from './Footer';
 		}
 	}
 	.newBook{
+		.book{
+			margin: auto;
+			width: 80%;
+		}
 		margin: auto;
 		text-align: center;
 		letter-spacing:2px;
@@ -294,13 +223,14 @@ import Footer from './Footer';
 			margin-bottom: 50px;
 		}
 	}
-	.right_top{
+	.right_nos{
+		margin-top: 35px;
 		.text {
 		    font-size: 14px;
 		  }
 		
 		  .item {
-		    padding: 18px 0;
+		    padding: 8px 0;
 		  }
 		
 		  .clearfix:before,
@@ -318,13 +248,14 @@ import Footer from './Footer';
 	    }
 
 	}
-	.right_news,.right_news{
+	.right_news{
+		margin-top: 15px;
 		.text {
 		    font-size: 14px;
 		  }
 		
 		  .item {
-		    padding: 15px 0;
+		    padding: 8px 0;
 		  }
 		
 		  .clearfix:before,
@@ -336,6 +267,9 @@ import Footer from './Footer';
 		      clear: both
 		  }
 		  .box-card {
+		    width: 85%;
+		    margin-left: 40px;
+		    margin-bottom: 30px;
 	    }
 
 	}
