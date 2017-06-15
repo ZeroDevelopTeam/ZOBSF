@@ -31,9 +31,9 @@ const Role = resolve => require.ensure([], () => resolve(require('../container/m
 const AddRole = resolve => require.ensure([], () => resolve(require('../container/manage/system/role/AddRole.vue')), 'group-role');
 const EditRole = resolve => require.ensure([], () => resolve(require('../container/manage/system/role/EditRole.vue')), 'group-role');
 //权限管理
-const Authorization = resolve => require.ensure([], () => resolve(require('../container/manage/system/authorization/Authorization.vue')), 'group-authorization');
-const AddAuth = resolve => require.ensure([], () => resolve(require('../container/manage/system/authorization/AddAuth.vue')), 'group-authorization');
-const EditAuth = resolve => require.ensure([], () => resolve(require('../container/manage/system/authorization/EditAuth.vue')), 'group-authorization');
+const Purview = resolve => require.ensure([], () => resolve(require('../container/manage/system/purview/Purview.vue')), 'group-purview');
+const AddPurview = resolve => require.ensure([], () => resolve(require('../container/manage/system/purview/AddPurview.vue')), 'group-purview');
+const EditPurview = resolve => require.ensure([], () => resolve(require('../container/manage/system/purview/EditPurview.vue')), 'group-purview');
 //日志管理
 const Log = resolve => require.ensure([], () => resolve(require('../container/manage/system/log/Log.vue')), 'group-log');
 
@@ -88,9 +88,9 @@ let routes = [
             { path: '/system/role', component: Role, name: '角色管理' },
             { path: '/system/role/addRole', component: AddRole, name: '新增角色',hidden: true },
             { path: '/system/role/editRole', component: EditRole, name: '编辑角色',hidden: true },
-            { path: '/system/authorization', component: Authorization, name: '权限管理' },
-            { path: '/system/authorization/addAuth', component: AddAuth, name: '新增权限',hidden: true },
-            { path: '/system/authorization/editAuth', component: EditAuth, name: '编辑权限',hidden: true },
+            { path: '/system/purview', component: Purview, name: '权限管理' },
+            { path: '/system/purview/addPurview', component: AddPurview, name: '新增权限',hidden: true },
+            { path: '/system/purview/editPurview', component: EditPurview, name: '编辑权限',hidden: true },
             { path: '/system/log', component: Log, name: '日志管理' },
         ]
     },

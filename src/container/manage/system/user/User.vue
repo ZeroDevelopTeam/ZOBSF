@@ -120,17 +120,17 @@
 					  	{
 					  		func :this.handleEdit,
 					  		label:'编辑',
-					  		type:'info'
+					  		butType:'info'
 					  	},
 					  	{
 					  		func :this.handleDel,
 					  		label:'删除',
-					  		type:'info'
+					  		butType:'info'
 					  	},
 					  	{
 					  		func :this.changeState,
-					  		flag:'state',
-					  		type:'danger'
+					  		label:this.labelFun,
+					  		butType:'danger'
 					  	}
 				  	]
 		        }];
@@ -163,6 +163,15 @@
 			//状态显示转换
 			formatState: function (row, column) {
 				return row.state == 1 ? '启用' : row.state == 0 ? '停用' : '未知';
+			},
+			//启用停用功能按钮设置
+			labelFun(index,row){
+				let str = '启用';
+				if(row.state == 1){
+					str = '停用';
+				}
+				alert(str)
+				return str;
 			},
 			//点击链接显示详情
 			clickLick(row){
