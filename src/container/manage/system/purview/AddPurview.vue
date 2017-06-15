@@ -2,7 +2,7 @@
 	<section class="add-auth">
 		<el-card class="box-card">
 		  <div slot="header" class="clearfix">
-		    <span style="line-height: 20px;">新增用户</span>
+		    <span style="line-height: 20px;">新增权限</span>
 		  </div>
 		  <div class="text item">
 		    <!--新增界面-->
@@ -16,10 +16,10 @@
 				<el-form-item label="规则" prop="purviewRule">
 					<el-input v-model="addForm.purviewRule"></el-input>
 				</el-form-item>
-				<el-form-item label="用户状态" prop="state">
+				<el-form-item label="权限状态" prop="state">
 				    <el-select v-model="addForm.state" placeholder="请选择状态类型">
-					    <el-option label="启用" value="0"></el-option>
-					    <el-option label="停用" value="1"></el-option>
+					    <el-option label="启用" value="1"></el-option>
+					    <el-option label="停用" value="0"></el-option>
 				    </el-select>
 				</el-form-item>
 				<el-form-item label="备注" >
@@ -65,7 +65,8 @@
 					purviewId:'',
 					purviewName:'',
 					purviewRule: '',
-					purviewDesc: ''
+					purviewDesc: '',
+					state:''
 				}
 			}
 		},
@@ -77,14 +78,13 @@
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							this.addLoading = true;
 							let para = Object.assign({}, this.addForm);
-							this.$store.dispatch('addAuth',para).then((res) => {  
+							this.$store.dispatch('addPurview',para).then((res) => {  
 								this.addLoading = false;
-								if(res.status==1){
+								if(res.status==200){
 									this.$message({
 										message: res.msg,
 										type: 'success'
 									});
-									this.getRoles();
 								}else{
 									this.$message({
 										message: res.msg,
@@ -92,7 +92,7 @@
 									});
 								}
 								this.$refs['addForm'].resetFields();
-								this.$router.push({ path: '/system/auth' });
+								this.$router.push({ path: '/system/purview' });
 					        });  
 						});
 					}

@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<!--工具条-->
-		<el-col :span="16" class="toolbar" style="padding-bottom: 0px;">
+		<el-col :span="18" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
 					<el-button type="primary" @click="handleAdd">新增</el-button>
@@ -11,16 +11,14 @@
 				</el-form-item>
 			</el-form>
 		</el-col>
-		<el-col :span="8" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" ref="search">
-				<el-form-item>
-					<el-input v-model="filters.keyWord" placeholder="关键字查询"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getRoles">查询</el-button>
-					<el-button type="primary" @click="resetForm()">重置</el-button>
-				</el-form-item>
-			</el-form>
+		<el-col :span="6" class="toolbar" style="padding-bottom: 0px;">
+			<el-input
+			  placeholder="关键字查询"
+			  icon="search"
+			  v-model="filters.keyWord"
+			  :on-icon-click="getRoles"
+			  @keyup.enter.native="getRoles">
+			</el-input>
 		</el-col>
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
@@ -97,16 +95,18 @@
 				  	operations:[
 					  	{
 					  		func :this.handleEdit,
-					  		label:'编辑'
+					  		label:'编辑',
+					  		butType:'info'
 					  	},
 					  	{
 					  		func :this.handleDel,
-					  		label:'删除'
+					  		label:'删除',
+					  		butType:'info'
 					  	},
 					  	{
 					  		func :this.changeState,
-					  		flag:'state',
-					  		type:'danger'
+					  		label:this.labelFun,
+					  		butType:'danger'
 					  	}
 				  	]
 		        }];
@@ -143,6 +143,27 @@
 				this.dialogFormVisible=true;
 				this.roleInfo=row;
 			},
+			//启用停用功能按钮设置
+			labelFun(index,row){
+				let str = '启用';
+				if(row.state == 1){
+					str = '停用';
+				}
+				return str;
+			},
+			//选中的列
+			handleSelectionChange(val) {
+		        this.sels = val;
+	      	},
+	      	//显示新增界面
+			handleAdd: function () {
+				this.$router.push({ path: '/system/role/addRole' });
+			},
+			
+			//显示编辑界面
+			handleEdit: function (index, row,scope) {
+				this.$router.push({ path: '/system/role/editRole', query: { id: row.roleId }});
+			},
 			//重置
 			resetForm() {
 		        this.$refs.search.resetFields();
@@ -163,70 +184,80 @@
 			},
 			//删除
 			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					let para = { roleId: row.roleId };
-					this.$store.dispatch('removeRole',para).then((res) => {  
-						this.listLoading = false;
-						this.$message({
-							message: '删除角色成功',
-							type: 'success'
-						});
-						this.getRoles();
-			        });  
-				}).catch(() => {
-
-				});
+				if(row.state == 1){
+					this.$message({
+						message: '启用状态的角色不能删除！',
+						type: 'error'
+					});
+				}else{
+					this.$confirm('确认删除该记录吗?', '提示', {
+						type: 'warning'
+					}).then(() => {
+						this.listLoading = true;
+						let para = { roleIds: row.roleId };
+						this.$store.dispatch('removeRole',para).then((res) => {  
+							this.listLoading = false;
+							if(res.status == 200){
+								this.$message({
+									message: res.msg,
+									type: 'success'
+								});
+								this.getRoles();
+							}else{
+								this.$message({
+									message: res.msg,
+									type: 'error'
+								});
+							}
+							
+				        });  
+					}).catch(() => {
+	
+					});
+				}
 			},
-			//显示新增界面
-			handleAdd: function () {
-				this.$router.push({ path: '/system/role/addRole' });
-			},
-			
-			//显示编辑界面
-			handleEdit: function (index, row,scope) {
-				this.$router.push({ path: '/system/role/editRole', query: { id: row.roleId }});
-			},
-			
-			handleSelectionChange(val) {
-		        this.sels = val;
-	      	},
 			//批量删除
 			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					let para = { ids: ids };
-					this.$store.dispatch('removeRole',para).then((res) => {  
-						this.listLoading = false;
-						if(res.status==1){
-							this.$message({
-								message: res.msg,
-								type: 'success'
-							});
-							this.getRoles();
-						}else{
-							this.$message({
-								message: res.msg,
-								type: 'error'
-							});
-						}
-			        });  
-				}).catch(() => {
-
-				});
+				const states = this.sels.map(item => item.state);
+				if(states.indexOf(1)>-1){
+					this.$message({
+						message: '启用状态的角色不能删除！',
+						type: 'error'
+					});
+				}else{
+					var roleIds = this.sels.map(item => item.roleId).toString();
+					this.$confirm('确认删除选中记录吗？', '提示', {
+						type: 'warning'
+					}).then(() => {
+						this.listLoading = true;
+						let para = { roleIds: roleIds };
+						this.$store.dispatch('removeRole',para).then((res) => {  
+							this.listLoading = false;
+							if(res.status==200){
+								this.$message({
+									message: res.msg,
+									type: 'success'
+								});
+								this.getRoles();
+							}else{
+								this.$message({
+									message: res.msg,
+									type: 'error'
+								});
+							}
+				        });  
+					}).catch(() => {
+	
+					});
+				}
 			},
 			//修改用户状态
 			changeState:function(index, row,scope){
 				let para ='';
 				if(row.state==1){//目前是启用状态,改为停用
-					para = { roleId: row.roleId,state:0 };
+					para = { roleIds: row.roleId,state:0 };
 				}else{
-					para = { roleId: row.roleId,state:1 };
+					para = { roleIds: row.roleId,state:1 };
 				}
 				console.log(para);
 				console.log(row.state);
@@ -241,7 +272,7 @@
 								message: res.msg,
 								type: 'success'
 							});
-							this.getUsers();
+							this.getRoles();
 						}else{
 							this.$message({
 								message: res.msg,

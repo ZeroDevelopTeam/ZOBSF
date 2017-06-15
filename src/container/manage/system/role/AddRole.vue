@@ -15,8 +15,8 @@
 				</el-form-item>
 				<el-form-item label="角色状态" prop="state">
 				    <el-select v-model="addForm.state" placeholder="请选择状态类型">
-					    <el-option label="启用" value="0"></el-option>
-					    <el-option label="停用" value="1"></el-option>
+					    <el-option label="启用" value="1"></el-option>
+					    <el-option label="停用" value="0"></el-option>
 				    </el-select>
 				</el-form-item>
 				<el-form-item label="角色权限" prop="purviews">

@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<!--工具条-->
-		<el-col :span="16" class="toolbar" style="padding-bottom: 0px;">
+		<el-col :span="18"  class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" >
 				<el-form-item>
 					<el-button type="primary" @click="handleAdd">新增</el-button>
@@ -11,16 +11,14 @@
 				</el-form-item>
 			</el-form>
 		</el-col>
-		<el-col :span="8" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" ref="search">
-				<el-form-item>
-					<el-input v-model="filters.keyWord" placeholder="关键字查询"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getUsers">查询</el-button>
-					<el-button type="primary" @click="resetForm()">重置</el-button>
-				</el-form-item>
-			</el-form>
+		<el-col :span="6"  class="toolbar" style="padding-bottom: 0px;">
+			<el-input
+			  placeholder="关键字查询"
+			  icon="search"
+			  v-model="filters.keyWord"
+			  :on-icon-click="getUsers"
+			  @keyup.enter.native="getUsers">
+			</el-input>
 		</el-col>
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
@@ -170,7 +168,6 @@
 				if(row.state == 1){
 					str = '停用';
 				}
-				alert(str)
 				return str;
 			},
 			//点击链接显示详情
@@ -178,12 +175,19 @@
 				this.dialogFormVisible=true;
 				this.userInfo=row;
 			},
-			//重置
-			resetForm() {
-		        this.$refs.search.resetFields();
-		        this.filters.keyWord='';
-		        this.getUsers();
-		   },
+			//获取选中列
+			handleSelectionChange(val) {
+		        this.sels = val;
+	      	},
+		   //显示新增界面
+			handleAdd: function () {
+				this.$router.push({ path: '/system/user/addUser' });
+			},
+			
+			//显示编辑界面
+			handleEdit: function (index, row,scope) {
+				this.$router.push({ path: '/system/user/editUser', query: { id: row.userCode }});
+			},
 			//获取用户列表
 			getUsers() {
 				let para = {
@@ -198,43 +202,38 @@
 			},
 			//删除
 			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					let para = { userCode: row.userCode };
-					this.$store.dispatch('removeUser',para).then((res) => {  
-						this.listLoading = false;
-						if(res.status==200){
-							this.$message({
-								message: res.msg,
-								type: 'success'
-							});
-							this.getUsers();
-						}else{
-							this.$message({
-								message: res.msg,
-								type: 'error'
-							});
-						}
-			        });  
-				}).catch(() => {
-
-				});
+				if(row.state == 1){
+					this.$message({
+						message: '启用状态的用户不能删除！',
+						type: 'error'
+					});
+				}else{
+					this.$confirm('确认删除该记录吗?', '提示', {
+						type: 'warning'
+					}).then(() => {
+						this.listLoading = true;
+						let para = { userCodes: row.userCode };
+						this.$store.dispatch('removeUsers',para).then((res) => {  
+							this.listLoading = false;
+							if(res.status==200){
+								this.$message({
+									message: res.msg,
+									type: 'success'
+								});
+								this.getUsers();
+							}else{
+								this.$message({
+									message: res.msg,
+									type: 'error'
+								});
+							}
+				        });  
+					}).catch(() => {
+	
+					});
+				}
+				
 			},
-			//显示新增界面
-			handleAdd: function () {
-				this.$router.push({ path: '/system/user/addUser' });
-			},
-			
-			//显示编辑界面
-			handleEdit: function (index, row,scope) {
-				this.$router.push({ path: '/system/user/editUser', query: { id: row.userCode }});
-			},
-			
-			handleSelectionChange(val) {
-		        this.sels = val;
-	      	},
 			//批量删除
 			batchRemove: function () {
 				const states = this.sels.map(item => item.state);
@@ -244,12 +243,12 @@
 						type: 'error'
 					});
 				}else{
-					var userCodes = this.sels.map(item => item.userCode).toString();
+					const userCodes = this.sels.map(item => item.userCode).toString();
 					this.$confirm('确认删除选中记录吗？', '提示', {
 						type: 'warning'
 					}).then(() => {
 						this.listLoading = true;
-						let para = { str_userCode: userCodes };
+						let para = { userCodes: userCodes };
 						this.$store.dispatch('removeUsers',para).then((res) => {  
 							this.listLoading = false;
 							if(res.status==200){

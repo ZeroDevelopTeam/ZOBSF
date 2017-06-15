@@ -1,5 +1,5 @@
 import {USERLIST,USERINFO} from './types'
-import {get,post} from '../../api/api'
+import {get,post,del} from '../../api/api'
 
 export default {
 	//获取所有
@@ -48,19 +48,10 @@ export default {
 	        })
 	    });
 	},
-	//单个删除
-	removeUser({commit},params){
-		return new Promise((resolve, reject) => {
-			get('user/deleteUser',params)
-	        .then(res => {
-	            resolve(res);
-	        })
-	    });
-	},
 	//批量删除
 	removeUsers({commit},params){
 		return new Promise((resolve, reject) => {
-			get('user/deleteUsers',params)
+			del('user/deleteUsers',params)
 	        .then(res => {
 	            resolve(res);
 	        })

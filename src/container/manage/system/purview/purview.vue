@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<!--工具条-->
-		<el-col :span="16" class="toolbar" style="padding-bottom: 0px;">
+		<el-col :span="18" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
 					<el-button type="primary" @click="handleAdd">新增</el-button>
@@ -11,20 +11,38 @@
 				</el-form-item>
 			</el-form>
 		</el-col>
-		<el-col :span="8" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" ref="search">
-				<el-form-item>
-					<el-input v-model="filters.keyWord" placeholder="关键字查询"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getPurviews">查询</el-button>
-					<el-button type="primary" @click="resetForm()">重置</el-button>
-				</el-form-item>
-			</el-form>
+		<el-col :span="6" class="toolbar" style="padding-bottom: 0px;">
+			<el-input
+			  placeholder="关键字查询"
+			  icon="search"
+			  v-model="filters.keyWord"
+			  :on-icon-click="getPurviews"
+			  @keyup.enter.native="getPurviews">
+			</el-input>
 		</el-col>
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
 		<!--权限详情 -->
+		<el-dialog title="权限详情" :visible.sync="dialogFormVisible">
+		  	<!--编辑界面-->
+				<el-form :model="purviewInfo" label-width="80px" >
+					<el-form-item label="权限编号">
+						<el-input v-model="purviewInfo.purviewId" readonly auto-complete="off"></el-input><!-- input中加入autocomplete="off" 来关闭记录,默认on -->
+					</el-form-item>
+					<el-form-item label="权限名称">
+						<el-input v-model="purviewInfo.purviewName"></el-input>
+					</el-form-item>
+					<el-form-item label="规则">
+						<el-input v-model="purviewInfo.purviewRule"></el-input>
+					</el-form-item>
+					<el-form-item label="备注" >
+						<el-input type="textarea" v-model="purviewInfo.purviewDesc"></el-input>
+					</el-form-item>
+				</el-form>
+			  <div slot="footer" class="dialog-footer">
+			    <el-button type="primary"  @click="dialogFormVisible = false">返 回</el-button>
+			  </div>
+		</el-dialog>
 	</section>
 	
 </template>
@@ -78,16 +96,18 @@
 				  	operations:[
 					  	{
 					  		func :this.handleEdit,
-					  		label:'编辑'
+					  		label:'编辑',
+					  		butType:'info'
 					  	},
 					  	{
 					  		func :this.handleDel,
-					  		label:'删除'
+					  		label:'删除',
+					  		butType:'info'
 					  	},
 					  	{
 					  		func :this.changeState,
-					  		flag:'state',
-					  		type:'danger'
+					  		label:this.labelFun,
+					  		butType:'danger'
 					  	}
 				  	]
 		        }];
@@ -124,11 +144,32 @@
 			formatState: function (row, column) {
 				return row.state == 1 ? '启用' : row.state == 0 ? '停用' : '未知';
 			},
+			//启用停用功能按钮设置
+			labelFun(index,row){
+				let str = '启用';
+				if(row.state == 1){
+					str = '停用';
+				}
+				return str;
+			},
+			//选中的列
+			handleSelectionChange(val) {
+		        this.sels = val;
+	      	},
+			//显示新增界面
+			handleAdd: function () {
+				this.$router.push({ path: '/system/purview/addPurview' });
+			},
+			
+			//显示编辑界面
+			handleEdit: function (index, row,scope) {
+				this.$router.push({ path: '/system/purview/editPurview', query: { id: row.purviewId }});
+			},
 			//重置
 			resetForm() {
 		        this.$refs.search.resetFields();
 		        this.filters.keyWord='';
-		        this.getpurviews();
+		        this.getPurviews();
 		    },
 			//获取权限列表
 			getPurviews() {
@@ -144,70 +185,80 @@
 			},
 			//删除
 			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					let para = { ids: row.id };
-					this.$store.dispatch('removePurview',para).then((res) => {  
-						this.listLoading = false;
-						this.$message({
-							message: '删除权限成功',
-							type: 'success'
-						});
-						this.getPurviews();
-			        });  
-				}).catch(() => {
-
-				});
+				if(row.state == 1){
+					this.$message({
+						message: '启用状态的权限不能删除！',
+						type: 'error'
+					});
+				}else{
+					this.$confirm('确认删除该记录吗?', '提示', {
+						type: 'warning'
+					}).then(() => {
+						this.listLoading = true;
+						let para = { purviewIds: row.purviewId };
+						this.$store.dispatch('removePurview',para).then((res) => {  
+							this.listLoading = false;
+							if(res.status == 200){
+								this.$message({
+									message: res.msg,
+									type: 'success'
+								});
+								this.getPurviews();
+							}else{
+								this.$message({
+									message: res.msg,
+									type: 'error'
+								});
+							}
+							
+				        });  
+					}).catch(() => {
+	
+					});
+				}
 			},
-			//显示新增界面
-			handleAdd: function () {
-				this.$router.push({ path: '/system/purview/addPurview' });
-			},
-			
-			//显示编辑界面
-			handleEdit: function (index, row,scope) {
-				this.$router.push({ path: '/system/purview/editPurview', query: { id: row.id }});
-			},
-			
-			handleSelectionChange(val) {
-		        this.sels = val;
-	      	},
 			//批量删除
 			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					let para = { ids: ids };
-					this.$store.dispatch('removePurview',para).then((res) => {  
-						this.listLoading = false;
-						if(res.status==1){
-							this.$message({
-								message: res.msg,
-								type: 'success'
-							});
-							this.getPurviews();
-						}else{
-							this.$message({
-								message: res.msg,
-								type: 'error'
-							});
-						}
-			        });  
-				}).catch(() => {
-
-				});
+				const states = this.sels.map(item => item.state);
+				if(states.indexOf(1)>-1){
+					this.$message({
+						message: '启用状态的权限不能删除！',
+						type: 'error'
+					});
+				}else{
+					const purviewIds = this.sels.map(item => item.purviewId).toString();
+					this.$confirm('确认删除选中记录吗？', '提示', {
+						type: 'warning'
+					}).then(() => {
+						this.listLoading = true;
+						let para = { purviewIds: purviewIds };
+						this.$store.dispatch('removePurview',para).then((res) => {  
+							this.listLoading = false;
+							if(res.status==200){
+								this.$message({
+									message: res.msg,
+									type: 'success'
+								});
+								this.getPurviews();
+							}else{
+								this.$message({
+									message: res.msg,
+									type: 'error'
+								});
+							}
+				        });  
+					}).catch(() => {
+	
+					});
+				}
 			},
-			//修改用户状态
+			//修改权限状态
 			changeState:function(index, row,scope){
 				let para ='';
 				if(row.state==1){//目前是启用状态,改为停用
-					para = { roleId: row.roleId,state:0 };
+					para = { purviewIds: row.purviewId,state:0 };
 				}else{
-					para = { roleId: row.roleId,state:1 };
+					para = { purviewIds: row.purviewId,state:1 };
 				}
 				this.$confirm(row.state==1?'确认停用选中记录吗？':'确认启用选中记录吗？', '提示', {
 					type: 'warning'
@@ -220,7 +271,7 @@
 								message: res.msg,
 								type: 'success'
 							});
-							this.getUsers();
+							this.getPurviews();
 						}else{
 							this.$message({
 								message: res.msg,

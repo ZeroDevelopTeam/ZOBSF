@@ -1,5 +1,5 @@
 import {PURVIEWLIST,PURVIEWINFO} from './types'
-import {get,post} from '../../api/api'
+import {get,post,del} from '../../api/api'
 
 export default {
 	//获取所有
@@ -16,7 +16,7 @@ export default {
 	//获取用户信息
 	getPurview({commit},params){
 		return new Promise((resolve, reject) => {
-			get('purview/info',params)
+			get('purview/getPurviewByPurviewId',params)
 	        .then(res => {
 	        	commit(PURVIEWINFO, res)
 	            resolve(res);
@@ -27,7 +27,7 @@ export default {
 	//新增
 	addPurview({commit},params){
 		return new Promise((resolve, reject) => {
-			post('purview/add',params)
+			post('purview/addPurview',params)
 	        .then(res => {
 	            resolve(res);
 	        })
@@ -35,8 +35,10 @@ export default {
 	},
 	//修改
 	editPurview({commit},params){
+		delete params.createDate;
+		delete params.updateDate;
 		return new Promise((resolve, reject) => {
-			post('purview/edit',params)
+			post('purview/eidtPurview',params)
 	        .then(res => {
 	            resolve(res);
 	        })
@@ -45,7 +47,7 @@ export default {
 	//删除
 	removePurview({commit},params){
 		return new Promise((resolve, reject) => {
-			get('purview/delete',params)
+			del('purview/removePurview',params)
 	        .then(res => {
 	            resolve(res);
 	        })
@@ -54,7 +56,7 @@ export default {
 	//启用or停用
 	changePurviewState({commit},params){
 		return new Promise((resolve, reject) => {
-			get('purview/changeState',params)
+			get('purview/changePurviewState',params)
 	        .then(res => {
 	            resolve(res);
 	        })
