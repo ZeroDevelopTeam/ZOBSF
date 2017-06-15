@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <template>
 	<section class="add-user">
 		<el-card class="box-card">
@@ -462,4 +461,3 @@
 }
 
 </style>
->>>>>>> 104bf16188ae32b34461c1ee14543fb59811e487
