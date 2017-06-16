@@ -1,45 +1,58 @@
 <template>
-	<el-dialog title="权限详情" :visible.sync="dialogFormVisible">
-	  <!--编辑界面-->
-			<el-form :model="authInfo" label-width="80px" >
-				<el-form-item label="权限编号">
-					<el-input v-model="authInfo.authCode" readonly auto-complete="off"></el-input><!-- input中加入autocomplete="off" 来关闭记录,默认on -->
-				</el-form-item>
-				<el-form-item label="权限名称">
-					<el-input v-model="authInfo.authName"></el-input>
-				</el-form-item>
-				<el-form-item label="规则">
-					<el-input v-model="authInfo.rule"></el-input>
-				</el-form-item>
-				<el-form-item label="备注" >
-					<el-input type="textarea" v-model="authInfo.descript"></el-input>
-				</el-form-item>
-			</el-form>
-	  <div slot="footer" class="dialog-footer">
-	    <el-button type="primary"  @click="dialogFormVisible = false">返 回</el-button>
-	  </div>
-	</el-dialog>
+	<el-dialog title="权限详情" :visible.sync="dialogFormVisible1" size="tiny">
+		  	<!--编辑界面-->
+				<el-form  label-width="50%" >
+					<el-form-item label="权限编号：">
+						{{purviewInfo.purviewId}}
+					</el-form-item>
+					<el-form-item label="权限名称：">
+						{{purviewInfo.purviewName}}
+					</el-form-item>
+					<el-form-item label="规则：">
+						{{purviewInfo.purviewRule}}
+					</el-form-item>
+					<el-form-item label="备注：" >
+						{{purviewInfo.purviewDesc}}
+					</el-form-item>
+				</el-form>
+			  <div slot="footer" class="dialog-footer">
+			    <el-button type="primary"  @click="dialogFormVisible1 = false">返 回</el-button>
+			  </div>
+		</el-dialog>
 </template>
 
 <script>
   	import { mapGetters } from 'vuex'
 	export default {
 		props: [
-			'authInfo',
+			'purviewInfo',
 			'dialogFormVisible'
 		],
 		data() {
 			return {
+				dialogFormVisible1:false,
 			}
 		},
 		methods: {
+			aa(){
+				console.log(111);
+				this.dialogFormVisible1 = this.dialogFormVisible;
+			}
 		},
 		computed: {
 		 ...mapGetters([
 	   		])
 	    },
 		mounted() {
+			this.aa();
+			
 		},
+		/*watch:{
+			dialogFormVisible(){
+				console.log("进来");
+				this.dialogFormVisible1 = this.dialogFormVisible;
+			}
+		},*/
 		components: {
 		}
 	}

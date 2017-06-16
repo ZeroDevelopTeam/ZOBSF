@@ -25,29 +25,27 @@
 		<!--<UserInfo :dialogFormVisible="dialogFormVisible" :userInfo="userInfo"></UserInfo>-->
 		
 		<!--用户详情-->
-		<el-dialog title="用户详情" :visible.sync="dialogFormVisible">
-	        <el-form style="width:600px;margin: auto;"
-	                 label-width="320px"
-	                 :model="userInfo">
-	            <el-form-item label="用户账号：" prop='userCode'>
+		<el-dialog title="用户详情" :visible.sync="dialogFormVisible" size="tiny">
+	        <el-form label-width="50%" >
+	            <el-form-item label="用户账号：">
 					{{userInfo.userCode}}
 				</el-form-item>
-				<el-form-item label="用户名称：" prop='userName'>
+				<el-form-item label="用户名称：">
 					{{userInfo.userName}}
 				</el-form-item>
-				<el-form-item label="手机号：" prop='phone'>
+				<el-form-item label="手机号：">
 					{{userInfo.phone}}
 				</el-form-item>
-				<el-form-item label="用户邮箱：" prop='email'>
+				<el-form-item label="用户邮箱：">
 					{{userInfo.email}}
 				</el-form-item>
-				<el-form-item label="用户状态：" prop='state'>
+				<el-form-item label="用户状态：">
 				    {{userInfo.state=='1'?'启用':'停用'}}
 				</el-form-item>
-				<el-form-item label="用户角色：" prop='roleName'>
-				    {{userInfo.roleName}}
+				<el-form-item label="用户角色：">
+				    {{userInfo.roles}}
 				</el-form-item>
-				<el-form-item label="常用地址：" prop='address'>
+				<el-form-item label="常用地址：">
 					{{userInfo.address}}
 				</el-form-item>
 	        </el-form>
@@ -173,7 +171,8 @@
 			//点击链接显示详情
 			clickLick(row){
 				this.dialogFormVisible=true;
-				this.userInfo=row;
+				let roles = row.roles?row.roles.map(item => item.roleName).toString():'暂无';
+				this.userInfo=Object.assign( row,{roles:roles});
 			},
 			//获取选中列
 			handleSelectionChange(val) {

@@ -65,6 +65,9 @@
 	export default {
 		data() {
 			const validatePass = (rule, value, callback) => {
+				if(value && value!=this.oldPsw && (value.length<6 || value.length>16)){
+					callback(new Error('请输入6 到 16位密码'));
+				}
 		        if (value === '') {
 		          callback(new Error('请输入密码'));
 		        } else {
@@ -89,50 +92,45 @@
 				colors:'',
 				editFormRules: {
 					userCode: [
-						{ required: true, message: '请输入用户账号', trigger: 'blur' }
+						{ required: true, message: '请输入用户账号', trigger: 'change' }
 					],
 					userName: [
-						{ required: true, message: '请输入用户名', trigger: 'blur' }
+						{ required: true, message: '请输入用户名', trigger: 'change' }
 					],
 					userPsw: [
 						{ required: true, validator: validatePass, trigger: 'change' },
-						{ min: 6, max: 16, message: '请输入6 到 16位密码'}
 					],
 					reUserPsw: [
 						{ required: true, validator: validatePass2, trigger: 'change' },
-						{ min: 6, max: 16, message: '请输入6 到 16位密码'}
 					],
 					phone: [
-						{ required: true, message: '请输入手机号', trigger: 'blur' },
+						{ required: true, message: '请输入手机号', trigger: 'change' },
 						{ pattern: /^1[3|4|5|7|8][0-9]{9}$/, message: '请输入正确的手机号（例如：13101030301）' , trigger: 'blur,change' }
 					],
 					email: [
-						{ required: true, message: '请输入邮箱', trigger: 'blur' },
+						{ required: true, message: '请输入邮箱', trigger: 'change' },
 						{ type: 'email', message: '请输入正确的邮箱地址（例如：123456@163.com）', trigger: 'blur,change' }
 					],
 					state: [
-						{ required: true, message: '请选择状态', trigger: 'blur' }
+						{ required: true, message: '请选择状态', trigger: 'change' }
 					]
 				},
-				
+				//新增界面数据
+				editForm: {
+					userCode:'',
+					userPsw: '',
+					reUserPsw:'',
+					userName:'',
+					phone: '',
+					email: '',
+					state: '',
+					roles:'',
+					address: ''
+				},
+				oldPsw:'',
 			}
 		},
 		methods: {
-			//获取所有角色
-			getAllRoles(){
-				let para = {
-					pageSize:9999,
-					pageNum:1,
-					keyWord:''
-				}
-				this.$store.dispatch('getRoleList',para);  
-			},
-			//获取用户信息
-			getUserInfo(id){
-				this.$store.dispatch('getUser',{userCode:id}).then((res)=>{
-					console.log(res);
-				});
-			},
 			//编辑
 			editSubmit: function () {
 				this.$refs.editForm.validate((valid) => {
@@ -195,21 +193,16 @@
 		 ...mapGetters([
 			'userInfo',
 			'roleList'
-	   		 ]),
-	   		 //将用户信息复制给editForm，避免v-model直接修改userInfo
-		 	editForm () {
-		 		console.log(this.userInfo)
-		 		let roles = [];
-		 		if(this.userInfo.roles){
-		 			roles = this.userInfo.roles.map(item => item.roleId);
-		 		}
-		        return Object.assign( this.userInfo,{reUserPsw:this.userInfo.userPsw,roles:roles});
-		    }
+   		 ]),
 	    },
 		mounted() {
 			const id=this.$route.query.id;
-			this.getUserInfo(id);
-			this.getAllRoles();
+			this.$store.dispatch('getUser',{userCode:id}).then((res)=>{
+				let roles = res.roles?res.roles.map(item => item.roleId):[];
+		 		this.oldPsw=res.userPsw;
+				this.editForm = Object.assign( res,{reUserPsw:res.userPsw,roles:roles,state:res.state.toString()})
+			});
+			this.$store.dispatch('getRoleList',{pageSize:9999,pageNum:1,keyWord:''});  
 		},
 		components: {
 		}

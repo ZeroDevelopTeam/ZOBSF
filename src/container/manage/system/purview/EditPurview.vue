@@ -55,6 +55,14 @@
 						{ required: true, message: '请选择状态', trigger: 'change' }
 					]
 				},
+				//修改界面数据
+				editForm: {
+					purviewId:'',
+					purviewName:'',
+					purviewRule: '',
+					purviewDesc: '',
+					state:''
+				}
 			}
 		},
 		methods: {
@@ -93,13 +101,12 @@
 		 ...mapGetters([
 			'purviewInfo'
 	   		 ]),
-		 	editForm () {
-		        return this.purviewInfo;
-		    }
 	    },
 		mounted() {
 			const id=this.$route.query.id;
-			this.$store.dispatch('getPurview',{purviewId:id});
+			this.$store.dispatch('getPurview',{purviewId:id}).then((res)=>{
+				this.editForm = Object.assign( res,{state:res.state.toString()});
+			});
 		},
 		components: {
 		}

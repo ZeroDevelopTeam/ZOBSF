@@ -66,10 +66,19 @@ export default {
 	        })
 	    });
 	},
+	//修改密码
+	changeUserPsw({commit},params){
+		return new Promise((resolve, reject) => {
+			get('user/changeUserPsw',params)
+	        .then(res => {
+	            resolve(res);
+	        })
+	    });
+	},
 	//登入
 	requestLogin({commit},params){
 		return new Promise((resolve, reject) => {
-			post('login/login',params)
+			post('user/login',params)
 	        .then(res => {
 	            resolve(res);
 	        })

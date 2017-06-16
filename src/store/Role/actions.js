@@ -48,15 +48,6 @@ export default {
 	        })
 	    });
 	},
-	//单个删除
-	removeRole({commit},params){
-		return new Promise((resolve, reject) => {
-			del('role/deleteRoles',params)
-	        .then(res => {
-	            resolve(res);
-	        })
-	    });
-	},
 	//批量删除
 	removeRoles({commit},params){
 		return new Promise((resolve, reject) => {

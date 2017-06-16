@@ -45,7 +45,7 @@ export default {
 	    });
 	},
 	//删除
-	removePurview({commit},params){
+	removePurviews({commit},params){
 		return new Promise((resolve, reject) => {
 			del('purview/removePurview',params)
 	        .then(res => {

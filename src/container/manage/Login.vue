@@ -1,22 +1,22 @@
 <template>
-  <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+  <el-form :model="loginForm" :rules="ruleLogin" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
     <h3 class="title">系统登录</h3>
-    <el-form-item prop="account">
-      <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号">
+    <el-form-item prop="userCode">
+      <el-input type="text" v-model="loginForm.userCode" auto-complete="off" placeholder="账号">
       	<template slot="prepend">
 					<i class="fa fa-user-o" aria-hidden="true"></i>
 				</template>
       </el-input>
     </el-form-item>
-    <el-form-item prop="checkPass">
-      <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码">
+    <el-form-item prop="userPsw">
+      <el-input type="password" v-model="loginForm.userPsw" auto-complete="off" placeholder="密码">
       	<template slot="prepend">
 					<i class="fa fa-lock" aria-hidden="true"></i>
 				</template>
       </el-input>
     </el-form-item>
     <el-form-item prop="valResult">
-      <el-input v-model="ruleForm2.valResult" auto-complete="off" placeholder="验证码">
+      <el-input v-model="loginForm.valResult" auto-complete="off" placeholder="验证码">
       	<template slot="prepend">
 					<i class="fa fa-qrcode" aria-hidden="true"></i>
 				</template>
@@ -25,9 +25,8 @@
 				</template>
       </el-input>
     </el-form-item>
-    <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
+      <el-button type="primary" style="width:100%;" @click.native.prevent="login" :loading="logining">登录</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -51,36 +50,31 @@
         logining: false,  
         expression: '',
 	      validate: '',
-        ruleForm2: {
-          account: 'YWRtaW4=',
-          checkPass: 'MTIz',
+        loginForm: {
+          userCode: 'YWRtaW4=',
+          userPsw: 'MTIz',
           valResult:'',
         },
-        rules2: {
-          account: [
+        ruleLogin: {
+          userCode: [
             { required: true, message: '请输入账号', trigger: 'blur' },
           ],
-          checkPass: [
+          userPsw: [
             { required: true, message: '请输入密码', trigger: 'blur' },
           ],
           valResult: [
             { required: true, validator: valResultFunc,trigger: 'blur' },
           ]
         },
-        checked: true
       };
     },
     methods: {
-      handleReset2() {
-        this.$refs.ruleForm2.resetFields();
-      },
-      handleSubmit2(ev) {
+      login(ev) {
         var _this = this;
-        this.$refs.ruleForm2.validate((valid) => {
+        this.$refs.loginForm.validate((valid) => {
           if (valid) {
             this.logining = true;
-            this.$router.push({ path: '/system/user' });
-            /*var loginParams = { userCode: this.ruleForm2.account, userPsw: this.ruleForm2.checkPass,status:1};
+            var loginParams = { userCode: this.loginForm.userCode, userPsw: this.loginForm.userPsw,status:1};
             this.$store.dispatch('requestLogin',loginParams).then((data) => {  
 	              this.logining = false;
 	              if (data.status == 200) {
@@ -92,7 +86,7 @@
 	                  type: 'error'
 	                });
 	              }
-		        });  */
+		        });  
           } else {
             console.log('error submit!!');
             return false;

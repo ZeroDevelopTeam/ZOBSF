@@ -22,33 +22,14 @@
 		</el-col>
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
-		<!--权限详情 -->
-		<el-dialog title="权限详情" :visible.sync="dialogFormVisible">
-		  	<!--编辑界面-->
-				<el-form :model="purviewInfo" label-width="80px" >
-					<el-form-item label="权限编号">
-						<el-input v-model="purviewInfo.purviewId" readonly auto-complete="off"></el-input><!-- input中加入autocomplete="off" 来关闭记录,默认on -->
-					</el-form-item>
-					<el-form-item label="权限名称">
-						<el-input v-model="purviewInfo.purviewName"></el-input>
-					</el-form-item>
-					<el-form-item label="规则">
-						<el-input v-model="purviewInfo.purviewRule"></el-input>
-					</el-form-item>
-					<el-form-item label="备注" >
-						<el-input type="textarea" v-model="purviewInfo.purviewDesc"></el-input>
-					</el-form-item>
-				</el-form>
-			  <div slot="footer" class="dialog-footer">
-			    <el-button type="primary"  @click="dialogFormVisible = false">返 回</el-button>
-			  </div>
-		</el-dialog>
+		<PurviewInfo :dialogFormVisible="dialogFormVisible" :purviewInfo="purviewInfo"></PurviewInfo>
 	</section>
 	
 </template>
 
 <script>
 	import CommTable from '../../../../components/CommTable';
+	import PurviewInfo from './PurviewInfo';
   	import { mapGetters } from 'vuex'
 	export default {
 		computed: {
@@ -119,6 +100,7 @@
 		        };
 		        const dispatch='getPurviewList';
 			return {
+				formLabelWidth: '40%',
 				purviewInfo:'',
 				tableConfig:{
 					dataList:[],
@@ -137,7 +119,9 @@
 		methods: {
 			//点击链接显示详情
 			clickLick(row){
+				console.log(row)
 				this.dialogFormVisible=true;
+				console.log(this.dialogFormVisible)
 				this.purviewInfo=row;
 			},
 			//状态显示转换
@@ -196,7 +180,7 @@
 					}).then(() => {
 						this.listLoading = true;
 						let para = { purviewIds: row.purviewId };
-						this.$store.dispatch('removePurview',para).then((res) => {  
+						this.$store.dispatch('removePurviews',para).then((res) => {  
 							this.listLoading = false;
 							if(res.status == 200){
 								this.$message({
@@ -232,7 +216,7 @@
 					}).then(() => {
 						this.listLoading = true;
 						let para = { purviewIds: purviewIds };
-						this.$store.dispatch('removePurview',para).then((res) => {  
+						this.$store.dispatch('removePurviews',para).then((res) => {  
 							this.listLoading = false;
 							if(res.status==200){
 								this.$message({
@@ -300,6 +284,7 @@
 		},
 		components: {
 			CommTable,
+			PurviewInfo
 		}
 	}
 
