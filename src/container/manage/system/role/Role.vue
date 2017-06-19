@@ -22,33 +22,9 @@
 		</el-col>
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
-		<!--<RoleInfo :dialogFormVisible="dialogFormVisible" :roleInfo="roleInfo"></RoleInfo>-->
+		<RoleInfo :dialogFormVisible="dialogFormVisible" :roleInfo="roleInfo" @hiddenInfo="hiddenInfo"></RoleInfo>
 		
-		<!--角色详情 -->
-		<el-dialog title="角色详情" :visible.sync="dialogFormVisible"  size="tiny">
-	    <!--角色详情-->
-			<el-form  label-width="50%">
-				<el-form-item label="角色编号：">
-					{{roleInfo.roleId}}
-				</el-form-item>
-				<el-form-item label="角色名称：">
-					{{roleInfo.roleName}}
-				</el-form-item>
-				<el-form-item label="角色权限：">
-					{{roleInfo.purviews}}
-				</el-form-item>
-				<el-form-item label="角色状态：">
-					{{roleInfo.state==1?'启用':'停用'}}
-				</el-form-item>
-				<el-form-item label="备注：">
-					{{roleInfo.roleDesc}}
-				</el-form-item>
-				
-			</el-form>
-	  		<div slot="footer" class="dialog-footer">
-		    	<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-		  	</div>
-		</el-dialog>
+		
 	</section>
 	
 </template>
@@ -148,6 +124,10 @@
 				let purviews = row.purviews?row.purviews.map(item => item.purviewName).toString():'暂无';
 				this.roleInfo=Object.assign( row,{purviews:purviews});
 			},
+			//子组件控制父组件隐藏
+			hiddenInfo(visible){
+				this.dialogFormVisible = visible;
+			},
 			//启用停用功能按钮设置
 			labelFun(index,row){
 				let str = '启用';
@@ -169,21 +149,15 @@
 			handleEdit: function (index, row,scope) {
 				this.$router.push({ path: '/system/role/editRole', query: { id: row.roleId }});
 			},
-			//重置
-			resetForm() {
-		        this.$refs.search.resetFields();
-		        this.filters.keyWord='';
-		        this.getRoles();
-		    },
 			//获取角色列表
 			getRoles() {
-				let para = {
+				this.tableConfig.params = {
 					pageNum: 1,
 					pageSize:10,
 					keyWord: this.filters.keyWord
 				};
 				this.listLoading = true;
-				this.$store.dispatch('getRoleList',para).then((res) => {  
+				this.$store.dispatch('getRoleList',this.tableConfig.params).then((res) => {  
 					this.listLoading = false;
 		        });  
 			},
@@ -293,13 +267,8 @@
 		watch:{
 		  	roleList(){
 		  		this.$set(this.tableConfig, "dataList", this.roleList);
+		  		this.$set(this.tableConfig, "params", this.tableConfig.params);
 		  	},
-		  	filters:{
-		  		 handler(val,oldval){  
-                    this.$set(this.tableConfig.params, "keyWord", val.keyWord);
-                },  
-                deep:true//对象内部的属性监听，也叫深度监听  
-　　　　　　 },
 		},
 		mounted() {
 			this.getRoles();

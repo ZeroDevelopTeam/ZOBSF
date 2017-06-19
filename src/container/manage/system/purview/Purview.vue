@@ -22,7 +22,8 @@
 		</el-col>
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
-		<PurviewInfo :dialogFormVisible="dialogFormVisible" :purviewInfo="purviewInfo"></PurviewInfo>
+		<!-- 权限详情  -->
+		<PurviewInfo :dialogFormVisible="dialogFormVisible" :purviewInfo="purviewInfo" @hiddenInfo="hiddenInfo"></PurviewInfo>
 	</section>
 	
 </template>
@@ -119,10 +120,12 @@
 		methods: {
 			//点击链接显示详情
 			clickLick(row){
-				console.log(row)
 				this.dialogFormVisible=true;
-				console.log(this.dialogFormVisible)
 				this.purviewInfo=row;
+			},
+			//子组件控制父组件
+			hiddenInfo(visible){
+				this.dialogFormVisible = visible;
 			},
 			//状态显示转换
 			formatState: function (row, column) {
@@ -149,21 +152,15 @@
 			handleEdit: function (index, row,scope) {
 				this.$router.push({ path: '/system/purview/editPurview', query: { id: row.purviewId }});
 			},
-			//重置
-			resetForm() {
-		        this.$refs.search.resetFields();
-		        this.filters.keyWord='';
-		        this.getPurviews();
-		    },
 			//获取权限列表
 			getPurviews() {
-				let para = {
+				this.tableConfig.params = {
 					pageNum: 1,
 					pageSize:10,
 					keyWord: this.filters.keyWord
 				};
 				this.listLoading = true;
-				this.$store.dispatch('getPurviewList',para).then((res) => {  
+				this.$store.dispatch('getPurviewList',this.tableConfig.params).then((res) => {  
 					this.listLoading = false;
 		        });  
 			},
@@ -271,13 +268,8 @@
 		watch:{
 		  	purviewList(){
 		  		this.$set(this.tableConfig, "dataList", this.purviewList);
-		  	},
-		  	filters:{
-		  		 handler(val,oldval){  
-                    this.$set(this.tableConfig.params, "keyWord", val.keyWord);
-                },  
-                deep:true//对象内部的属性监听，也叫深度监听  
-　　　　　　 },
+		  		this.$set(this.tableConfig, "params", this.tableConfig.params);
+		  	}
 		},
 		mounted() {
 			this.getPurviews();

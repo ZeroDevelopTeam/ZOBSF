@@ -22,37 +22,8 @@
 		</el-col>
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
-		<!--<UserInfo :dialogFormVisible="dialogFormVisible" :userInfo="userInfo"></UserInfo>-->
-		
-		<!--用户详情-->
-		<el-dialog title="用户详情" :visible.sync="dialogFormVisible" size="tiny">
-	        <el-form label-width="50%" >
-	            <el-form-item label="用户账号：">
-					{{userInfo.userCode}}
-				</el-form-item>
-				<el-form-item label="用户名称：">
-					{{userInfo.userName}}
-				</el-form-item>
-				<el-form-item label="手机号：">
-					{{userInfo.phone}}
-				</el-form-item>
-				<el-form-item label="用户邮箱：">
-					{{userInfo.email}}
-				</el-form-item>
-				<el-form-item label="用户状态：">
-				    {{userInfo.state=='1'?'启用':'停用'}}
-				</el-form-item>
-				<el-form-item label="用户角色：">
-				    {{userInfo.roles}}
-				</el-form-item>
-				<el-form-item label="常用地址：">
-					{{userInfo.address}}
-				</el-form-item>
-	        </el-form>
-	        <span slot="footer" class="dialog-footer">
-	            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-	        </span>
-	    </el-dialog>
+		<!-- 用户详情  -->
+		<UserInfo :dialogFormVisible="dialogFormVisible" :userInfo="userInfo" @hiddenInfo="hiddenInfo"></UserInfo>
 	</section>
 	
 </template>
@@ -174,6 +145,10 @@
 				let roles = row.roles?row.roles.map(item => item.roleName).toString():'暂无';
 				this.userInfo=Object.assign( row,{roles:roles});
 			},
+			//子组件控制父组件隐藏
+			hiddenInfo(visible){
+				this.dialogFormVisible = visible;
+			},
 			//获取选中列
 			handleSelectionChange(val) {
 		        this.sels = val;
@@ -189,13 +164,13 @@
 			},
 			//获取用户列表
 			getUsers() {
-				let para = {
+				this.tableConfig.params = {
 					pageNum: 1,
 					pageSize:10,
 					keyWord: this.filters.keyWord
 				};
 				this.listLoading = true;
-				this.$store.dispatch('getUserList',para).then((res) => {  
+				this.$store.dispatch('getUserList',this.tableConfig.params).then((res) => {  
 					this.listLoading = false;
 		        });  
 			},
@@ -305,13 +280,8 @@
 		watch:{
 		  	userList(){
 		  		this.$set(this.tableConfig, "dataList", this.userList);
-		  	},
-		  	filters:{
-		  		 handler(val,oldval){  
-                    this.$set(this.tableConfig.params, "keyWord", val.keyWord);
-                },  
-                deep:true//对象内部的属性监听，也叫深度监听  
-　　　　　　	},
+		  		this.$set(this.tableConfig, "params", this.tableConfig.params);
+		  	}
 		},
 		mounted() {
 			this.getUsers();

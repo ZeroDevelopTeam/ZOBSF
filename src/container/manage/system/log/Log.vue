@@ -108,15 +108,15 @@
 	   		 ])
 	    },
 		data() {
-		        //方法名
-		        const dispatch = 'getLogList';
-		        //查询参数
-		        let params = {
-		        	pageNum: 1,
-					pageSize:10,
-					type:0,
-					keyWord: ''
-		        }
+	        //方法名
+	        const dispatch = 'getLogList';
+	        //查询参数
+	        let params = {
+	        	pageNum: 1,
+				pageSize:10,
+				type:0,
+				keyWord: ''
+	        }
 			return {
 				activeName: 'columnsOperate',
 				//日志分类（0=操作日志；1=数据库日志；2=系统日志）
@@ -161,14 +161,14 @@
 		     },
 			//获取日志列表
 			getLogs() {
-				let para = {
+				this.tableConfig.params = {
 					pageNum: 1,
 					pageSize:10,
 					type:this.type,
 					keyWord: this.filters.keyWord
 				};
 				this.listLoading = true;
-				this.$store.dispatch('getLogList',para).then((res) => {  
+				this.$store.dispatch('getLogList',this.tableConfig.params).then((res) => {  
 					this.listLoading = false;
 		        });  
 			},
@@ -176,19 +176,10 @@
 		watch:{
 		  	logList(){
 		  		this.$set(this.tableConfig, "dataList", this.logList);
+		  		this.$set(this.tableConfig, "params", this.tableConfig.params);
 		  	},
-		  	filters:{
-		  		 handler(val,oldval){  
-                    this.$set(this.tableConfig.params, "keyWord", val.keyWord);
-                },  
-                deep:true//对象内部的属性监听，也叫深度监听  
-　　　　　　 	},
-			type(){
-                this.$set(this.tableConfig.params, "type", this.type);
-			},
 			columns:{
 		  		 handler(val,oldval){  
-		  		 	console.log(val);
                     this.$set(this.tableConfig, "columns", val);
                 },  
                 deep:true//对象内部的属性监听，也叫深度监听  
