@@ -83,15 +83,6 @@ export default {
 	            resolve(res);
 	        })
 	    });
-	},
-	//报表
-	echarts({commit},params){
-		return new Promise((resolve, reject) => {
-			get('role/echarts',params)
-	        .then(res => {
-	            resolve(res);
-	        })
-	    });
-	},
+	}
 }
 

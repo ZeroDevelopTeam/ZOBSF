@@ -39,8 +39,6 @@ const EditPurview = resolve => require.ensure([], () => resolve(require('../cont
 //日志管理
 const Log = resolve => require.ensure([], () => resolve(require('../container/manage/system/log/Log.vue')), 'group-log');
 
-const upload = resolve => require(['../container/manage/Upload/Upload.vue'], resolve);
-
 //前台
 const HomePlatForm = resolve => require(['../container/platform/Home.vue'], resolve);
 let routes = [
@@ -95,15 +93,6 @@ let routes = [
             { path: '/system/purview/addPurview', component: AddPurview, name: '新增权限',hidden: true },
             { path: '/system/purview/editPurview', component: EditPurview, name: '编辑权限',hidden: true },
             { path: '/system/log', component: Log, name: '日志管理' },
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: 'Upload',
-        iconCls: 'fa fa-bar-chart',
-        children: [
-            { path: '/upload', component: upload, name: 'upload' }
         ]
     },
     {
