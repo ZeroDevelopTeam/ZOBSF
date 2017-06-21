@@ -76,7 +76,7 @@ export default {
 		        	}
 		        ]
 	        }];
-	    let souData =[{
+	    let list =[{
 	    	orderId: '20170868',
 	    	address: '喜马拉雅山脚下十一号',
 	    	receiver: '爱因斯坦',
@@ -86,6 +86,7 @@ export default {
 	    	deliveryDate: '2016-10-06', 
 	    	state: '待配送'
 	    }];
+	    let souData = {list: list}
 	    //查询参数
         let params = {
         	pageNum: 1,

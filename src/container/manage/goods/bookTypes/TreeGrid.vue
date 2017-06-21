@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-table
-	    :data="data"
+	    :data="tableData"
 	    style="width: 100%"
 		highlight-current-row 
 		@selection-change="rowOptions"
@@ -24,37 +24,18 @@
 	        <el-button
 	          size="small"
 	          type="info"
-	          @click="handleEdit()">
+	          @click="handleEdit(scope.$index, scope.row,scope)">
 	            	修改
 	        </el-button>
 	        <el-button
 	          size="small"
 	          type="danger"
-	          @click="handleDelete()">
+	          @click="handleDelete(scope.$index, scope.row,scope)">
 	          		删除
 	        </el-button>
 	      </template>
 	    </el-table-column>
 	  </el-table>
-	  <!--修改界面-->
-		<el-dialog :title="dialogTitle" v-model="formVisible" :close-on-click-modal="false" class="bookType-dialog">
-			<el-form :model="bookTypeForm" label-width="100px" :rules="bookTypeFormRules" ref="bookTypeForm" class="bookType-form">
-				<el-form-item label="分类编号:" prop="typeId">
-					<el-input disabled="true" v-model="bookTypeForm.typeId" auto-complete="off" class="bookType-input"></el-input>
-					<span class="bookType-note">(自动生成)</span>
-				</el-form-item>
-				<el-form-item label="分类名称:" prop="typeName">
-					<el-input v-model="bookTypeForm.typeName" auto-complete="off" class="bookType-input"></el-input>
-				</el-form-item>
-				<el-form-item label="分类描述:">
-					<el-input type="textarea" v-model="bookTypeForm.typeDesc" class="bookType-desc"></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button type="primary" @click.native="formVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="onSubmit" :loading="addLoading">提交</el-button>
-			</div>
-		</el-dialog>
 	  <el-col :span="24" class="toolbar">
 	  		<el-pagination
 		      @size-change="handleSizeChange"
@@ -67,175 +48,155 @@
 		      style="float:right;">
 		    </el-pagination>
 	  </el-col>
+	  <!--修改界面-->
+	  <EditBookType @close="closeDialog" :isVisible="editFormVisible" :booTypeData="bookTypeById" ></EditBookType>
 	</div>
 </template>
 <script>
 import Utils from '../../../../util/dataTranslate.js'
-//  import Vue from 'vue'
-  export default {
-    name: 'TreeGrid',
-    props: {
-    	rowOptions: {
-    		type: Function,
-    	},
-// 该属性是确认父组件传过来的数据是否已经是树形结构了，如果是，则不需要进行树形格式化
-      treeStructure: {
-        type: Boolean,
-        default: function () {
-          return false
-        }
-      },
-// 这是相应的字段展示
-      columns: {
-        type: Array,
-        default: function () {
-          return []
-        }
-      },
-// 这是数据源
-      dataSource: {
-        type: Array,
-        default: function () {
-          return []
-        }
-      },
-// 这个作用是根据自己需求来的，比如在操作中涉及相关按钮编辑，删除等，需要向服务端发送请求，则可以把url传过来
-      requestUrl: {
-        type: String,
-        default: function () {
-          return ''
-        }
-      },
-// 这个是是否展示操作列
-      treeType: {
-        type: String,
-        default: function () {
-          return 'normal'
-        }
-      },
-// 是否默认展开所有树
-      defaultExpandAll: {
-        type: Boolean,
-        default: function () {
-          return false
-        }
-      }
-    },
-    data () {
-      return {
-      	params: '',
-      	dataList: '',
-      	dialogTitle: '修改',
-		formVisible: false,
-		addLoading: false,
-		//弹窗属性
-		bookTypeForm: {
-			typeId: '',
-			typeName: '',
-			typeDesc: '',
+import EditBookType from './EditBookType'
+import { mapGetters } from 'vuex'
+export default {
+	name: 'TreeGrid',
+	components:{
+		EditBookType
+	},
+	props: {
+		rowOptions: {
+			type: Function,
 		},
-		bookTypeFormRules: {
-			typeId: [
-				{ required: true, message: '必填项', trigger: 'blur' }
-			],
-			typeName: [
-				{ required: true, message: '请输入名称', trigger: 'blur' }
-			]
+		// 该属性是确认父组件传过来的数据是否已经是树形结构了，如果是，则不需要进行树形格式化
+		treeStructure: {
+		    type: Boolean,
+		    default: function () {
+		      return false
+		    }
 		},
-      }
-    },
-    computed: {
-    // 格式化数据源
-      data: function () {
-        let me = this
-        if (me.treeStructure) {
-          let data = Utils.treeToArray(me.dataSource, null, null, me.defaultExpandAll)
-          console.log(data)
-          return data
-        }
-        return me.dataSource
-      }
-    },
-    methods: {
-    // 显示行
-      showTr: function (row, index) {
-        let show = (row._parent ? (row._parent._expanded && row._parent._show) : true)
-        row._show = show
-        return show ? '' : 'display:none;'
-      },
-    // 展开下级
-      toggle: function (trIndex) {
-        let me = this
-        let record = me.data[trIndex]
-        record._expanded = !record._expanded
-      },
-    // 显示层级关系的空格和图标
-      spaceIconShow (index) {
-        let me = this
-        if (me.treeStructure && index === 0) {
-          return true
-        }
-        return false
-      },
-    // 点击展开和关闭的时候，图标的切换
-      toggleIconShow (index, record) {
-        let me = this
-        if (me.treeStructure && index === 0 && record.children && record.children.length > 0) {
-          return true
-        }
-        return false
-      },
-      handleDelete () {
-        this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'error'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-      },
-      //新增
-		onSubmit: function () {
-			this.$refs.bookTypeForm.validate((valid) => {
-				if (valid) {
-					this.addLoading = true;
-					let para = Object.assign({}, this.bookTypeForm);
-					//para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-					this.addLoading = false;
-					this.$message({
-						message: '提交成功',
-						type: 'success'
-					});
-					this.$refs['addForm'].resetFields();
-					this.addFormVisible = false;
-				}
+		// 这是相应的字段展示
+		columns: {
+		    type: Array,
+		    default: function () {
+		      return []
+		    }
+		},
+		// 这是数据源
+		dataSource: {
+		    type: Array,
+		    default: function () {
+		      return []
+		    }
+		},
+		// 这个作用是根据自己需求来的，比如在操作中涉及相关按钮编辑，删除等，需要向服务端发送请求，则可以把url传过来
+		requestUrl: {
+		    type: String,
+		    default: function () {
+		      return ''
+		    }
+		},
+		// 这个是是否展示操作列
+		treeType: {
+		    type: String,
+		    default: function () {
+		      return 'normal'
+		    }
+		},
+		// 是否默认展开所有树
+		defaultExpandAll: {
+		    type: Boolean,
+		    default: function () {
+		      return false
+		    }
+		}
+	},
+	data () {
+		return {
+		  	params: '',
+			dataList: '',
+			editFormVisible: false,
+			addLoading: false,
+//			booTypeData: {} ,//修改分类数据
+		}
+	},
+	computed: {
+		...mapGetters([
+			'bookTypeById'
+   		]),
+		// 格式化数据源
+		tableData() {
+		    if (this.treeStructure) {
+		      let data = Utils.treeToArray(this.dataSource, null, null, this.defaultExpandAll)
+		      return data
+		    }
+		    return this.dataSource
+		}
+	},
+	methods: {
+		// 显示行
+		showTr(row, index) {
+		    let show = (row._parent ? (row._parent._expanded && row._parent._show) : true)
+		    row._show = show
+		    return show ? '' : 'display:none;'
+		},
+		// 展开下级
+		toggle(trIndex) {
+		    let record = this.tableData[trIndex]
+		    record._expanded = !record._expanded
+		},
+		// 显示层级关系的空格和图标
+		spaceIconShow (index) {
+		    if (this.treeStructure && index === 0) {
+		      return true
+		    }
+		    return false
+		},
+		// 点击展开和关闭的时候，图标的切换
+		toggleIconShow (index, record) {
+		    if (this.treeStructure && index === 0 && record.children && record.children.length > 0) {
+		      return true
+		    }
+		    return false
+		},
+		handleDelete (index, row) {
+			this.$confirm('确认删除该记录吗?', '提示', {
+				type: 'error'
+			}).then(() => {
+				let para = {typeId: row.typeId}
+				this.$store.dispatch('deleteBookTypeById',para).then((res) => {
+					if(res.status==200){
+						this.$message({
+							message: '删除成功！',
+							type: 'success'
+						});
+						this.$emit("refresh");
+					}else{
+						this.$message({
+							message: res.msg,
+							type: 'error'
+						});
+					}
+				});
+			}).catch(()=>{
+				
 			});
 		},
-      handleEdit() {
-      	this.formVisible = true;
-      },
-      //改变每页数量
+		handleEdit(index, row) {
+			this.$store.dispatch('getBookTypeById',{typeId: row.typeId})
+		  	this.editFormVisible = true;
+		},
+		  //改变每页数量
 		handleSizeChange(val) {
 		 	this.params.pageSize = val;
-	        let para = {
-	        	keyWord:this.params.keyWord,
-	        	pageSize: val,
-	        	pageNum: this.params.pageNum
-	        };
+		    let para = {
+		    	keyWord:this.params.keyWord,
+		    	pageSize: val,
+		    	pageNum: this.params.pageNum
+		    };
 			this.listLoading = true;
-	        this.$store.dispatch(this.tableConfig.dispatch,para).then((res) => {  
-	    		this.listLoading = false;
-	    	});
-	    },
-	    //切换页码
+		    this.$store.dispatch(this.tableConfig.dispatch,para).then((res) => {  
+				this.listLoading = false;
+			});
+		},
+		//切换页码
 	    handleCurrentChange(val) {
 	    	this.params.pageNum = val;
 	    	let para = {
@@ -248,8 +209,11 @@ import Utils from '../../../../util/dataTranslate.js'
 	    		this.listLoading = false;
 	    	});
 		},
-    }
-  }
+		closeDialog() {
+			this.editFormVisible = false;
+		}
+	}
+}
 </script>
 <style scoped lang="scss">
   .ms-tree-space{position: relative;
@@ -265,20 +229,4 @@ import Utils from '../../../../util/dataTranslate.js'
   table td{
     line-height: 26px;
   }
-  
-  .bookType-form{
-		.bookType-note{
-			color: #4db3ff;
-			margin-left: 1em;
-		}
-		.bookType-input{
-			width: 40% !important;
-		}
-		.bookType-desc{
-			width:70% !important;
-		}
-	}
-	.dialog-footer{
-		text-align: center;
-	}
 </style>

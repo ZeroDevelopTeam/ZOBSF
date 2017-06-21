@@ -1,8 +1,8 @@
-import {get,post} from '../../api/api'
-import {ADDBOOK, GETBYPAGE} from './mutation_types'
+import {get,post, del} from '../../api/api'
+import {ADDBOOK, GETBYPAGE, REMOVEBOOK, BATCHREMOVEBOOK, GETBYID} from './mutation_types'
 export default {
 	
-	addBook({commit},params){
+	addBook({commit},params) {
 		return new Promise((resolve, reject) => {
 			post('book/addBook',params)
 	        .then(res => {
@@ -10,16 +10,51 @@ export default {
 	        })
 	    });
 	},
-	
-	getByPage({commit},params){
+	editBook({commit},params) {
 		return new Promise((resolve, reject) => {
-			post('book/getByPage',params)
+			post('book/editBook',params)
+	        .then(res => {
+	            resolve(res);
+	        })
+	    });
+	},
+	getByPage({commit},params) {
+		return new Promise((resolve, reject) => {
+			get('book/getByPage',params)
 	        .then(res => {
 	        	commit(GETBYPAGE, res);
 	            resolve(res);
 	        })
 	    });
-	}
+	},
 	
+	removeBook({commit},params) {
+		return new Promise((resolve, reject) => {
+			del('book/deleteBooks',params)
+	        .then(res => {
+	            resolve(res);
+	        })
+	    });
+	},
+	
+	getById({commit},params) {
+		return new Promise((resolve, reject) => {
+			get('book/getBookByBookId',params)
+	        .then(res => {
+	        	commit(GETBYID, res);
+	            resolve(res);
+	        })
+	    });
+	},
+	
+	getBooksByBookTypeId({commit},params) {
+		return new Promise((resolve, reject) => {
+			get('book/getBookByBookId',params)
+	        .then(res => {
+	        	commit(GETBYPAGE, res);
+	            resolve(res);
+	        })
+	    });
+	},
 }
 

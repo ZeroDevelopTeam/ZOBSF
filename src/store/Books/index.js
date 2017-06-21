@@ -3,7 +3,8 @@ import mutations from './mutations';
 import getters from './getters';
 //初始化状态
 const state = {
-	bookList: []
+	bookList: [],
+	bookDataById: {},
 }
 export default {
     state,

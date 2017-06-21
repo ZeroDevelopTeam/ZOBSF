@@ -13,6 +13,8 @@ const Main = resolve => require(['../container/Main.vue'], resolve);
 const Book = resolve => require.ensure([], () => resolve(require('../container/manage/goods/books/Book.vue')), 'group-book');
 //新增图书
 const AddBook = resolve => require.ensure([], () => resolve(require('../container/manage/goods/books/AddBook.vue')), 'group-book');
+//修改图书
+const EditBook = resolve => require.ensure([], () => resolve(require('../container/manage/goods/books/EditBook.vue')), 'group-book');
 //分类管理
 const BookType = resolve => require.ensure([], () => resolve(require('../container/manage/goods/bookTypes/BookType.vue')), 'group-bookType');
 //单据管理
@@ -62,6 +64,7 @@ let routes = [
         children: [
             { path: '/goods/book', component: Book, name: '图书管理' },
             { path: '/goods/book/addBook', component: AddBook, name:'新增图书', hidden: true },
+            { path: '/goods/book/editBook', component: EditBook, name:'修改图书', hidden: true },
             { path: '/goods/bookType', component: BookType, name: '分类管理' }
         ]
     },

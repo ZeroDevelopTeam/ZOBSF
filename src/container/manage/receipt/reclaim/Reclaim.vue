@@ -79,7 +79,7 @@ export default {
 		        	}
 		        ]
 	        }];
-	    let souData = [{
+	    let list= [{
           retrieveId: '20160502',
           retriever: '王小虎',
           retrieveDate: '2017-03-12',
@@ -100,6 +100,7 @@ export default {
           retrieveDate: '2017-03-12',
           retrieveType: '手动回收'
         }]
+	    let souData = {list: list}
 	    //查询参数
         let params = {
         	pageNum: 1,
@@ -110,8 +111,8 @@ export default {
       		tableConfig: {
 		      	columns,
 		      	params,
-		      	actionType: 'increment',
-		      	dataList:souData,
+		      	dispatch: 'increment',
+		      	dataList: souData,
 		      	rowOptions:this.handleSelectionChange,
     		},
     		searchVaule:null,//检索值
@@ -120,7 +121,7 @@ export default {
     		addLoading: false,
     		//新增界面数据
 			addForm: {
-				retrieveId: 'sd',
+				retrieveId: '',
 				rretriever: '',
 				retrieveDate: '',
 				retrieveType: '',
