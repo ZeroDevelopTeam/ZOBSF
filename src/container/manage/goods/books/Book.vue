@@ -133,7 +133,12 @@ import { mapGetters } from 'vuex'
 		},
 		//点击分类
 		handleClick(data) {
-			this.$store.dispatch('getBooksByBookTypeId',{bookTypeId: data.typeId});
+			let para = {
+				pageNum:  1,
+				pageSize: 10,
+				typeId: data.typeId
+			};
+			this.$store.dispatch('getBooksByBookTypeId', para);
 			this.typeId = data.typeId;
 		},
 		//新增
