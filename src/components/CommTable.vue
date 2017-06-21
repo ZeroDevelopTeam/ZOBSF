@@ -91,12 +91,7 @@
 		methods: {
 			//改变每页数量
 			handleSizeChange(val) {
-	    	 	this.params.pageSize = val;
-		        let para = {
-		        	keyWord:this.params.keyWord,
-		        	pageSize: val,
-		        	pageNum: this.params.pageNum
-		        };
+		        let para = Object.assign({}, this.params);
 				this.listLoading = true;
 		        this.$store.dispatch(this.tableConfig.dispatch,para).then((res) => {  
 	        		this.listLoading = false;
@@ -105,11 +100,7 @@
 		    //切换页码
 		    handleCurrentChange(val) {
 		    	this.params.pageNum = val;
-		    	let para = {
-		        	keyWord:this.params.keyWord,
-		        	pageSize:this.params.pageSize,
-		        	pageNum: val
-		        };
+		        let para = Object.assign({}, this.params);
 				this.listLoading = true;
 		        this.$store.dispatch(this.tableConfig.dispatch,para).then((res) => {  
 	        		this.listLoading = false;
