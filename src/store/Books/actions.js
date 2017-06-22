@@ -49,7 +49,7 @@ export default {
 	
 	getBooksByBookTypeId({commit},params) {
 		return new Promise((resolve, reject) => {
-			get('book/getBookByBookId',params)
+			get('book/getBooksByTypeId',params)
 	        .then(res => {
 	        	commit(GETBYPAGE, res);
 	            resolve(res);
