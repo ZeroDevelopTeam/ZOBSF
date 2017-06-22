@@ -51,8 +51,8 @@
         expression: '',
 	      validate: '',
         loginForm: {
-          userCode: 'YWRtaW4=',
-          userPsw: 'MTIz',
+          userCode: '',
+          userPsw: '',
           valResult:'',
         },
         ruleLogin: {
@@ -74,7 +74,7 @@
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
             this.logining = true;
-            var loginParams = { userCode: this.loginForm.userCode, userPsw: this.loginForm.userPsw,status:1};
+            var loginParams = { userCode: this.loginForm.userCode, userPsw: this.loginForm.userPsw};
             this.$store.dispatch('requestLogin',loginParams).then((data) => {  
 	              this.logining = false;
 	              if (data.status == 200) {
