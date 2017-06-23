@@ -1,6 +1,6 @@
 <template>
-	<el-row style="margin-top: 10px;">
-		<el-col :span="4">
+	<div class="book-container" id="book-container">
+		<div id="book-left">
 		 	<el-tree
 			  :data="bookTypeTree"
 			  :props="defaultProps"
@@ -11,8 +11,9 @@
 			  @node-click="handleClick"
 		  	>
 			</el-tree>
-		</el-col>
-		<el-col :span="19" style="margin-left: 5px;">
+		</div>
+		<div id="book-middle"></div>
+		<div id="book-right">
 		 	<div class="book-top">
 				<el-button type="primary" @click="addSubmit">新增</el-button>
 				<el-button type="primary" :disabled="this.sels.length===0" @click="batchRemove">删除</el-button>
@@ -26,12 +27,13 @@
 				</el-input>
 			</div>
 			<CommTable  :tableConfig="tableConfig"></CommTable>
-		</el-col>
-	</el-row>
+		</div>
+	</div>
 </template>
 
 <script>
 import CommTable from '../../../../components/CommTable'
+import DivideUtil from '../../../../util/divideUtil'
 import { mapGetters } from 'vuex'
  export default {
  	components:{
@@ -230,19 +232,44 @@ import { mapGetters } from 'vuex'
 			};
 		this.$store.dispatch('getBookTypeTree',para);
 		this.getBooks();
+		//分栏拖拽
+		DivideUtil.divideFun("book-container", "book-left", "book-middle", "book-right");
 	},
 };
 </script>
 
 <style scoped lang="scss">
-.book-top{
-	margin-bottom: 5px;
-	float: left;
-	width:100%;
-	.el-input{
-		width: 20%;
-		display: inline-block;
-		float: right;
+.book-container {
+	margin-top: 10px;
+	position: relative;
+	height: 50em;
+	/*overflow: hidden;*/
+	#book-left, #book-right, #book-middle { 
+		height:100%; 
+		position:absolute;
+	}
+	#book-left {
+		width:300px;
+	}
+	#book-middle {
+		width:9px;
+		left:300px;
+	}
+	#book-middle:hover{ cursor:col-resize;}
+	#book-right {
+		right:0; 
+		left:309px; 
+		width:auto;
+	}
+	.book-top{
+		margin-bottom: 5px;
+		float: left;
+		width:100%;
+		.el-input{
+			width: 20%;
+			display: inline-block;
+			float: right;
+		}
 	}
 }
 </style>
