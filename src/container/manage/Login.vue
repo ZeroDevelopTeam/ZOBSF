@@ -21,7 +21,7 @@
 					<i class="fa fa-qrcode" aria-hidden="true"></i>
 				</template>
       	<template slot="append">
-					<el-button type="primary" style="width:100%;" @click.native.prevent="renderCode" >{{expression}}</el-button>
+					<el-button type="primary" style="width:80px;" @click.native.prevent="renderCode" >{{expression}}</el-button>
 				</template>
       </el-input>
     </el-form-item>

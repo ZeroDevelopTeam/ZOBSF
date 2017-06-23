@@ -24,6 +24,9 @@
 		<CommTable  :tableConfig="tableConfig"></CommTable>
 		<!-- 用户详情  -->
 		<UserInfo :dialogFormVisible="dialogFormVisible" :userInfo="userInfo" @hiddenInfo="hiddenInfo"></UserInfo>
+			<transition name="fade" mode="out-in">
+				<router-view></router-view>
+			</transition>
 	</section>
 	
 </template>
@@ -129,7 +132,22 @@
 		methods: {
 			//状态显示转换
 			formatState: function (row, column) {
-				return row.state == 1 ? '启用' : row.state == 0 ? '停用' : '未知';
+				let str = '';
+				switch(row.state)
+					{
+					case 0:
+					  str='停用';
+					  break;
+					case 1:
+					  str='启用';
+					  break;
+				    case 2:
+				      str='待激活';
+				      break;
+					default:
+					  str='未知';
+					}
+				return str;
 			},
 			//启用停用功能按钮设置
 			labelFun(index,row){

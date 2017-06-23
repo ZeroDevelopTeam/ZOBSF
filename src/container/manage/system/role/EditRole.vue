@@ -50,11 +50,8 @@
 		data() {
 			return {
 				editFormRules: {
-					roleId: [
-						{ required: true, message: '请输入角色编号', trigger: 'blur' }
-					],
 					roleName: [
-						{ required: true, message: '请输入角色名称', trigger: 'blur' }
+						{ required: true, message: '请输入角色名称', trigger: 'change' }
 					],
 					state: [
 						{ required: true, message: '请选择状态', trigger: 'change' }

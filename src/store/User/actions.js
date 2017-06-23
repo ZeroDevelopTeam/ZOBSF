@@ -69,7 +69,7 @@ export default {
 	//修改密码
 	changeUserPsw({commit},params){
 		return new Promise((resolve, reject) => {
-			get('user/changeUserPsw',params)
+			post('user/changeUserPsw',params)
 	        .then(res => {
 	            resolve(res);
 	        })

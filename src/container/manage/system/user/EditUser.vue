@@ -91,9 +91,6 @@
 				showTexts:'',
 				colors:'',
 				editFormRules: {
-					userCode: [
-						{ required: true, message: '请输入用户账号', trigger: 'change' }
-					],
 					userName: [
 						{ required: true, message: '请输入用户名', trigger: 'change' }
 					],

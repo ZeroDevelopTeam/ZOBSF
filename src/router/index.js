@@ -8,6 +8,9 @@ const NotFound = resolve => require(['../container/404.vue'], resolve);
 const Home = resolve => require(['../container/manage/Home.vue'], resolve);
 //后端主界面
 const Main = resolve => require(['../container/Main.vue'], resolve);
+//后端三级路由
+const Content = resolve => require(['../container/manage/Content.vue'], resolve);
+
 //货物管理
 //图书管理
 const Book = resolve => require.ensure([], () => resolve(require('../container/manage/goods/books/Book.vue')), 'group-book');
@@ -55,44 +58,84 @@ let routes = [
         hidden: true
     },
     {
-        path: '/',
+        path: '/goods',
         component: Home,
         name: '货物管理',
         iconCls: 'fa fa-book',//图标样式class
-        children: [
-            { path: '/goods/book', component: Book, name: '图书管理' },
-            { path: '/goods/book/addBook', component: AddBook, name:'新增图书', hidden: true },
-            { path: '/goods/book/editBook', component: EditBook, name:'修改图书', hidden: true },
-            { path: '/goods/bookType', component: BookType, name: '分类管理' }
+		meta: {
+            requireAuth: true,  // 添加该字段，true表示进入这个路由是需要登录的
+        },
+        redirect: '/goods/book',
+		children: [
+            { path: 'book', component: Content, name: '图书管理',redirect: '/goods/book/list',
+	            children: [
+		            { path: 'list', component: Book, name: '图书列表' },
+		            { path: 'addBook', component: AddBook, name:'新增图书' },
+		            { path: 'editBook', component: EditBook, name:'修改图书' },
+		        ]
+	        },
+            { path: 'bookType', component: Content, name: '分类管理',redirect: '/goods/bookType/list',
+            	children: [
+		            { path: 'list', component: BookType, name: '分类列表' },
+		        ]
+            }
         ]
     },
     {
-        path: '/',
+        path: '/receipt',
         component: Home,
         name: '单据管理',
         iconCls: 'fa fa-files-o',//图标样式class
+        meta: {
+            requireAuth: true,  // 添加该字段，true表示进入这个路由是需要登录的
+        },
+        redirect: '/receipt/order',
         children: [
-            { path: '/receipt/order', component: Order, name: '订单管理' },
-            { path: '/receipt/order/editOrder', component: EditOrder, name: '修改订单',hidden: true },
-            { path: '/receipt/reclaim', component: Reclaim, name: '回收管理' }
+            { path: 'order', component: Content, name: '订单管理',redirect: '/receipt/order/list',
+            	children: [
+		            { path: 'list', component: Order, name: '订单列表' },
+		            { path: 'editOrder', component: EditOrder, name: '修改订单'},
+		        ]
+            },
+            { path: 'reclaim', component: Content, name: '回收管理',redirect: '/receipt/reclaim/list',
+            	children: [
+		            { path: 'list', component: Reclaim, name: '回收列表' },
+		        ]
+            }
         ]
     },
     {
-        path: '/',
+        path: '/system',
         component: Home,
         name: '系统管理',
         iconCls: 'el-icon-setting',//图标样式class
+        meta: {
+            requireAuth: true,  // 添加该字段，true表示进入这个路由是需要登录的
+        },
+        redirect: '/system/user',
         children: [
-            { path: '/system/user', component: User, name: '用户管理' },
-            { path: '/system/user/addUser', component: AddUser, name: '新增用户',hidden: true },
-            { path: '/system/user/editUser', component: EditUser, name: '编辑用户',hidden: true },
-            { path: '/system/role', component: Role, name: '角色管理' },
-            { path: '/system/role/addRole', component: AddRole, name: '新增角色',hidden: true },
-            { path: '/system/role/editRole', component: EditRole, name: '编辑角色',hidden: true },
-            { path: '/system/purview', component: Purview, name: '权限管理' },
-            { path: '/system/purview/addPurview', component: AddPurview, name: '新增权限',hidden: true },
-            { path: '/system/purview/editPurview', component: EditPurview, name: '编辑权限',hidden: true },
-            { path: '/system/log', component: Log, name: '日志管理' },
+            { path: 'user', component: Content, name: '用户管理',redirect: '/system/user/list',
+            	children:[
+            		{ path: 'list', component: User, name: '用户列表' },
+	            	{ path: 'addUser', component: AddUser, name: '新增用户' },
+	            	{ path: 'editUser', component: EditUser, name: '编辑用户' }
+            	] 
+            },
+            { path: 'role', component: Content, name: '角色管理',redirect: '/system/role/list',
+            	children:[
+            		{ path: 'list', component: Role, name: '角色列表' },
+	            	{ path: 'addRole', component: AddRole, name: '新增角色' },
+            		{ path: 'editRole', component: EditRole, name: '编辑角色' },
+            	] 
+            },
+            { path: 'purview', component: Content, name: '权限管理',redirect: '/system/purview/list',
+            	children:[
+            		{ path: 'list', component: Purview, name: '权限列表' },
+	            	{ path: 'addPurview', component: AddPurview, name: '新增权限' },
+           			{ path: 'editPurview', component: EditPurview, name: '编辑权限' },
+            	]
+            },
+            { path: 'log', component: Log, name: '日志管理' },
         ]
     },
     {
@@ -103,6 +146,10 @@ let routes = [
     {
         path: '/homePlatForm',
         component: HomePlatForm,
+        hidden: true,
+        meta: {
+            requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
+        },
         children: [
         ]
     },

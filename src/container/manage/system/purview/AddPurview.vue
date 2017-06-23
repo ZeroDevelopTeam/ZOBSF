@@ -40,21 +40,36 @@
 	export default {
 		computed: {
 		 ...mapGetters([
-		 	
+		 		'purviewList'
    			])
 	    },
 		data() {
+			//权限编号重复校验
+			const validatePurviewId = (rule, value, callback) => {
+		        if (value === '') {
+		          callback(new Error('请输入权限编号'));
+		        } else {
+		        	let isPass = false;
+		        	this.purviewList.list.map(item=>{
+						if(item.purviewId == value.trim()){
+							isPass = true;
+							return;
+						}
+					})
+		        	isPass? callback(new Error('权限编号已存在！')): callback();
+		        }
+		    };
 			return {
 				addLoading:false,
 				addFormRules: {
 					purviewId: [
-						{ required: true, message: '请输入权限编号', trigger: 'blur' }
+						{ required: true, validator: validatePurviewId, trigger: 'change' }
 					],
 					purviewName: [
-						{ required: true, message: '请输入权限名称', trigger: 'blur' }
+						{ required: true, message: '请输入权限名称', trigger: 'change' }
 					],
 					purviewRule: [
-						{ required: true, message: '请输入规则', trigger: 'blur' }
+						{ required: true, message: '请输入规则', trigger: 'change' }
 					],
 					state: [
 						{ required: true, message: '请选择状态', trigger: 'change' }
@@ -103,10 +118,11 @@
 				this.$refs.addForm.resetFields();
 				this.$router.go(-1);
 			},
-			mounted() {
-			},
-			components: {
-			}
+		},
+		mounted() {
+			this.$store.dispatch('getPurviewList',{pageNum:1,pageSize:9999,keyWord:''});
+		},
+		components: {
 		}
 	}
 </script>

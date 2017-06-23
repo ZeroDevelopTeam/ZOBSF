@@ -42,14 +42,11 @@
 		data() {
 			return {
 				editFormRules: {
-					purviewId: [
-						{ required: true, message: '请输入权限编号', trigger: 'blur' }
-					],
 					purviewName: [
-						{ required: true, message: '请输入权限名称', trigger: 'blur' }
+						{ required: true, message: '请输入权限名称', trigger: 'change' }
 					],
 					purviewRule: [
-						{ required: true, message: '请输入规则', trigger: 'blur' }
+						{ required: true, message: '请输入规则', trigger: 'change' }
 					],
 					state: [
 						{ required: true, message: '请选择状态', trigger: 'change' }

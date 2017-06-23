@@ -60,7 +60,7 @@
 		        {
 				  	key:4,
 		          	label:'创建时间',
-		          	prop:'time',
+		          	prop:'createDate',
 		        },
 		        {
 				  	key:5,

@@ -4,6 +4,7 @@ import {get,post,del} from '../../api/api'
 export default {
 	//获取所有
 	getPurviewList({commit},params){
+		console.log(params);
 		return new Promise((resolve, reject) => {
 			get('purview/getByPage',params)
 	        .then(res => {
@@ -13,7 +14,7 @@ export default {
 	    });
 	},
 	
-	//获取用户信息
+	//获取权限信息
 	getPurview({commit},params){
 		return new Promise((resolve, reject) => {
 			get('purview/getPurviewByPurviewId',params)
@@ -47,7 +48,7 @@ export default {
 	//删除
 	removePurviews({commit},params){
 		return new Promise((resolve, reject) => {
-			del('purview/removePurview',params)
+			del('purview/deletePurviews',params)
 	        .then(res => {
 	            resolve(res);
 	        })

@@ -139,10 +139,10 @@
 				},
 				//新增界面数据
 				addForm: {
-					userCode:'1',
-					userPsw: '111111',
-					reUserPsw:'111111',
-					userName:'1',
+					userCode:'',
+					userPsw: '',
+					reUserPsw:'',
+					userName:'',
 					phone: '13111111111',
 					email: '123@qq.com',
 					state: '',

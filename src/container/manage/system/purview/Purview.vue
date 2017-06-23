@@ -160,7 +160,7 @@
 					keyWord: this.filters.keyWord
 				};
 				this.listLoading = true;
-				this.$store.dispatch('getPurviewList',this.tableConfig.params).then((res) => {  
+		        this.$store.dispatch('getPurviewList',this.tableConfig.params).then((res) => {  
 					this.listLoading = false;
 		        });  
 			},
