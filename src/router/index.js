@@ -43,7 +43,14 @@ const EditPurview = resolve => require.ensure([], () => resolve(require('../cont
 const Log = resolve => require.ensure([], () => resolve(require('../container/manage/system/log/Log.vue')), 'group-log');
 
 //前台
-const HomePlatForm = resolve => require(['../container/platform/Home.vue'], resolve);
+const PlatForm = resolve => require(['../container/platform/Index.vue'], resolve);
+const PlatForm2 = resolve => require(['../container/platform/Index2.vue'], resolve);
+const PlatFormMain = resolve => require(['../container/platform/Main.vue'], resolve);
+const PlatFormHotBook = resolve => require(['../container/platform/hotBook/Main.vue'], resolve);
+const PlatFormCheapBook = resolve => require(['../container/platform/cheapBook/Main.vue'], resolve);
+const PlatFormOnlineRetrieve = resolve => require(['../container/platform/onlineRetrieve/Main.vue'], resolve);
+const PlatFormSearch = resolve => require(['../container/platform/search/Nav.vue'], resolve);
+const PlatFormShopping = resolve => require(['../container/platform/shopping/Nav.vue'], resolve);
 let routes = [
     {
         path: '/login',
@@ -144,13 +151,43 @@ let routes = [
         redirect: { path: '/404' }
     },
     {
-        path: '/homePlatForm',
-        component: HomePlatForm,
+        path: '/platform',
+        component: PlatForm,
         hidden: true,
         meta: {
             requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
         },
+        redirect: '/platform/main',
         children: [
+        	{ path: 'main', component: PlatFormMain,hidden:true},
+        	{ path: 'hotBook', component: PlatFormHotBook,hidden:true},
+        	{ path: 'cheapBook', component: PlatFormCheapBook,hidden:true},
+        	{ path: 'onlineRetrieve', component: PlatFormOnlineRetrieve,hidden:true},
+        	{ path: 'search', component: PlatFormSearch,hidden:true},
+        ]
+    },
+    {
+        path: '/search',
+        component: PlatForm2,
+        hidden: true,
+        meta: {
+            requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
+        },
+        redirect: '/search',
+        children: [
+        	{ path: '', component: PlatFormSearch,hidden:true},
+        ]
+    },
+    {
+        path: '/shopping',
+        component: PlatForm2,
+        hidden: true,
+        meta: {
+            requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
+        },
+        redirect: '/shopping',
+        children: [
+        	{ path: '', component: PlatFormShopping,hidden:true},
         ]
     },
 ];

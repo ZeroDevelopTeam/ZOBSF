@@ -1,0 +1,48 @@
+/*搜索*/
+.search-container{
+    width:90%;
+    margin: auto;
+    margin-top: 20px;
+    .filter-book{
+        margin-left: 10px;
+        table{
+            width:90%;
+            border-collapse:   separate;
+            border-spacing:  0 20px; 
+        }
+        h2{
+            margin-bottom: 10px;
+        }
+    }
+    .result{
+        border-left: 1px solid #bfcbd9;
+    }
+    .result-count{
+        margin-left: 30px;
+        height: 30px;
+        line-height: 30px;
+        margin-bottom: 30px;
+    }
+    .result-book{
+        margin:0 0 30px 30px;
+        border-bottom: 1px dashed #bfcbd9;
+        span{
+            margin-top: 15px;
+            display:block;
+            white-space:nowrap; 
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        img{
+            margin-right: 10px;
+            width:130px;
+            height:165px;
+            float: left;
+            margin-bottom: 30px;
+        }
+    }
+    .page{
+        text-align: center;
+        margin-bottom: 30px;
+    }
+}

@@ -207,14 +207,14 @@
 </script>
 
 <style scoped>
-
+.footer-button{
+	text-align: center;
+}
 .edit-user{
 	padding-top: 50px;
 	width:600px;
     margin: auto;
-    .footer-button{
-		text-align: center;
-	}
+    
 	.clearfix{
 		text-align: center;
 	}
