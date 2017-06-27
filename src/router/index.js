@@ -49,8 +49,15 @@ const PlatFormMain = resolve => require(['../container/platform/Main.vue'], reso
 const PlatFormHotBook = resolve => require(['../container/platform/hotBook/Main.vue'], resolve);
 const PlatFormCheapBook = resolve => require(['../container/platform/cheapBook/Main.vue'], resolve);
 const PlatFormOnlineRetrieve = resolve => require(['../container/platform/onlineRetrieve/Main.vue'], resolve);
-const PlatFormSearch = resolve => require(['../container/platform/search/Nav.vue'], resolve);
-const PlatFormShopping = resolve => require(['../container/platform/shopping/Nav.vue'], resolve);
+const PlatFormSearch = resolve => require(['../container/platform/search/Main.vue'], resolve);
+const PlatFormShopping = resolve => require(['../container/platform/shopping/Main.vue'], resolve);
+
+//个人中心
+const Person = resolve => require.ensure([], () => resolve(require('../container/platform/person/Index.vue')), 'person');
+const MyInfo = resolve => require.ensure([], () => resolve(require('../container/platform/person/MyInfo.vue')), 'person');
+const MyPsw = resolve => require.ensure([], () => resolve(require('../container/platform/person/MyPsw.vue')), 'person');
+const MyOrder = resolve => require.ensure([], () => resolve(require('../container/platform/person/MyOrder.vue')), 'person');
+const MyRetrieve = resolve => require.ensure([], () => resolve(require('../container/platform/person/MyRetrieve.vue')), 'person');
 let routes = [
     {
         path: '/login',
@@ -167,27 +174,24 @@ let routes = [
         ]
     },
     {
-        path: '/search',
+        path: '/bookStore',
         component: PlatForm2,
         hidden: true,
         meta: {
             requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
         },
-        redirect: '/search',
+        redirect: '/platform/main',
         children: [
-        	{ path: '', component: PlatFormSearch,hidden:true},
-        ]
-    },
-    {
-        path: '/shopping',
-        component: PlatForm2,
-        hidden: true,
-        meta: {
-            requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
-        },
-        redirect: '/shopping',
-        children: [
-        	{ path: '', component: PlatFormShopping,hidden:true},
+        	{ path: 'search', component: PlatFormSearch,hidden:true},
+        	{ path: 'shopping', component: PlatFormShopping,hidden:true},
+        	{ path: 'person', component: Person,hidden:true,redirect: '/bookStore/person/myInfo',
+            	children:[
+            		{ path: 'myInfo', component: MyInfo, name: '我的资料' },
+            		{ path: 'myPsw', component: MyPsw, name: '修改密码' },
+            		{ path: 'myOrder', component: MyOrder, name: '我的订单' },
+            		{ path: 'myRetrieve', component: MyRetrieve, name: '我的回收单' },
+            	]
+           }
         ]
     },
 ];

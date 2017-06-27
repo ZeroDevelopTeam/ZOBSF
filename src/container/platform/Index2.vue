@@ -1,26 +1,24 @@
 <template>
 	<div>
 		<el-row class="header">
-			<Header/>
-		</el-row>
-		<el-row class="content">
-			<transition name="fade" mode="out-in">
-				<router-view></router-view>
-			</transition>
+			<MyHeader/>
+			<MyNav2/>
 		</el-row>
 		<el-row class="footer">
-			<Footer/>
+			<MyFooter/>
 		</el-row>
 	</div>
 </template>
 
 <script>
-import Header from './Header';
-import Footer from './Footer';
+import MyHeader from './Header';
+import MyFooter from './Footer';
+import MyNav2 from './Nav2';
 	export default {
 		components: {
-			Footer,
-			Header,
+			MyFooter,
+			MyHeader,
+			MyNav2
 		}
 	}
 
