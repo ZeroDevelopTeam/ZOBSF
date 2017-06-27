@@ -187,7 +187,8 @@ export default {
 			this.$refs.addBookForm.validate((valid) => {
 				if (valid) {
 					this.addLoading = true;
-					let para = Object.assign({}, this.addBookForm);
+					let typeId=this.$route.query.typeId;
+					let para = Object.assign({}, {typeId: typeId}, this.addBookForm);
 					para.publishTime = (!para.publishTime || para.publishTime == '') ? '' : util.formatDate.format(new Date(para.publishTime), 'yyyy-MM-dd');
 					para.printTime = (!para.printTime || para.printTime == '') ? '' : util.formatDate.format(new Date(para.printTime), 'yyyy-MM-dd');
 					this.$store.dispatch('addBook',para).then((res) => {
@@ -205,7 +206,7 @@ export default {
 								type: 'error'
 							});
 						}
-				    });  
+				    });
 				}
 			});
 		},

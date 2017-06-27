@@ -15,8 +15,8 @@
 				</el-form-item>
 				<el-form-item label="角色状态" prop="state">
 				    <el-select v-model="editForm.state" placeholder="请选择状态类型">
-					    <el-option label="启用" value="0"></el-option>
-					    <el-option label="停用" value="1"></el-option>
+					    <el-option label="启用" value="1"></el-option>
+					    <el-option label="停用" value="0"></el-option>
 				    </el-select>
 				</el-form-item>
 				<el-form-item label="角色权限" prop="purviews">
@@ -50,16 +50,21 @@
 		data() {
 			return {
 				editFormRules: {
-					roleId: [
-						{ required: true, message: '请输入角色编号', trigger: 'blur' }
-					],
 					roleName: [
-						{ required: true, message: '请输入角色名称', trigger: 'blur' }
+						{ required: true, message: '请输入角色名称', trigger: 'change' }
 					],
 					state: [
 						{ required: true, message: '请选择状态', trigger: 'change' }
 					]
 				},
+				//修改界面数据
+				editForm: {
+					roleId:'',
+					roleName: '',
+					roleDesc:'',
+					purviews:'',
+					state:''
+				}
 			}
 		},
 		methods: {
@@ -99,19 +104,15 @@
 			'roleInfo',
 			'purviewList'
 	   		 ]),
-	   		 //将角色信息复制给editForm，避免v-model直接修改roleInfo
-		 	editForm () {
-		 		let purviews = [];
-		 		if(this.roleInfo.purviews){
-		 			purviews = this.roleInfo.purviews.map(item => item.purviewId);
-		 		}
-		        return Object.assign( this.roleInfo,{purviews:purviews});
-		    }
 	    },
 		mounted() {
 			const id=this.$route.query.id;
-			this.$store.dispatch('getRole',{roleId:id});
-			this.$store.dispatch('getPurviewList',{pageNum:1,pageSize:10,keyWord:''});
+			this.$store.dispatch('getRole',{roleId:id}).then((res)=>{
+				//将角色信息复制给editForm，避免v-model直接修改roleInfo
+		 		let purviews = res.purviews?res.purviews.map(item => item.purviewId):[];
+		 		this.editForm = Object.assign( res,{purviews:purviews,state:res.state.toString()});
+			});
+			this.$store.dispatch('getPurviewList',{pageNum:1,pageSize:9999,keyWord:''});
 		},
 		components: {
 		}
@@ -119,14 +120,13 @@
 </script>
 
 <style scoped>
-
+.footer-button{
+	text-align: center;
+}
 .edit-role{
 	padding-top: 50px;
 	width:600px;
     margin: auto;
-    .footer-button{
-		text-align: center;
-	}
 	.clearfix{
 		text-align: center;
 	}

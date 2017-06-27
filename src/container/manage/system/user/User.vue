@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<!--工具条-->
-		<el-col :span="16" class="toolbar" style="padding-bottom: 0px;">
+		<el-col :span="18"  class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" >
 				<el-form-item>
 					<el-button type="primary" @click="handleAdd">新增</el-button>
@@ -11,52 +11,22 @@
 				</el-form-item>
 			</el-form>
 		</el-col>
-		<el-col :span="8" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" ref="search">
-				<el-form-item>
-					<el-input v-model="filters.keyWord" placeholder="关键字查询"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getUsers">查询</el-button>
-					<el-button type="primary" @click="resetForm()">重置</el-button>
-				</el-form-item>
-			</el-form>
+		<el-col :span="6"  class="toolbar" style="padding-bottom: 0px;">
+			<el-input
+			  placeholder="关键字查询"
+			  icon="search"
+			  v-model="filters.keyWord"
+			  :on-icon-click="getUsers"
+			  @keyup.enter.native="getUsers">
+			</el-input>
 		</el-col>
 		<!--列表-->
 		<CommTable  :tableConfig="tableConfig"></CommTable>
-		<!--<UserInfo :dialogFormVisible="dialogFormVisible" :userInfo="userInfo"></UserInfo>-->
-		
-		<!--用户详情-->
-		<el-dialog title="用户详情" :visible.sync="dialogFormVisible">
-	        <el-form style="width:600px;margin: auto;"
-	                 label-width="320px"
-	                 :model="userInfo">
-	            <el-form-item label="用户账号：" prop='userCode'>
-					{{userInfo.userCode}}
-				</el-form-item>
-				<el-form-item label="用户名称：" prop='userName'>
-					{{userInfo.userName}}
-				</el-form-item>
-				<el-form-item label="手机号：" prop='phone'>
-					{{userInfo.phone}}
-				</el-form-item>
-				<el-form-item label="用户邮箱：" prop='email'>
-					{{userInfo.email}}
-				</el-form-item>
-				<el-form-item label="用户状态：" prop='state'>
-				    {{userInfo.state=='1'?'启用':'停用'}}
-				</el-form-item>
-				<el-form-item label="用户角色：" prop='roleName'>
-				    {{userInfo.roleName}}
-				</el-form-item>
-				<el-form-item label="常用地址：" prop='address'>
-					{{userInfo.address}}
-				</el-form-item>
-	        </el-form>
-	        <span slot="footer" class="dialog-footer">
-	            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-	        </span>
-	    </el-dialog>
+		<!-- 用户详情  -->
+		<UserInfo :dialogFormVisible="dialogFormVisible" :userInfo="userInfo" @hiddenInfo="hiddenInfo"></UserInfo>
+			<transition name="fade" mode="out-in">
+				<router-view></router-view>
+			</transition>
 	</section>
 	
 </template>
@@ -120,17 +90,17 @@
 					  	{
 					  		func :this.handleEdit,
 					  		label:'编辑',
-					  		type:'info'
+					  		butType:'info'
 					  	},
 					  	{
 					  		func :this.handleDel,
 					  		label:'删除',
-					  		type:'info'
+					  		butType:'info'
 					  	},
 					  	{
 					  		func :this.changeState,
-					  		flag:'state',
-					  		type:'danger'
+					  		label:this.labelFun,
+					  		butType:'danger'
 					  	}
 				  	]
 		        }];
@@ -162,58 +132,46 @@
 		methods: {
 			//状态显示转换
 			formatState: function (row, column) {
-				return row.state == 1 ? '启用' : row.state == 0 ? '停用' : '未知';
+				let str = '';
+				switch(row.state)
+					{
+					case 0:
+					  str='停用';
+					  break;
+					case 1:
+					  str='启用';
+					  break;
+				    case 2:
+				      str='待激活';
+				      break;
+					default:
+					  str='未知';
+					}
+				return str;
+			},
+			//启用停用功能按钮设置
+			labelFun(index,row){
+				let str = '启用';
+				if(row.state == 1){
+					str = '停用';
+				}
+				return str;
 			},
 			//点击链接显示详情
 			clickLick(row){
 				this.dialogFormVisible=true;
-				this.userInfo=row;
+				let roles = row.roles?row.roles.map(item => item.roleName).toString():'暂无';
+				this.userInfo=Object.assign( row,{roles:roles});
 			},
-			//重置
-			resetForm() {
-		        this.$refs.search.resetFields();
-		        this.filters.keyWord='';
-		        this.getUsers();
-		   },
-			//获取用户列表
-			getUsers() {
-				let para = {
-					pageNum: 1,
-					pageSize:10,
-					keyWord: this.filters.keyWord
-				};
-				this.listLoading = true;
-				this.$store.dispatch('getUserList',para).then((res) => {  
-					this.listLoading = false;
-		        });  
+			//子组件控制父组件隐藏
+			hiddenInfo(visible){
+				this.dialogFormVisible = visible;
 			},
-			//删除
-			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					let para = { userCode: row.userCode };
-					this.$store.dispatch('removeUser',para).then((res) => {  
-						this.listLoading = false;
-						if(res.status==200){
-							this.$message({
-								message: res.msg,
-								type: 'success'
-							});
-							this.getUsers();
-						}else{
-							this.$message({
-								message: res.msg,
-								type: 'error'
-							});
-						}
-			        });  
-				}).catch(() => {
-
-				});
-			},
-			//显示新增界面
+			//获取选中列
+			handleSelectionChange(val) {
+		        this.sels = val;
+	      	},
+		   //显示新增界面
 			handleAdd: function () {
 				this.$router.push({ path: '/system/user/addUser' });
 			},
@@ -222,10 +180,52 @@
 			handleEdit: function (index, row,scope) {
 				this.$router.push({ path: '/system/user/editUser', query: { id: row.userCode }});
 			},
-			
-			handleSelectionChange(val) {
-		        this.sels = val;
-	      	},
+			//获取用户列表
+			getUsers() {
+				this.tableConfig.params = {
+					pageNum: 1,
+					pageSize:10,
+					keyWord: this.filters.keyWord
+				};
+				this.listLoading = true;
+				this.$store.dispatch('getUserList',this.tableConfig.params).then((res) => {  
+					this.listLoading = false;
+		        });  
+			},
+			//删除
+			handleDel: function (index, row) {
+				if(row.state == 1){
+					this.$message({
+						message: '启用状态的用户不能删除！',
+						type: 'error'
+					});
+				}else{
+					this.$confirm('确认删除该记录吗?', '提示', {
+						type: 'warning'
+					}).then(() => {
+						this.listLoading = true;
+						let para = { userCodes: row.userCode };
+						this.$store.dispatch('removeUsers',para).then((res) => {  
+							this.listLoading = false;
+							if(res.status==200){
+								this.$message({
+									message: res.msg,
+									type: 'success'
+								});
+								this.getUsers();
+							}else{
+								this.$message({
+									message: res.msg,
+									type: 'error'
+								});
+							}
+				        });  
+					}).catch(() => {
+	
+					});
+				}
+				
+			},
 			//批量删除
 			batchRemove: function () {
 				const states = this.sels.map(item => item.state);
@@ -235,12 +235,12 @@
 						type: 'error'
 					});
 				}else{
-					var userCodes = this.sels.map(item => item.userCode).toString();
+					const userCodes = this.sels.map(item => item.userCode).toString();
 					this.$confirm('确认删除选中记录吗？', '提示', {
 						type: 'warning'
 					}).then(() => {
 						this.listLoading = true;
-						let para = { str_userCode: userCodes };
+						let para = { userCodes: userCodes };
 						this.$store.dispatch('removeUsers',para).then((res) => {  
 							this.listLoading = false;
 							if(res.status==200){
@@ -298,13 +298,8 @@
 		watch:{
 		  	userList(){
 		  		this.$set(this.tableConfig, "dataList", this.userList);
-		  	},
-		  	filters:{
-		  		 handler(val,oldval){  
-                    this.$set(this.tableConfig.params, "keyWord", val.keyWord);
-                },  
-                deep:true//对象内部的属性监听，也叫深度监听  
-　　　　　　	},
+		  		this.$set(this.tableConfig, "params", this.tableConfig.params);
+		  	}
 		},
 		mounted() {
 			this.getUsers();

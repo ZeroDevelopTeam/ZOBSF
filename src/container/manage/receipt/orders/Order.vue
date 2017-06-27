@@ -10,11 +10,23 @@
 			</el-input>
 		</div>
 		<CommTable  :tableConfig="tableConfig"></CommTable>
+		<el-popover
+		  ref="stateAction"
+		  placement="top"
+		  width="160"
+		  v-model="popoverVisible">
+		  <p>这是一段内容这是一段内容确定删除吗？</p>
+		  <div style="text-align: right; margin: 0">
+		    <el-button size="mini" type="text" @click="popoverVisible = false">取消</el-button>
+		    <el-button type="primary" size="mini" @click="popoverVisible = false">确定</el-button>
+		  </div>
+		</el-popover>
 	</div>
 </template>
 
 <script>
 import CommTable from '../../../../components/CommTable'
+import { mapGetters } from 'vuex'
 export default {
 	components: {
 		CommTable
@@ -55,6 +67,7 @@ export default {
 	        {
 	          	label: '状态',
 	          	prop: 'state',
+	          	formatter: this.stateFormatter,
 	          	width: 80,
 	        },
 	        {
@@ -68,7 +81,9 @@ export default {
 		        	},{
 			          label: this.labelFun,
 			          butType: 'info',
-			          func: this.handleAction
+			          func: this.handleAction,
+			          isShow: this.butIsShow,
+			          popover: 'stateAction'
 		        	},{
 			          label: '删除',
 			          butType: 'danger',
@@ -76,18 +91,8 @@ export default {
 		        	}
 		        ]
 	        }];
-	    let souData =[{
-	    	orderId: '20170868',
-	    	address: '喜马拉雅山脚下十一号',
-	    	receiver: '爱因斯坦',
-	    	phone: '13845668685',
-	    	orderDate: '2016-01-05',
-	    	delivery: '刘翔',
-	    	deliveryDate: '2016-10-06', 
-	    	state: '待配送'
-	    }];
 	    //查询参数
-        let params = {
+        const params = {
         	pageNum: 1,
 			pageSize:10,
 			keyWord: ''
@@ -96,51 +101,123 @@ export default {
       		tableConfig: {
 		      	columns,
 		      	params,
-		      	actionType: 'increment',
-		      	dataList: souData,
+		      	dispatch: 'getOrderByPage',
+		      	dataList: [],
 		      	rowOptions:this.handleSelectionChange
     		},
-    		searchVaule:null,//检索值
+    		searchVaule: '',//检索值
     		sels: [],//列表选中列
+    		popoverVisible: false,//按钮上的提示
         }
 	},
+	computed: {
+		...mapGetters([
+			'getOrderByPage'
+		]),
+	},
+	watch: {
+		getOrderByPage() {
+            this.$set(this.tableConfig, "dataList", this.getOrderByPage);
+		}
+	},
 	methods: {
+		//初始化或者刷新表格
+		getOrders() {
+			let para = {
+				pageNum: this.getOrderByPage.pageNum ? this.getOrderByPage.pageNum : 1,
+				pageSize: this.getOrderByPage.pageSize ? this.getOrderByPage.pageSize : 10,
+				keyWord: this.searchVaule
+			};
+			this.$store.dispatch('getOrderByPage',para);
+		},
+		//格式化状态
+		stateFormatter(row, column) {
+			let st = "";
+			if(row.state == -1){
+				st = '已废止';
+			}else if(row.state == 0){
+				st = '已完成';
+			}else if(row.state == 1){
+				st = '待分配';
+			}else if(row.state == 2){
+				st = '待配送';
+			}else if(row.state == 3){
+				st = '已取消';
+			}else if(row.state == 4){
+				st = '配送中';
+			}
+			return st;
+		},
 		//关键字检索
-		handleSearch(ev) {
-			console.log(this.searchVaule);
+		handleSearch() {
+			this.getOrders();
 		},
 		//行中修改
 		handleEdit(row) {
-			
+			this.$router.push({ path: '/receipt/order/editOrder', query: { orderId: row.orderId }});
 		},
 		//行中删除
 		handleDelete(index, row) {
 			this.$confirm('确认删除该记录吗?', '提示', {
 				type: 'error'
 			}).then(() => {
-				this.$message({
-						message: '删除成功',
-						type: 'success'
-					});
+				let para = { orderIds: row.orderId };
+				this.$store.dispatch('deleteOrderByIds',para).then((res) => {
+					if(res.status==200){
+						this.$message({
+							message: '删除成功！',
+							type: 'success'
+						});
+						this.getOrders();
+					}else{
+						this.$message({
+							message: '删除失败！',
+							type: 'error'
+						});
+					}
+			    });  
 			});
 		},
 		//批量删除
 		batchRemove() {
-			var orderIds = this.sels.map(item => item.orderId).toString();
-			this.$confirm('确认删除选中记录吗？', '提示', {
+			this.$confirm('确认删除该记录吗?', '提示', {
 				type: 'error'
 			}).then(() => {
-				alert(orderIds)
-			})
+				let orderIds = this.sels.map(item => item.orderId).toString();
+				let para = {orderIds:bookIds}
+				this.$store.dispatch('deleteOrderByIds',para).then((res) => {
+					if(res.status==200){
+						this.$message({
+							message: '删除成功！',
+							type: 'success'
+						});
+						this.getOrders();
+					}else{
+						this.$message({
+							message: '删除失败！',
+							type: 'error'
+						});
+					}
+			    });  
+			});
+		},
+		//是否在操作列中显示按钮(true-显示, false-不显示)
+		butIsShow(index, row) {
+			if(row.state==0 || row.state== -1 || row.state==2){
+				return false;
+			}else{
+				return true;
+			}
 		},
 		//列表勾选的行
 		handleSelectionChange(val) {
 		    this.sels = val;
 	    },
 	    //转跳订单详情
-	    handelLink() {
-	    	this.$router.push({ path: '/receipt/order/editOrder' });
+	    handelLink(row) {
+	    	this.$router.push({ path: '/receipt/order/editOrder', query: { orderId: row.orderId }});
 	    },
+	    //根据不同状态进行相关操作
 	    handleAction(index, row) {
 	    	alert("分配");
 	    },
@@ -149,11 +226,17 @@ export default {
 	    	let str = '完成';
 	    	if(row.state == 1){
 	    		str = '分配';
+	    	}else if(row.state == 4){
+	    		str = '完成';
 	    	}else if(row.state == 3){
 	    		str = '废止';
 	    	}
 	    	return str;
 	    }
+	},
+	mounted() {
+		//初始化表格
+		this.getOrders();
 	}
 }
 

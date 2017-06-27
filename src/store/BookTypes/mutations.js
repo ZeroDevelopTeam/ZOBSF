@@ -1,10 +1,10 @@
-import {LOGLIST,LOGINFO} from './mutation_types'
+import {GETTREE, GETBYID} from './mutation_types'
 	  
 export default {
-		[LOGLIST](state,data) {
-				state.logList = data;
+		[GETTREE](state,data) {
+			state.bookTypeTree = data;
 		},
-		[LOGINFO](state,data){
-				state.logInfo = data;
-		},
+		[GETBYID](state,data) {
+			state.bookTypeById = data;
+		}
 }

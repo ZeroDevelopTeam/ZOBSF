@@ -19,18 +19,17 @@ const router = new VueRouter({
   routes
 })
 
-/*router.beforeEach((to, from, next) => {
-  //NProgress.start();
+router.beforeEach((to, from, next) => {
   if (to.path == '/login') {
     sessionStorage.removeItem('user');
   }
   let user = JSON.parse(sessionStorage.getItem('user'));
-  if (!user && to.path != '/login') {
+  if (!user && to.path != '/login' && to.matched[0].meta.requireAuth) {
     next({ path: '/login' })
   } else {
     next()
   }
-})*/
+})
 
 /* eslint-disable no-new */
 new Vue({

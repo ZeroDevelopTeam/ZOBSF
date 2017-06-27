@@ -1,0 +1,83 @@
+/*购物页面*/
+.shopping-container{
+    width:90%;
+    margin: auto;
+    margin-top: 20px;
+    .shop-info{
+        margin-bottom:30px;
+        img{
+            margin-top: 40px;
+            width: 90%;
+            height: 90%;
+        }
+        .price{
+            width: 70%;
+            padding: 10px;
+            font-size: 15px;
+            background-color: #ebebeb;
+        }
+        span{
+            display: block;
+            margin: 20px 0 0 30px;
+            
+        }
+    }
+    .line{
+        border-bottom: 2px solid #bfcbd9;
+    }
+    .goods-box{
+        .goods-advice{
+            padding:0px;
+            img{
+                width: 95%;
+                height: 95%;
+            }
+            span{
+                font-size: 10px;
+                display: block;
+                margin-bottom: 2px;
+            }
+            .price-font{
+                color: red;
+            }
+        }
+        .buy{
+            .buy-title{
+                font-size: 16px;
+                text-align: center;
+                margin-top: 20px;
+            }
+            .buy-title:before,.buy-title:after{
+                margin-left: 20px;
+                margin-right: 20px;
+                color: #EBEBEB;
+                content: "——————————————";
+            }
+            .buy-last{
+                font-size: 10px;
+                float: left;
+                width: 17%;
+                margin-left: 20px;
+                img{
+                    width: 90%;
+                    height: 90%;
+                }
+                .buy-intro{
+                    width: 100%;
+                    display: block;
+                    white-space:nowrap; 
+                    overflow:hidden;
+                    text-overflow:ellipsis;
+                }
+                
+            }
+        }
+        .goods-info{
+            width: 95%;
+            margin: 20px auto;
+        }
+    }
+}
+.price-font{
+    color: red;
+}

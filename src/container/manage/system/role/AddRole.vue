@@ -15,8 +15,8 @@
 				</el-form-item>
 				<el-form-item label="角色状态" prop="state">
 				    <el-select v-model="addForm.state" placeholder="请选择状态类型">
-					    <el-option label="启用" value="0"></el-option>
-					    <el-option label="停用" value="1"></el-option>
+					    <el-option label="启用" value="1"></el-option>
+					    <el-option label="停用" value="0"></el-option>
 				    </el-select>
 				</el-form-item>
 				<el-form-item label="角色权限" prop="purviews">
@@ -47,18 +47,34 @@
 	export default {
 		computed: {
 		 ...mapGetters([
-		 		'purviewList'
+		 		'purviewList',
+		 		'roleList'
    			])
 	    },
 		data() {
+			//角色编号重复校验
+			const validateRoleId = (rule, value, callback) => {
+		        if (value === '') {
+		          callback(new Error('请输入角色编号'));
+		        } else {
+		        	let isPass = false;
+		        	this.roleList.list.map(item=>{
+						if(item.roleId == value.trim()){
+							isPass = true;
+							return;
+						}
+					})
+		        	isPass? callback(new Error('角色编号已存在！')): callback();
+		        }
+		    };
 			return {
 				addLoading:false,
 				addFormRules: {
 					roleId: [
-						{ required: true, message: '请输入角色编号', trigger: 'blur' }
+						{ required: true, validator: validateRoleId, trigger: 'change' }
 					],
 					roleName: [
-						{ required: true, message: '请输入角色名称', trigger: 'blur' }
+						{ required: true, message: '请输入角色名称', trigger: 'change' }
 					],
 					state: [
 						{ required: true, message: '请选择状态', trigger: 'change' }
@@ -109,7 +125,8 @@
 			},
 		},
 		mounted() {
-			this.$store.dispatch('getPurviewList',{pageNum:1,pageSize:10,keyWord:''});
+			this.$store.dispatch('getPurviewList',{pageNum:1,pageSize:9999,keyWord:''});
+			this.$store.dispatch('getRoleList',{pageNum:1,pageSize:9999,keyWord:''});
 		},
 		components: {
 		}

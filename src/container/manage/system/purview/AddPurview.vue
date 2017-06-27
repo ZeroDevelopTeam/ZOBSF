@@ -2,28 +2,28 @@
 	<section class="add-auth">
 		<el-card class="box-card">
 		  <div slot="header" class="clearfix">
-		    <span style="line-height: 20px;">新增用户</span>
+		    <span style="line-height: 20px;">新增权限</span>
 		  </div>
 		  <div class="text item">
 		    <!--新增界面-->
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="权限编号" prop="authCode">
-					<el-input v-model="addForm.authCode" auto-complete="off"></el-input>
+				<el-form-item label="权限编号" prop="purviewId">
+					<el-input v-model="addForm.purviewId" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="权限名称" prop="authName">
-					<el-input v-model="addForm.authName"></el-input>
+				<el-form-item label="权限名称" prop="purviewName">
+					<el-input v-model="addForm.purviewName"></el-input>
 				</el-form-item>
-				<el-form-item label="规则" prop="rule">
-					<el-input v-model="addForm.rule"></el-input>
+				<el-form-item label="规则" prop="purviewRule">
+					<el-input v-model="addForm.purviewRule"></el-input>
 				</el-form-item>
-				<el-form-item label="用户状态" prop="state">
+				<el-form-item label="权限状态" prop="state">
 				    <el-select v-model="addForm.state" placeholder="请选择状态类型">
-					    <el-option label="启用" value="0"></el-option>
-					    <el-option label="停用" value="1"></el-option>
+					    <el-option label="启用" value="1"></el-option>
+					    <el-option label="停用" value="0"></el-option>
 				    </el-select>
 				</el-form-item>
 				<el-form-item label="备注" >
-					<el-input type="textarea" v-model="addForm.descript"></el-input>
+					<el-input type="textarea" v-model="addForm.purviewDesc"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="footer-button">
@@ -40,21 +40,36 @@
 	export default {
 		computed: {
 		 ...mapGetters([
-		 	
+		 		'purviewList'
    			])
 	    },
 		data() {
+			//权限编号重复校验
+			const validatePurviewId = (rule, value, callback) => {
+		        if (value === '') {
+		          callback(new Error('请输入权限编号'));
+		        } else {
+		        	let isPass = false;
+		        	this.purviewList.list.map(item=>{
+						if(item.purviewId == value.trim()){
+							isPass = true;
+							return;
+						}
+					})
+		        	isPass? callback(new Error('权限编号已存在！')): callback();
+		        }
+		    };
 			return {
 				addLoading:false,
 				addFormRules: {
-					authCode: [
-						{ required: true, message: '请输入权限编号', trigger: 'blur' }
+					purviewId: [
+						{ required: true, validator: validatePurviewId, trigger: 'change' }
 					],
-					authName: [
-						{ required: true, message: '请输入权限名称', trigger: 'blur' }
+					purviewName: [
+						{ required: true, message: '请输入权限名称', trigger: 'change' }
 					],
-					rule: [
-						{ required: true, message: '请输入规则', trigger: 'blur' }
+					purviewRule: [
+						{ required: true, message: '请输入规则', trigger: 'change' }
 					],
 					state: [
 						{ required: true, message: '请选择状态', trigger: 'change' }
@@ -62,30 +77,29 @@
 				},
 				//新增界面数据
 				addForm: {
-					authCode:'',
-					authName:'',
-					rule: '',
-					roleName:'',
-					descripte: ''
+					purviewId:'',
+					purviewName:'',
+					purviewRule: '',
+					purviewDesc: '',
+					state:''
 				}
 			}
 		},
 		methods: {
 			//新增
-			/*addSubmit: function () {
+			addSubmit: function () {
 				this.$refs.addForm.validate((valid) => {
 					if (valid) {
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							this.addLoading = true;
 							let para = Object.assign({}, this.addForm);
-							this.$store.dispatch('addAuth',para).then((res) => {  
+							this.$store.dispatch('addPurview',para).then((res) => {  
 								this.addLoading = false;
-								if(res.status==1){
+								if(res.status==200){
 									this.$message({
 										message: res.msg,
 										type: 'success'
 									});
-									this.getRoles();
 								}else{
 									this.$message({
 										message: res.msg,
@@ -93,38 +107,22 @@
 									});
 								}
 								this.$refs['addForm'].resetFields();
-								this.$router.push({ path: '/system/auth' });
+								this.$router.push({ path: '/system/purview' });
 					        });  
 						});
 					}
 				});
-			},*/
-			addSubmit: function () {
-				this.$refs.addForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							this.$message({
-								message: '新增权限成功',
-								type: 'success'
-							});
-							this.$refs['addForm'].resetFields();
-							this.$router.push({ path: '/system/authorization' });
-					        });  
-					}
-				});
 			},
-			
-			
 			//返回
 			back(){
 				this.$refs.addForm.resetFields();
 				this.$router.go(-1);
 			},
-			mounted() {
-			},
-			components: {
-			}
+		},
+		mounted() {
+			this.$store.dispatch('getPurviewList',{pageNum:1,pageSize:9999,keyWord:''});
+		},
+		components: {
 		}
 	}
 </script>

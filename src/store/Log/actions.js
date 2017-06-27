@@ -5,7 +5,7 @@ export default {
 	//获取所有
 	getLogList({commit},params){
 		return new Promise((resolve, reject) => {
-			get('log/getByCondition',params)
+			get('log/getByPage',params)
 	        .then(res => {
 	        	commit(LOGLIST, res)
 	            resolve(res);

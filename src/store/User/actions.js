@@ -1,5 +1,5 @@
 import {USERLIST,USERINFO} from './types'
-import {get,post} from '../../api/api'
+import {get,post,del} from '../../api/api'
 
 export default {
 	//获取所有
@@ -48,19 +48,10 @@ export default {
 	        })
 	    });
 	},
-	//单个删除
-	removeUser({commit},params){
-		return new Promise((resolve, reject) => {
-			get('user/deleteUser',params)
-	        .then(res => {
-	            resolve(res);
-	        })
-	    });
-	},
 	//批量删除
 	removeUsers({commit},params){
 		return new Promise((resolve, reject) => {
-			get('user/deleteUsers',params)
+			del('user/deleteUsers',params)
 	        .then(res => {
 	            resolve(res);
 	        })
@@ -75,23 +66,23 @@ export default {
 	        })
 	    });
 	},
+	//修改密码
+	changeUserPsw({commit},params){
+		return new Promise((resolve, reject) => {
+			post('user/changeUserPsw',params)
+	        .then(res => {
+	            resolve(res);
+	        })
+	    });
+	},
 	//登入
 	requestLogin({commit},params){
 		return new Promise((resolve, reject) => {
-			post('login/login',params)
+			post('user/login',params)
 	        .then(res => {
 	            resolve(res);
 	        })
 	    });
-	},
-	//报表
-	echarts({commit},params){
-		return new Promise((resolve, reject) => {
-			get('role/echarts',params)
-	        .then(res => {
-	            resolve(res);
-	        })
-	    });
-	},
+	}
 }
 
