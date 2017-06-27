@@ -3,8 +3,8 @@
 		<el-table :data="dataList.list" style="width: 100%"
 			v-loading="listLoading"
 			highlight-current-row 
-		    @selection-change="rowOptions">
-		    <el-table-column type="selection" width="55"></el-table-column>
+		    @selection-change="rowOptions?rowOptions:''">
+		    <el-table-column type="selection" width="55" v-if="rowOptions"></el-table-column>
 			<template v-for="item in columns">
 				<el-table-column v-if="item.operations" 
 					:key="item.prop" 
@@ -20,6 +20,7 @@
 							:key="tag.label"
 							:type="tag.butType"
 							@click="tag.func(scope.$index, scope.row,scope)"
+							v-if="tag.isShow?tag.isShow(scope.$index, scope.row,scope):true"
 						>
 							{{typeof(tag.label)== "string"? tag.label: tag.label(scope.$index, scope.row,scope)}}
 						</el-button>

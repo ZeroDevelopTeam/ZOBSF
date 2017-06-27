@@ -8,14 +8,9 @@
 	export default {
 		data() {
 		    return {
-		        search: '',
-		        hotBook:'1',
 		    }
 		  },
 		methods: {
-		    handleClick(tab, event) {
-		        console.log(tab, event);
-		    }
   		},
   		mounted(){
   		},

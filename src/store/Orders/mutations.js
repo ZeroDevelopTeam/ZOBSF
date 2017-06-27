@@ -1,10 +1,10 @@
-import {LOGLIST,LOGINFO} from './mutation_types'
+import {GETORDERBYPAGE, GETBOOKSBYORDERID} from './mutation_types'
 	  
 export default {
-		[LOGLIST](state,data) {
-				state.logList = data;
+		[GETORDERBYPAGE](state,data) {
+				state.orderList = data;
 		},
-		[LOGINFO](state,data){
-				state.logInfo = data;
-		},
+		[GETBOOKSBYORDERID](state,data) {
+			state.getBooksByOrderId = data;
+		}
 }

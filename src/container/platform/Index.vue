@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<el-row class="header">
-			<Header/>
-			<Nav/>
+			<MyHeader/>
+			<MyNav/>
 		</el-row>
 		<el-row class="content">
 			<transition name="fade" mode="out-in">
@@ -10,20 +10,20 @@
 			</transition>
 		</el-row>
 		<el-row class="footer">
-			<Footer/>
+			<MyFooter/>
 		</el-row>
 	</div>
 </template>
 
 <script>
-import Header from './Header';
-import Footer from './Footer';
-import Nav from './Nav';
+import MyHeader from './Header';
+import MyFooter from './Footer';
+import MyNav from './Nav';
 	export default {
 		components: {
-			Footer,
-			Header,
-			Nav
+			MyFooter,
+			MyHeader,
+			MyNav
 		}
 	}
 

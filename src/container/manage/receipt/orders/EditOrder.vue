@@ -50,7 +50,7 @@
 				</el-card>
 			</el-form>
 			<div class="editOrder-botton">
-				<el-button type="primary">浏览订单图书信息</el-button>
+				<el-button type="primary" @click.native="relateBooks">订单相关图书信息</el-button>
 				<el-button type="primary"  @click.native="back()">返回</el-button>
 				<el-button type="primary"  @click.native="editSubmit" >提交</el-button>
 			</div>
@@ -113,11 +113,14 @@ export default {
 			this.$refs.editOrderForm.resetFields();
 			this.$router.go(-1);
 		},
+		//浏览订单相关图书
+		relateBooks() {
+			const orderId=this.$route.query.orderId;
+			this.$router.push({ path: '/receipt/order/relateBooks', query: { orderId: orderId }});
+		}
 	},
 	mounted() {
-		const id=this.$route.query.id;
-	},
-	components: {
+		const orderId=this.$route.query.orderId;
 	}
 }
 </script>

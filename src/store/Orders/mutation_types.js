@@ -1,2 +1,2 @@
-export const LOGLIST = 'LOGLIST';
-export const LOGINFO = 'LOGINFO';
+export const GETORDERBYPAGE = 'GETORDERBYPAGE';//分页获取订单
+export const GETBOOKSBYORDERID = 'GETBOOKSBYORDERID';//获取订单相关图书

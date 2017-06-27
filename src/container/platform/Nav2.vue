@@ -48,13 +48,14 @@
 					</ul>
 				</el-col>
 			</el-row>
-			<Main/>
+			<transition name="fade" mode="out-in">
+				<router-view></router-view>
+			</transition>
 		</el-row>
 	</section>
 </template>
 
 <script>
-import Main from './Main';
 	export default {
 		data() {
 		    return {
@@ -93,7 +94,6 @@ import Main from './Main';
   			
   		},
   		components: {
-			Main,
 		}
 	}
 
