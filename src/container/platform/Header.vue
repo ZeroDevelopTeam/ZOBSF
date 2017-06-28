@@ -26,9 +26,10 @@
 				</div>
   			</el-col>
   			<el-col :xs="6" :sm="6" :md="5" :lg="5" class="login">
-  				<span><a href="">登入</a></span>
+  				<span v-show="sysUserName"><a href="/bookStore/person">{{sysUserName}}</a></span>
+  				<span v-show="!sysUserName"><a href="/platformLogin">登入</a></span>
   				<span>|</span>
-  				<span><a href="">注册</a></span>
+  				<span><a href="/regist">注册</a></span>
   			</el-col>
 		</el-row>
 	</header>
@@ -38,6 +39,7 @@
 	export default {
 		data() {
 		    return {
+		    	sysUserName:'',
 		    	activeIndex:'homePlatform',
 		    	flag:'nav-middle',
 		    	options: [{
@@ -66,9 +68,13 @@
 		   		this.$router.push({ path: '/bookStore/search'});
 		    }
   		},
-  		mounted () {
-  			
-  		}
+  		mounted() {
+			let platformUser = sessionStorage.getItem('platformUser');
+			if (platformUser) {
+				platformUser = JSON.parse(platformUser);
+				this.sysUserName = platformUser.userName || '';
+			}
+		},
 		
 	}
 

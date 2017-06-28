@@ -30,5 +30,12 @@
 
 <style lang="scss">
 .my-sider{
+	li.el-menu-item{
+		border-bottom: 1px solid #f2f5f9;
+		background-color: white;
+	}
+	li.el-menu-item:hover,li.el-menu-item.is-active{
+		background-color: #f2f5f9;
+	}
 }
 </style>

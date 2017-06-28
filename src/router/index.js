@@ -61,6 +61,11 @@ const MyInfo = resolve => require.ensure([], () => resolve(require('../container
 const MyPsw = resolve => require.ensure([], () => resolve(require('../container/platform/person/MyPsw.vue')), 'person');
 const MyOrder = resolve => require.ensure([], () => resolve(require('../container/platform/person/MyOrder.vue')), 'person');
 const MyRetrieve = resolve => require.ensure([], () => resolve(require('../container/platform/person/MyRetrieve.vue')), 'person');
+const MyAdvice = resolve => require.ensure([], () => resolve(require('../container/platform/person/MyAdvice.vue')), 'person');
+
+//登入注册
+const PlatFormLogin = resolve => require.ensure([], () => resolve(require('../container/platform/user/Login.vue')), 'platform-user');
+const PlatFormRegist = resolve => require.ensure([], () => resolve(require('../container/platform/user/Regist.vue')), 'platform-user');
 let routes = [
     {
         path: '/login',
@@ -194,9 +199,28 @@ let routes = [
             		{ path: 'myPsw', component: MyPsw, name: '修改密码' },
             		{ path: 'myOrder', component: MyOrder, name: '我的订单' },
             		{ path: 'myRetrieve', component: MyRetrieve, name: '我的回收单' },
+            		{ path: 'myAdvice', component: MyAdvice, name: '咨询反馈' },
             	]
            }
         ]
+    },
+    {
+        path: '/platFormLogin',
+        component: PlatFormLogin,
+        name: '',
+        hidden: true,
+        meta: {
+            requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
+        },
+    },
+    {
+        path: '/regist',
+        component: PlatFormRegist,
+        name: '',
+        hidden: true,
+        meta: {
+            requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
+        },
     },
 ];
 

@@ -150,7 +150,7 @@
 .my-psw{
 	.title{
 		font-size: 1.3em;
-		padding-right:10px;
+		padding:0 10px 0 30px;
 		border-right: 3px solid #c7161c;
 	}
 	.my-psw-detail{

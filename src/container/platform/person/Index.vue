@@ -1,10 +1,10 @@
 <template>
 	<el-card class="my-home">
-		<el-row :gutter="40">
+		<el-row>
 			<el-col :span="5" >
 				<MySider/>
 			</el-col>
-			<el-col :span="19">
+			<el-col :span="19" class="content">
 				<transition name="fade" mode="out-in">
 				<router-view></router-view>
 			</transition>
@@ -27,5 +27,15 @@ import MySider from './Sider';
 .my-home{
 	width: 90%;
 	margin: 30px auto;
+	.content{
+		min-height: 500px;
+		border-left: 1px solid #d1dbe5;
+	}
+	.el-card{
+		
+	}
+	.el-card__body{
+		padding: 0 !important;
+	}
 }
 </style>
