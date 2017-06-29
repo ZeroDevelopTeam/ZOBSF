@@ -25,6 +25,8 @@ const BookType = resolve => require.ensure([], () => resolve(require('../contain
 const Order = resolve => require.ensure([], () => resolve(require('../container/manage/receipt/orders/Order.vue')), 'group-order');
 //修改订单
 const EditOrder = resolve => require.ensure([], () => resolve(require('../container/manage/receipt/orders/EditOrder.vue')), 'group-order');
+//订单详情
+const OrderDetail = resolve => require.ensure([], () => resolve(require('../container/manage/receipt/orders/OrderDetail.vue')), 'group-order');
 //订单相关的图书
 const RelateBooks = resolve => require.ensure([], () => resolve(require('../container/manage/receipt/orders/RelateBooks.vue')), 'group-order');
 //回收管理
@@ -117,6 +119,7 @@ let routes = [
             	children: [
 		            { path: 'list', component: Order, name: '订单列表' },
 		            { path: 'editOrder', component: EditOrder, name: '修改订单'},
+		            {path: 'orderDetail', component: OrderDetail, name: '订单详情'},
 		            {path: 'relateBooks', component: RelateBooks, name: '订单相关图书'}
 		        ]
             },
