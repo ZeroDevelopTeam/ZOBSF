@@ -43,8 +43,12 @@
 					</el-form-item>
 					<el-form-item label="状态：">
 						<el-select  placeholder="请选择状态" v-model="editOrderForm.state">
-					      <el-option label="待分配" value="0"></el-option>
-					      <el-option label="待收件" value="1"></el-option>
+					      <el-option label="已废止" value="-1"></el-option>
+					      <el-option label="已完成" value="0"></el-option>
+					      <el-option label="待分配" value="1"></el-option>
+					      <el-option label="待配送" value="2"></el-option>
+					      <el-option label="已取消" value="3"></el-option>
+					      <el-option label="配送中" value="4"></el-option>
 					    </el-select>
 					</el-form-item>
 				</el-card>
@@ -60,6 +64,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import util from '../../../../util/util'
 export default {
 	data() {
 		return {
@@ -78,33 +84,51 @@ export default {
 				]
 			},
 			editOrderForm: {
-				orderId: 'AAAAAAAA',
-				receiver: 'BBBBB',
-				phone: 'CCCCCC',
-				orderDate: 'DDDDD',
+				orderId: '',
+				receiver: '',
+				phone: '',
+				orderDate: '',
 				delivery: '',
 				deliveryDate: '',
 				courierPhone: '',
 				receiverDate: '',
 				state: ''
-			}
+			},
+			addLoading: false,
 		}
+	},
+	computed: {
+		...mapGetters([
+			'getOrderById'
+		]),
 	},
 	methods: {
 		//编辑
 		editSubmit() {
-			this.$refs.editOrederForm.validate((valid) => {
+			this.$refs.editOrderForm.validate((valid) => {
 				if (valid) {
-					this.$confirm('确认提交吗？', '提示', {}).then(() => {
-						let para = Object.assign({}, this.editOrederForm);
-//						para.time = (!para.time || para.time == '') ? '' : util.formatDate.format(new Date(para.time), 'yyyy-MM-dd');
-						this.$message({
-							message: '提交成功',
-							type: 'success'
-						});
-						this.$refs['editOrederForm'].resetFields();
-						this.$router.push({ path: '/recept/order' });
-					});
+					this.addLoading = true;
+					let para = Object.assign({},this.getOrderById, this.editOrderForm);
+					para.updateDate = (!para.updateDate || para.updateDate == '') ? '' : util.formatDate.format(new Date(para.updateDate), 'yyyy-MM-dd');
+					para.deliveryDate = (!para.deliveryDate || para.deliveryDate == '') ? '' : util.formatDate.format(new Date(para.deliveryDate), 'yyyy-MM-dd');
+					para.receiverDate = (!para.receiverDate || para.receiverDate == '') ? '' : util.formatDate.format(new Date(para.receiverDate), 'yyyy-MM-dd');
+					para.createDate = (!para.createDate || para.createDate == '') ? '' : util.formatDate.format(new Date(para.createDate), 'yyyy-MM-dd');
+					this.$store.dispatch('editOrder',para).then((res) => {
+						this.addLoading = false;
+						if(res.status==200){
+							this.$message({
+								message: '提交成功',
+								type: 'success'
+							});
+							this.$refs['editOrderForm'].resetFields();
+							this.$router.push({ path: '/receipt/order' });
+						}else{
+							this.$message({
+								message: res.msg,
+								type: 'error'
+							});
+						}
+				    });
 				}
 			});
 		},
@@ -117,10 +141,34 @@ export default {
 		relateBooks() {
 			const orderId=this.$route.query.orderId;
 			this.$router.push({ path: '/receipt/order/relateBooks', query: { orderId: orderId }});
-		}
+		},
+		//数字的状态转换成文字
+		state2Name(state) {
+			let st = "";
+			if(state == -1){
+				st = '已废止';
+			}else if(state == 0){
+				st = '已完成';
+			}else if(state == 1){
+				st = '待分配';
+			}else if(state == 2){
+				st = '待配送';
+			}else if(state == 3){
+				st = '已取消';
+			}else if(state == 4){
+				st = '配送中';
+			}
+			return st;
+		},
 	},
 	mounted() {
 		const orderId=this.$route.query.orderId;
+		this.$store.dispatch('getOrderById',{orderId: orderId}).then((res)=>{
+			if(res.state!=undefined){
+				res.state = this.state2Name(res.state);
+			}
+			this.editOrderForm = Object.assign({}, this.editOrderForm, res);
+		})
 	}
 }
 </script>

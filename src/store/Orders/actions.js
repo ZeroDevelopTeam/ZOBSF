@@ -1,5 +1,5 @@
 import {get, post, del} from '../../api/api'
-import {GETORDERBYPAGE, GETBOOKSBYORDERID } from './mutation_types'
+import {GETORDERBYPAGE, GETBOOKSBYORDERID, GETORDERBYID } from './mutation_types'
 export default {
 	getOrderByPage({commit},params) {
 		return new Promise((resolve, reject) => {
@@ -27,6 +27,23 @@ export default {
 	        })
 	    });
 	
+	},
+	getOrderById({commit},params) {
+		return new Promise((resolve, reject) => {
+			get('order/getOrderByOrderId',params)
+	        .then(res => {
+	        	commit(GETORDERBYID, res);
+	            resolve(res);
+	        })
+	    });
+	},
+	editOrder({commit},params) {
+		return new Promise((resolve, reject) => {
+			post('order/editOrder',params)
+	        .then(res => {
+	            resolve(res);
+	        })
+	    });
 	}
 }
 

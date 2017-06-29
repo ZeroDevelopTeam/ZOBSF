@@ -1,4 +1,4 @@
-import {GETORDERBYPAGE, GETBOOKSBYORDERID} from './mutation_types'
+import {GETORDERBYPAGE, GETBOOKSBYORDERID, GETORDERBYID} from './mutation_types'
 	  
 export default {
 		[GETORDERBYPAGE](state,data) {
@@ -6,5 +6,8 @@ export default {
 		},
 		[GETBOOKSBYORDERID](state,data) {
 			state.getBooksByOrderId = data;
+		},
+		[GETORDERBYID](state,data){
+			state.getOrderById = data;
 		}
 }

@@ -4,5 +4,8 @@ export default {
 	},
 	getBooksByOrderId: (state)=> {
 		return state.getBooksByOrderId;
+	},
+	getOrderById: (state)=> {
+		return state.getOrderById;
 	}
 }

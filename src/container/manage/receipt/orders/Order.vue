@@ -10,17 +10,6 @@
 			</el-input>
 		</div>
 		<CommTable  :tableConfig="tableConfig"></CommTable>
-		<el-popover
-		  ref="stateAction"
-		  placement="top"
-		  width="160"
-		  v-model="popoverVisible">
-		  <p>这是一段内容这是一段内容确定删除吗？</p>
-		  <div style="text-align: right; margin: 0">
-		    <el-button size="mini" type="text" @click="popoverVisible = false">取消</el-button>
-		    <el-button type="primary" size="mini" @click="popoverVisible = false">确定</el-button>
-		  </div>
-		</el-popover>
 	</div>
 </template>
 
@@ -83,11 +72,11 @@ export default {
 			          butType: 'info',
 			          func: this.handleAction,
 			          isShow: this.butIsShow,
-			          popover: 'stateAction'
 		        	},{
 			          label: '删除',
 			          butType: 'danger',
-			          func: this.handleDelete
+			          func: this.handleDelete,
+			          isShow: this.annulButShow,
 		        	}
 		        ]
 	        }];
@@ -107,7 +96,6 @@ export default {
     		},
     		searchVaule: '',//检索值
     		sels: [],//列表选中列
-    		popoverVisible: false,//按钮上的提示
         }
 	},
 	computed: {
@@ -153,7 +141,7 @@ export default {
 			this.getOrders();
 		},
 		//行中修改
-		handleEdit(row) {
+		handleEdit(index,row) {
 			this.$router.push({ path: '/receipt/order/editOrder', query: { orderId: row.orderId }});
 		},
 		//行中删除
@@ -209,13 +197,21 @@ export default {
 				return true;
 			}
 		},
+		//删除按钮是否显示
+		annulButShow(index,row) {
+			if(row.state==-1 || row.state == 0 || row.state == 3){
+				return true;
+			}else{
+				return false;
+			}
+		},
 		//列表勾选的行
 		handleSelectionChange(val) {
 		    this.sels = val;
 	    },
 	    //转跳订单详情
 	    handelLink(row) {
-	    	this.$router.push({ path: '/receipt/order/editOrder', query: { orderId: row.orderId }});
+	    	this.$router.push({ path: '/receipt/order/orderDetail', query: { orderId: row.orderId }});
 	    },
 	    //根据不同状态进行相关操作
 	    handleAction(index, row) {
