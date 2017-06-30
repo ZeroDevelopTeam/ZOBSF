@@ -56,6 +56,8 @@ const PlatFormCheapBook = resolve => require(['../container/platform/cheapBook/M
 const PlatFormOnlineRetrieve = resolve => require(['../container/platform/onlineRetrieve/Main.vue'], resolve);
 const PlatFormSearch = resolve => require(['../container/platform/search/Main.vue'], resolve);
 const PlatFormShopping = resolve => require(['../container/platform/shopping/Main.vue'], resolve);
+const PlatFormShoppingCart = resolve => require(['../container/platform/shopping/ShoppingCart.vue'], resolve);
+const PlatFormShoppingOrder = resolve => require(['../container/platform/shopping/ShoppingOrder.vue'], resolve);
 
 //个人中心
 const Person = resolve => require.ensure([], () => resolve(require('../container/platform/person/Index.vue')), 'person');
