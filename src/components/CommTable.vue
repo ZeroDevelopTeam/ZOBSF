@@ -92,6 +92,7 @@
 		methods: {
 			//改变每页数量
 			handleSizeChange(val) {
+				this.params.pageSize = val;
 		        let para = Object.assign({}, this.params);
 				this.listLoading = true;
 		        this.$store.dispatch(this.tableConfig.dispatch,para).then((res) => {  
