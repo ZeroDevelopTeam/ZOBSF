@@ -68,6 +68,7 @@ const MyAdvice = resolve => require.ensure([], () => resolve(require('../contain
 //登入注册
 const PlatFormLogin = resolve => require.ensure([], () => resolve(require('../container/platform/user/Login.vue')), 'platform-user');
 const PlatFormRegist = resolve => require.ensure([], () => resolve(require('../container/platform/user/Regist.vue')), 'platform-user');
+const PlatFormForget = resolve => require.ensure([], () => resolve(require('../container/platform/user/Forget.vue')), 'platform-user');
 let routes = [
     {
         path: '/login',
@@ -183,20 +184,11 @@ let routes = [
         	{ path: 'cheapBook', component: PlatFormCheapBook,hidden:true},
         	{ path: 'onlineRetrieve', component: PlatFormOnlineRetrieve,hidden:true},
         	{ path: 'search', component: PlatFormSearch,hidden:true},
-        ]
-    },
-    {
-        path: '/bookStore',
-        component: PlatForm2,
-        hidden: true,
-        meta: {
-            requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
-        },
-        redirect: '/platform/main',
-        children: [
         	{ path: 'search', component: PlatFormSearch,hidden:true},
         	{ path: 'shopping', component: PlatFormShopping,hidden:true},
-        	{ path: 'person', component: Person,hidden:true,redirect: '/bookStore/person/myInfo',
+        	{ path: 'shoppingCart', name:'购物车' , component: PlatFormShoppingCart,hidden:true},
+        	{ path: 'shoppingOrder', name:'订单' , component: PlatFormShoppingOrder,hidden:true},
+        	{ path: 'person', component: Person,hidden:true,redirect: '/platform/person/myInfo',
             	children:[
             		{ path: 'myInfo', component: MyInfo, name: '我的资料' },
             		{ path: 'myPsw', component: MyPsw, name: '修改密码' },
@@ -208,9 +200,21 @@ let routes = [
         ]
     },
     {
+        path: '/bookStore',
+        component: PlatForm2,
+        hidden: true,
+        meta: {
+            requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
+        },
+        redirect: '/platform/main',
+        children: [
+        	
+        ]
+    },
+    {
         path: '/platFormLogin',
         component: PlatFormLogin,
-        name: '',
+        name: '用户登录',
         hidden: true,
         meta: {
             requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
@@ -219,7 +223,16 @@ let routes = [
     {
         path: '/regist',
         component: PlatFormRegist,
-        name: '',
+        name: '用户注册',
+        hidden: true,
+        meta: {
+            requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
+        },
+    },
+    {
+        path: '/forget',
+        component: PlatFormForget,
+        name: '忘记密码',
         hidden: true,
         meta: {
             requireAuth: false,  // 添加该字段，false表示进入这个路由是不需要登录的
