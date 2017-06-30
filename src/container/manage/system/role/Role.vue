@@ -50,7 +50,6 @@
 				  	key:2,
 		          	label:'角色名称',
 		          	prop:'roleName',
-		          	handelLink:this.clickLick,
 		        },
 		        {
 			 	 	key:3,
