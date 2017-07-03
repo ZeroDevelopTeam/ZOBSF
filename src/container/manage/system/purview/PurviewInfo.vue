@@ -1,18 +1,18 @@
 <template>
-	<el-dialog title="权限详情" :visible.sync="dialogFormVisible1" size="tiny">
+	<el-dialog title="权限详情" :visible.sync="dialogFormVisible1" size="tiny" class="purview-info">
 	  	<!--编辑界面-->
 		<el-form  label-width="50%" >
 			<el-form-item label="权限编号：">
-				{{purviewInfo.purviewId}}
+				<div class="content-info">{{purviewInfo.purviewId}}</div>
 			</el-form-item>
 			<el-form-item label="权限名称：">
-				{{purviewInfo.purviewName}}
+				<div class="content-info">{{purviewInfo.purviewName}}</div>
 			</el-form-item>
 			<el-form-item label="规则：">
-				{{purviewInfo.purviewRule}}
+				<div class="content-info">{{purviewInfo.purviewRule}}</div>
 			</el-form-item>
 			<el-form-item label="备注：" >
-				{{purviewInfo.purviewDesc}}
+				<div class="content-info">{{purviewInfo.purviewDesc}}</div>
 			</el-form-item>
 		</el-form>
 	    <div slot="footer" class="dialog-footer">
@@ -55,13 +55,14 @@
 	}
 </script>
 
-<style scoped>
-.edit-auth{
-	padding-top: 50px;
-	width:600px;
-    margin: auto;
-}
-.clearfix{
-	text-align: center;
+<style scoped lang="scss">
+.purview-info{
+	.content-info{
+		border-bottom: 1px solid;
+	    width: 70%;
+	    text-align: center;
+        height: 30px;
+	}
 }
 </style>
+
