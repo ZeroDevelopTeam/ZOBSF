@@ -3,7 +3,7 @@
 		<el-table :data="dataList.list" style="width: 100%"
 			v-loading="listLoading"
 			highlight-current-row 
-		    @selection-change="rowOptions?rowOptions:''">
+		    @selection-change="rowOptions">
 		    <el-table-column type="selection" width="55" v-if="rowOptions"></el-table-column>
 			<template v-for="item in columns">
 				<el-table-column v-if="item.operations" 
@@ -73,7 +73,7 @@
 				dataList: this.tableConfig.dataList,
 				columns: this.tableConfig.columns,
 				params: this.tableConfig.params,
-		        rowOptions:this.tableConfig.rowOptions,
+		        rowOptions:this.tableConfig.rowOptions?this.tableConfig.rowOptions:'',
 		        listLoading:false,
 			}
 		},
@@ -83,7 +83,7 @@
 				handler(){
 					this.dataList = this.tableConfig.dataList;
 					this.columns =  this.tableConfig.columns;
-					this.rowOptions =  this.tableConfig.rowOptions;
+					this.rowOptions =  this.tableConfig.rowOptions?this.tableConfig.rowOptions:'';
 					this.params =  this.tableConfig.params;
 				},
 				deep: true
