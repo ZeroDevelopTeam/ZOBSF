@@ -31,123 +31,123 @@
 }
 
 /*导航样式*/
-.platform-nav{
-    .nav{
-        width: 90%;
-        margin: auto;
-        border-bottom: 3px solid #c7161c;
-        line-height: 40px;
-        .type{
-            background-color: #c7161c;
-            height: 40px;
-            text-align:center;
-            color: white;
-            font-size: 15px;
-            letter-spacing:3px;
-        }
-        .menu{
-            .el-menu{
-                background-color: white;
-                padding-left:50px;
-                height: 40px;
-            }
-            .el-menu-item{
-                height: 40px;
-                line-height: 40px;
-            }
-            .el-menu--horizontal>.el-menu-item:hover, .el-menu--horizontal>.el-submenu.is-active .el-submenu__title, .el-menu--horizontal>.el-submenu:hover .el-submenu__title {
-                border-bottom: 3px solid #c7161c;
-                color: #c7161c;
-                background-color: white;
-            }
-            .el-menu--horizontal.el-menu--dark .el-submenu .el-menu-item.is-active, .el-menu-item.is-active{
-                border-bottom: 3px solid #c7161c;
-                color: #c7161c;
-                background-color: white;
-            }
-            
-        }
-        .nav-type{
-            width: 30px;
-        }
-    }   
-    .picScroll{
-        width: 100%;
-        height: 450px;
-        margin-bottom: 50px;
-        .zhezhao{
-            margin-left: 5% !important;
-            width: 90% !important;
-            height: 450px !important;
-            position: absolute;
-            z-index: 999;
-            .nav-left{
-                filter:alpha(Opacity=90);-moz-opacity:0.9;opacity: 0.9;
-                background-color: #000000 !important;
-                height: 450px !important;
-                ul{
-                    text-align: center;
-                    letter-spacing:3px;
-                    padding-left: 0 !important;
-                }
-                ul li{
-                    list-style: none;
-                    display:block;  
-                    padding: 20px 0;
-                    border-bottom: dashed 1px white;
-                    -webkit-transition: background 0.8s linear;/*Safari or Chrome*/
-                    -moz-transition: background 0.8s linear;/*Firefox*/
-                    -ms-transition: background 0.8s linear;/*IE9*/
-                    -o-transition: background 0.8s linear;/*Opera*/
-                    transition: background 0.8s linear;/*默认w3c*/
-                }
-                ul li:hover{
-                    font-size: 15px;
-                    color: black;
-                    background-color: white;
-                }
-                ul li a{
-                    color: white;
-                    text-decoration: none;
-                }
-                ul li a:hover{
-                    color: black;
-                    text-decoration: none;
-                }
-            }
-            .nav-middle{
-                background: white;
-                filter:alpha(Opacity=0);-moz-opacity:0;opacity: 0;
-            }
-            .nav-middle-show{
-                height: 450px !important;
-                background: white;
-                filter:alpha(Opacity=90);-moz-opacity:0.9;opacity: 0.9;
-            }
-            .nav-right{
-                height: 450px !important;
-                img{
-                    display:block;
-                    height: 150px;
-                    margin-bottom: 1px;
-                }
-                img:hover{
-                    -webkit-transform:translateX(2px);/*Safari or Chrome*/
-                    -moz-transform:  translateX(2px);/*Firefox*/
-                    -ms-transform:  translate(2px);/*IE9*/
-                    -o-transform:  translateX(2px);/*Opera*/
-                    transform:  translateX(2px);/*默认w3c*/
-                }
-            }
-        }
-        .pic{
-            img{
-                width: 100%;
-                height: 100%;
-            }
-        }
-    }
-}
+//.platform-nav{
+//  .nav{
+//      width: 90%;
+//      margin: auto;
+//      border-bottom: 3px solid #c7161c;
+//      line-height: 40px;
+//      .type{
+//          background-color: #c7161c;
+//          height: 40px;
+//          text-align:center;
+//          color: white;
+//          font-size: 15px;
+//          letter-spacing:3px;
+//      }
+//      .menu{
+//          .el-menu{
+//              background-color: white;
+//              padding-left:50px;
+//              height: 40px;
+//          }
+//          .el-menu-item{
+//              height: 40px;
+//              line-height: 40px;
+//          }
+//          .el-menu--horizontal>.el-menu-item:hover, .el-menu--horizontal>.el-submenu.is-active .el-submenu__title, .el-menu--horizontal>.el-submenu:hover .el-submenu__title {
+//              border-bottom: 3px solid #c7161c;
+//              color: #c7161c;
+//              background-color: white;
+//          }
+//          .el-menu--horizontal.el-menu--dark .el-submenu .el-menu-item.is-active, .el-menu-item.is-active{
+//              border-bottom: 3px solid #c7161c;
+//              color: #c7161c;
+//              background-color: white;
+//          }
+//          
+//      }
+//      .nav-type{
+//          width: 30px;
+//      }
+//  }   
+//  .picScroll{
+//      width: 100%;
+//      height: 450px;
+//      margin-bottom: 50px;
+//      .zhezhao{
+//          margin-left: 5% !important;
+//          width: 90% !important;
+//          height: 450px !important;
+//          position: absolute;
+//          z-index: 999;
+//          .nav-left{
+//              filter:alpha(Opacity=90);-moz-opacity:0.9;opacity: 0.9;
+//              background-color: #000000 !important;
+//              height: 450px !important;
+//              ul{
+//                  text-align: center;
+//                  letter-spacing:3px;
+//                  padding-left: 0 !important;
+//              }
+//              ul li{
+//                  list-style: none;
+//                  display:block;  
+//                  padding: 20px 0;
+//                  border-bottom: dashed 1px white;
+//                  -webkit-transition: background 0.8s linear;/*Safari or Chrome*/
+//                  -moz-transition: background 0.8s linear;/*Firefox*/
+//                  -ms-transition: background 0.8s linear;/*IE9*/
+//                  -o-transition: background 0.8s linear;/*Opera*/
+//                  transition: background 0.8s linear;/*默认w3c*/
+//              }
+//              ul li:hover{
+//                  font-size: 15px;
+//                  color: black;
+//                  background-color: white;
+//              }
+//              ul li a{
+//                  color: white;
+//                  text-decoration: none;
+//              }
+//              ul li a:hover{
+//                  color: black;
+//                  text-decoration: none;
+//              }
+//          }
+//          .nav-middle{
+//              background: white;
+//              filter:alpha(Opacity=0);-moz-opacity:0;opacity: 0;
+//          }
+//          .nav-middle-show{
+//              height: 450px !important;
+//              background: white;
+//              filter:alpha(Opacity=90);-moz-opacity:0.9;opacity: 0.9;
+//          }
+//          .nav-right{
+//              height: 450px !important;
+//              img{
+//                  display:block;
+//                  height: 150px;
+//                  margin-bottom: 1px;
+//              }
+//              img:hover{
+//                  -webkit-transform:translateX(2px);/*Safari or Chrome*/
+//                  -moz-transform:  translateX(2px);/*Firefox*/
+//                  -ms-transform:  translate(2px);/*IE9*/
+//                  -o-transform:  translateX(2px);/*Opera*/
+//                  transform:  translateX(2px);/*默认w3c*/
+//              }
+//          }
+//      }
+//      .pic{
+//          img{
+//              width: 100%;
+//              height: 100%;
+//          }
+//      }
+//  }
+//}
 
 /*尾部样式*/
 .platform-footer{
@@ -209,7 +209,7 @@
     } 
 }
 *{
-    font-size: 14px;
+    font-size: 12px;
 }
 @media only screen and (max-width: 1366px) {
     *{
@@ -235,4 +235,8 @@
     
 .footer-button{
     text-align: center;
+}
+.price-font{
+    color: red;
+    font-size: 15px;
 }

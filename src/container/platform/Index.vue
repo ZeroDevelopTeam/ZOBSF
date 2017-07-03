@@ -23,8 +23,8 @@ import MyNav from './Nav';
 		components: {
 			MyFooter,
 			MyHeader,
-			MyNav
-		}
+			MyNav,
+		},
 	}
 
 </script>

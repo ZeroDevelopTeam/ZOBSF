@@ -4,30 +4,29 @@
 		<div class="my-order-detail">
 			<el-tabs v-model="activeName" type="card" @tab-click="handleClick">
 			    <el-tab-pane label="全部订单" name="all">
-			    	<el-card class="order-info" v-for="o in 5">
-					    <div class="info-title">
-					    	<strong>2017-06-27</strong>&nbsp;&nbsp;&nbsp;
-					    	订单号: 11032278161636747
-					    </div>
-			    		<el-row>
-			    			<el-col :span="3" style="border-right: 1px solid #d1dbe5;">
-			    				<img src="../../../image/xiaowangzi.png"/>
-			    			</el-col>
-			    			<el-col :span="8" style="border-right: 1px solid #d1dbe5;">
-			    				<p><h2>小王子(65周年纪念版)</h2></p>
-								<p>圣埃克苏佩里(Saint-Exupery) (作者), 林秀清 (译者)</p>
-								<p>数量：1</p>
-								<p>单价：￥19</p>
-			    			</el-col>
-			    			<el-col :span="6" style="border-right: 1px solid #d1dbe5;">
-			    				<p><h2>总金额：￥19</h2></p>
-								<p>运费：￥0</p>
-			    			</el-col>
-			    			<el-col :span="7" style="border-right: 1px solid #d1dbe5;">
-			    				<p><h2>交易成功</h2></p>
-								<p><a href="">订单详情</a></p>
-			    			</el-col>
-			    		</el-row>
+			    	<el-card class="order-info" v-for="o in 5" :key="o">
+			    		<table width="100%">
+			    			<tr>
+			    				<th colspan="4"><strong>2017-06-27</strong>&nbsp;&nbsp;&nbsp;订单号: 11032278161636747</th>	
+			    			</tr>
+			    			<tr>
+			    				<td width="20%"><img src="../../../image/xiaowangzi.png"/></td>
+			    				<td width="45%">
+			    					<p><h2>小王子(65周年纪念版)</h2></p>
+									<p>圣埃克苏佩里(Saint-Exupery) (作者), 林秀清 (译者)</p>
+									<p>数量：1</p>
+									<p>单价：￥19</p>
+			    				</td>
+			    				<td width="20%">
+			    					<p><h2>总金额：￥19</h2></p>
+									<p>运费：￥0</p>
+			    				</td>
+			    				<td width="15%">
+			    					<p><h2>交易成功</h2></p>
+									<p><a href="">订单详情</a></p>
+			    				</td>
+			    			</tr>	
+		    			</table>
 			    	</el-card>
 			    </el-tab-pane>
 			    <el-tab-pane label="待付款" name="waitPay">
@@ -64,7 +63,10 @@
 		methods: {
 			handleCurrentChange(val) {
 		        console.log(`当前页: ${val}`);
-		    }
+		    },
+		    handleClick(tab, event) {
+		        console.log(tab, event);
+		    },
 		},
 		computed: {
 	    },
@@ -94,10 +96,38 @@
 		.order-info{
 			margin-bottom: 10px;
 			padding: 10px;
-			height: 120px;
-			width: 97%;
+			height: 150px;
+			width: 95%;
+			table{
+				border: 1px solid #d1dbe5;
+			}
+			table th{
+				height: 30px;
+				line-height: 30px;
+				text-align: left;
+				border-bottom: 1px solid #d1dbe5;
+			}
+			table td:first-child{
+				white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+				border-left: 0;
+				padding: 0 10px;
+				
+			}
+			table td{
+				white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+				border-left: 1px solid #d1dbe5;
+				padding: 0 15px;
+				p{
+					padding-bottom: 4px;
+				}
+				p a{
+					color: #000000;
+				}
+				p a:hover{
+					color: #c7161c;
+				}
+			}
 			.info-title{
-				padding-bottom:5px ;
 				border-bottom: 1px solid #d1dbe5;
 			}
 			p{

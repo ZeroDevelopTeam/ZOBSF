@@ -19,7 +19,7 @@
 		},
 		methods:{
 			handleSelect(key, keyPath){
-				this.$router.push({ path: '/bookStore/person/' + key });
+				this.$router.push({ path: '/platform/person/' + key });
 			}
 		},
 		components: {

@@ -34,6 +34,9 @@
 										</template>
 						      </el-input>
 						    </el-form-item>
+						    <el-form-item style="width:100%;" class="forgetPsw">
+						    	<a href="/forget">忘记密码?</a>
+						    </el-form-item>
 						    <el-form-item style="width:100%;">
 						      <el-button type="danger" style="width:100%;" @click.native.prevent="login" :loading="logining">登录</el-button>
 						    </el-form-item>
@@ -169,6 +172,15 @@
       margin: 0px auto 40px auto;
       text-align: center;
       color: #505458;
+    }
+    .forgetPsw{
+    	a{
+    		color:#000000;
+    		text-decoration: none;
+    	}
+    	a:hover{
+    		color: #c7161c;
+    	}
     }
   }
   .footer-info{

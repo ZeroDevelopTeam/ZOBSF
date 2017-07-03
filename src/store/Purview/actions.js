@@ -36,7 +36,6 @@ export default {
 	},
 	//修改
 	editPurview({commit},params){
-		delete params.createDate;
 		delete params.updateDate;
 		return new Promise((resolve, reject) => {
 			post('purview/eidtPurview',params)

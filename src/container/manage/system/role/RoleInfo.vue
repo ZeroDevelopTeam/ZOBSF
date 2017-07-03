@@ -1,22 +1,22 @@
 <template>
 	<!--角色详情 -->
-	<el-dialog title="角色详情" :visible.sync="dialogFormVisible1"  size="tiny">
+	<el-dialog title="角色详情" :visible.sync="dialogFormVisible1"  size="tiny" class="role-info">
     	<!--角色详情-->
 		<el-form  label-width="50%">
 			<el-form-item label="角色编号：">
-				{{roleInfo.roleId}}
+				<div class="content-info">{{roleInfo.roleId}}</div>
 			</el-form-item>
 			<el-form-item label="角色名称：">
-				{{roleInfo.roleName}}
+				<div class="content-info">{{roleInfo.roleName}}</div>
 			</el-form-item>
 			<el-form-item label="角色权限：">
-				{{roleInfo.purviews}}
+				<div class="content-info">{{roleInfo.purviews}}</div>
 			</el-form-item>
 			<el-form-item label="角色状态：">
-				{{roleInfo.state==1?'启用':'停用'}}
+				<div class="content-info">{{roleInfo.state==1?'启用':'停用'}}</div>
 			</el-form-item>
 			<el-form-item label="备注：">
-				{{roleInfo.roleDesc}}
+				<div class="content-info">{{roleInfo.roleDesc}}</div>
 			</el-form-item>
 			
 		</el-form>
@@ -60,13 +60,13 @@
 	}
 </script>
 
-<style scoped>
-.edit-user{
-	padding-top: 50px;
-	width:600px;
-    margin: auto;
-}
-.clearfix{
-	text-align: center;
+<style scoped lang="scss">
+.role-info{
+	.content-info{
+		border-bottom: 1px solid;
+	    width: 70%;
+	    text-align: center;
+        height: 30px;
+	}
 }
 </style>

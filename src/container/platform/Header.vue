@@ -26,10 +26,11 @@
 				</div>
   			</el-col>
   			<el-col :xs="6" :sm="6" :md="5" :lg="5" class="login">
-  				<span v-show="sysUserName"><a href="/bookStore/person">{{sysUserName}}</a></span>
+  				<span v-show="sysUserName"><a href="/platform/person">{{sysUserName}}</a></span>
   				<span v-show="!sysUserName"><a href="/platformLogin">登入</a></span>
   				<span>|</span>
-  				<span><a href="/regist">注册</a></span>
+  				<span v-show="sysUserName"><a @click="logout">注销</a></span>
+  				<span v-show="!sysUserName"><a href="/regist">注册</a></span>
   			</el-col>
 		</el-row>
 	</header>
@@ -65,7 +66,17 @@
 		  },
 		methods: {
 		    searchBook(){
-		   		this.$router.push({ path: '/bookStore/search'});
+		   		this.$router.push({ path: '/platform/search'});
+		    },
+		    logout(){
+		    	var _this = this;
+				this.$confirm('确认退出吗?', '提示', {
+				}).then(() => {
+					sessionStorage.removeItem('platformUser');
+					_this.$router.push('/platform');
+				}).catch(() => {
+
+				});
 		    }
   		},
   		mounted() {
@@ -75,7 +86,6 @@
 				this.sysUserName = platformUser.userName || '';
 			}
 		},
-		
 	}
 
 </script>

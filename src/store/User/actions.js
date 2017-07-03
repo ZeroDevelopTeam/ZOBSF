@@ -39,7 +39,6 @@ export default {
 	editUser({commit},params){
 		const roles = params.roles;
 		delete params.roles;
-		delete params.createDate;
 		delete params.updateDate;
 		return new Promise((resolve, reject) => {
 			post('user/editUser?roleIds='+roles,params)
