@@ -10,12 +10,47 @@
 			</el-input>
 		</div>
 		<CommTable  :tableConfig="tableConfig"></CommTable>
+		<el-dialog title="完成订单" size="tiny"  :visible.sync="finishVisible" :close-on-click-modal="false" :before-close="closeFinishDialog">
+			<el-form :model="finishForm" label-width="110px" :rules="finishFormRules" ref="finishForm">
+				<el-form-item label="订单号：" prop="orderId">
+					<span v-text="finishForm.orderId" auto-complete="off"></span>
+				</el-form-item>
+				<el-form-item label="收货时间：" prop="receiverDate">
+					<el-date-picker type="datetime" placeholder="选择日期" v-model="finishForm.receiverDate"></el-date-picker>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="finish-footer">
+				<el-button type="primary" @click.native="closeFinishDialog">取消</el-button>
+				<el-button type="primary" @click.native="actionSubmit">完成</el-button>
+			</div>
+		</el-dialog>
+		<el-dialog title="分配订单" size="tiny"  :visible.sync="distributeVisible" :close-on-click-modal="false" :before-close="closeDistributeDialog">
+			<el-form :model="distributeForm" label-width="110px" :rules="distributeFormRules" ref="distributeForm" >
+				<el-form-item label="订单号：" prop="orderId">
+					<span v-text="distributeForm.orderId" auto-complete="off"></span>
+				</el-form-item>
+				<el-form-item label="送件人：" prop="delivery">
+					<el-input v-model="distributeForm.delivery" auto-complete="off" class="distribute-input"></el-input>
+				</el-form-item>
+				<el-form-item label="送件人电话：" prop="deliveryPhone">
+					<el-input v-model="distributeForm.deliveryPhone" auto-complete="off" class="distribute-input"></el-input>
+				</el-form-item>
+				<el-form-item label="送货时间：" prop="deliveryDate">
+					<el-date-picker type="datetime" placeholder="选择日期" v-model="distributeForm.deliveryDate"></el-date-picker>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="finish-footer">
+				<el-button type="primary" @click.native="closeDistributeDialog">取消</el-button>
+				<el-button type="primary" @click.native="actionSubmit">分配</el-button>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
 import CommTable from '../../../../components/CommTable'
 import { mapGetters } from 'vuex'
+import util from '../../../../util/util'
 export default {
 	components: {
 		CommTable
@@ -96,6 +131,38 @@ export default {
     		},
     		searchVaule: '',//检索值
     		sels: [],//列表选中列
+    		finishVisible: false,//完成订单操作
+    		distributeVisible: false,//分配订单操作
+    		isAction:'',//标记最后提交表单时是哪种操作
+    		bState:'',//点击操作按钮改变的状态
+    		//完成订单表单
+    		finishForm: {
+    			orderId:'',
+    			receiverDate:''
+    		},
+    		finishFormRules: {
+				receiverDate: [
+					{ type:'date', required: true, message: '请输入时间', trigger: 'blur' }
+				]
+			},
+			//配送订单表单
+			distributeForm: {
+				orderId:'',
+				delivery:'',
+				deliveryPhone:'',
+				deliveryDate:''
+			},
+			distributeFormRules: {
+				delivery:[
+					{required: true, message: '请输入名称', trigger: 'blur' }
+				],
+				deliveryPhone:[
+					{required: true, message: '请输入电话号码', trigger: 'blur' }
+				],
+				deliveryDate:[
+					{type: 'date', required: true, message: '请输入时间', trigger: 'blur' }
+				]
+			}
         }
 	},
 	computed: {
@@ -126,13 +193,13 @@ export default {
 			}else if(row.state == 0){
 				st = '已完成';
 			}else if(row.state == 1){
-				st = '待分配';
-			}else if(row.state == 2){
 				st = '待配送';
+			}else if(row.state == 2){
+				st = '配送中';
 			}else if(row.state == 3){
 				st = '已取消';
 			}else if(row.state == 4){
-				st = '配送中';
+				st = '未付款';
 			}
 			return st;
 		},
@@ -191,7 +258,7 @@ export default {
 		},
 		//是否在操作列中显示按钮(true-显示, false-不显示)
 		butIsShow(index, row) {
-			if(row.state==0 || row.state== -1 || row.state==2){
+			if(row.state==0 || row.state== -1 || row.state==4){
 				return false;
 			}else{
 				return true;
@@ -215,19 +282,107 @@ export default {
 	    },
 	    //根据不同状态进行相关操作
 	    handleAction(index, row) {
-	    	alert("分配");
+	    	if(row.state==2){//完成按钮
+	    		this.isAction = 'finish';
+	    		this.finishForm = Object.assign({},this.finishForm,{orderId:row.orderId})
+	    		this.bState = 0;
+	    		this.finishVisible = true;
+	    	}else if(row.state==3){//废止按钮
+	    		this.$confirm('确认废止订单吗?', '提示', {
+					type: 'info'
+				}).then(() => {
+					let para = { orderId: row.orderId, state:-1 };
+					this.$store.dispatch('changeOrderState',para).then((res) => {
+						if(res.status==200){
+							this.$message({
+								message: '废止成功！',
+								type: 'success'
+							});
+							this.getOrders();
+						}else{
+							this.$message({
+								message: '废止失败！',
+								type: 'error'
+							});
+						}
+				    });  
+				});
+	    	}else if(row.state==1){//分配按钮
+	    		this.isAction = 'distribute';
+	    		this.distributeForm = Object.assign({},this.distributeForm,{orderId:row.orderId})
+	    		this.bState = 2;
+	    		this.distributeVisible = true;
+	    	}
+	    },
+	    //不同状态最后保存触发的方法
+	    actionSubmit() {
+	    	if(this.isAction=="finish"){
+	    		this.$refs.finishForm.validate((valid) => {
+					if (valid) {
+						let para = Object.assign({}, this.finishForm, {state: this.bState});
+						para.receiverDate = (!para.receiverDate || para.receiverDate == '') ? '' : util.formatDate.format(new Date(para.receiverDate), 'yyyy-MM-dd hh:mm:ss');
+						this.$store.dispatch('changeOrderState',para).then((res) => {
+	    					if(res.status==200){
+								this.$message({
+									message: '操作成功！',
+									type: 'success'
+								});
+								this.closeFinishDialog();
+								this.getOrders();
+							}else{
+								this.$message({
+									message: '操作失败！',
+									type: 'error'
+								});
+							}
+	    				});
+					}
+				});
+	    	}else if(this.isAction=="distribute"){
+	    		this.$refs.distributeForm.validate((valid) => {
+					if (valid) {
+						let para = Object.assign({}, this.distributeForm, {state: this.bState});
+						para.deliveryDate = (!para.deliveryDate || para.deliveryDate == '') ? '' : util.formatDate.format(new Date(para.deliveryDate), 'yyyy-MM-dd hh:mm:ss');
+						this.$store.dispatch('changeOrderState',para).then((res) => {
+	    					if(res.status==200){
+								this.$message({
+									message: '分配成功！',
+									type: 'success'
+								});
+								this.closeDistributeDialog()
+								this.getOrders();
+							}else{
+								this.$message({
+									message: '分配失败！',
+									type: 'error'
+								});
+							}
+	    				});
+					}
+				});
+	    	}
 	    },
 	    //状态不同显示不同操作
 	    labelFun(index,row) {
 	    	let str = '完成';
 	    	if(row.state == 1){
 	    		str = '分配';
-	    	}else if(row.state == 4){
+	    	}else if(row.state == 2){
 	    		str = '完成';
 	    	}else if(row.state == 3){
 	    		str = '废止';
 	    	}
 	    	return str;
+	    },
+	    //关闭完成窗口
+	    closeFinishDialog(){
+	    	this.finishVisible = false;
+	    	this.$refs['finishForm'].resetFields();
+	    },
+	    //关闭分配窗口
+	    closeDistributeDialog(){
+	    	this.distributeVisible = false;
+	    	this.$refs['distributeForm'].resetFields();
 	    }
 	},
 	mounted() {
@@ -251,6 +406,12 @@ export default {
 			display: inline-block;
 			float: right;
 		}
+	}
+	.finish-footer{
+		text-align: center;
+	}
+	.distribute-input{
+		width: 46% !important;
 	}
 }
 </style>

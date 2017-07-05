@@ -24,10 +24,7 @@
 				<el-card style="padding-left: 1em;">
 					<div class="editOrder-tab"><strong>送货信息</strong></div>
 					<el-form-item label="送件人：">
-						<el-select  placeholder="请选择送件人" v-model="editOrderForm.delivery">
-					      <el-option label="员工1" value="0"></el-option>
-					      <el-option label="员工2" value="0"></el-option>
-					    </el-select>
+					    <el-input v-model="editOrderForm.delivery" class="editOrder-delivery" auto-complete="off"></el-input>
 					</el-form-item>
 					<el-form-item label="送件人电话：">
 						<span v-text="editOrderForm.courierPhone"></span>
@@ -42,13 +39,13 @@
 						<el-date-picker type="date" placeholder="选择日期" v-model="editOrderForm.receiverDate"></el-date-picker>
 					</el-form-item>
 					<el-form-item label="状态：">
-						<el-select  placeholder="请选择状态" v-model="editOrderForm.state">
+						<el-select  placeholder="请选择状态" v-model="editOrderForm.state" class="editOrder-state">
 					      <el-option label="已废止" value="-1"></el-option>
 					      <el-option label="已完成" value="0"></el-option>
-					      <el-option label="待分配" value="1"></el-option>
-					      <el-option label="待配送" value="2"></el-option>
-					      <el-option label="已取消" value="3"></el-option>
-					      <el-option label="配送中" value="4"></el-option>
+					      <el-option label="待配送" value="1"></el-option>
+					      <el-option label="配送中" value="2"></el-option>
+					      <el-option label="取消订单" value="3"></el-option>
+					      <el-option label="未付款" value="4"></el-option>
 					    </el-select>
 					</el-form-item>
 				</el-card>
@@ -143,20 +140,20 @@ export default {
 			this.$router.push({ path: '/receipt/order/relateBooks', query: { orderId: orderId }});
 		},
 		//数字的状态转换成文字
-		state2Name(state) {
+		state2Name(state) { 
 			let st = "";
 			if(state == -1){
 				st = '已废止';
 			}else if(state == 0){
 				st = '已完成';
 			}else if(state == 1){
-				st = '待分配';
-			}else if(state == 2){
 				st = '待配送';
+			}else if(state == 2){
+				st = '配送中';
 			}else if(state == 3){
 				st = '已取消';
 			}else if(state == 4){
-				st = '配送中';
+				st = '未付款';
 			}
 			return st;
 		},
@@ -206,6 +203,12 @@ export default {
 	.editOrder-tab{
 		margin-bottom: 2em;
     	margin-left: 1em;
+	}
+	.editOrder-delivery {
+		width: 35% !important;
+	}
+	.editOrder-state {
+		width: 35% !important;
 	}
 }
 .el-row {

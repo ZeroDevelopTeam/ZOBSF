@@ -81,13 +81,13 @@ export default {
 			}else if(stateNum == 0){
 				st = '已完成';
 			}else if(stateNum == 1){
-				st = '待分配';
-			}else if(stateNum == 2){
 				st = '待配送';
+			}else if(stateNum == 2){
+				st = '配送中';
 			}else if(stateNum == 3){
 				st = '已取消';
 			}else if(stateNum == 4){
-				st = '配送中';
+				st = '未付款';
 			}
 			return st;
 		}
