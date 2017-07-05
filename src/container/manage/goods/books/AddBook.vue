@@ -221,7 +221,7 @@ export default {
 <style scoped lang="scss">
 .addBook-card {
 	width:65%;
-    margin: auto;
+    margin: 1em auto;
 	.clearfix:before,
   	.clearfix:after {
         display: table;

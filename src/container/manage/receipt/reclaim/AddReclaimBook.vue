@@ -1,5 +1,5 @@
 <template>
-	<el-dialog title="新增回收图书" :visible="isVisible" :before-close="closeDialog" :close-on-click-modal="false">
+	<el-dialog title="新增回收图书" size="large" :visible="isVisible" :before-close="closeDialog" :close-on-click-modal="false">
 		<el-card class="recl-addBook-card">
 			<el-form :model="addReclBookForm" label-width="100px" :rules="formRules" ref="addReclBookForm">
 				<el-row>
