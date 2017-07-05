@@ -56,5 +56,13 @@ export default {
 	        })
 	    });
 	},
+	changeState({commit},params) {
+		return new Promise((resolve, reject) => {
+			post('book/changeState',params)
+	        .then(res => {
+	            resolve(res);
+	        })
+	    });
+	}
 }
 
