@@ -116,8 +116,8 @@
 				 <el-col :span="12">
 					<el-form-item label="状态：">
 						<el-select  placeholder="请选择状态" v-model="addBookForm.state">
-					      <el-option label="待分配" value="0"></el-option>
-					      <el-option label="待收件" value="1"></el-option>
+					      <el-option label="下架" value=0></el-option>
+					      <el-option label="上架" value=1></el-option>
 					    </el-select>
 					</el-form-item>
 				 </el-col>
@@ -174,7 +174,7 @@ export default {
 					{ required: true, message: '请输入价格', trigger: 'blur' }
 				],
 				state: [
-					{ required: true, message: '请选择状态', trigger: 'blur' }
+					{ type: 'number', required: true, message: '请选择状态', trigger: 'blur' }
 				],
 				storeHose: [
 					{ required: true, message: '请选输入仓库位置', trigger: 'blur' }

@@ -212,16 +212,35 @@ import { mapGetters } from 'vuex'
 	    },
 	    //状态不同显示不同操作
 	    labelFun(index,row) {
-	    	let str = '上架';
-	    	if(row.state == 1){
-	    		str = '分配';
-	    	}else if(row.state == 3){
-	    		str = '废止';
+	    	let str = '下架';
+	    	if(row.state == 0){
+	    		str = '上架';
+	    	}else if(row.state ==1){
+	    		str = '下架';
 	    	}
 	    	return str;
 	    },
+	    //上/下架操作
 	    handleAction(index, row) {
-	    	alert("上架");
+	    	let tempState =0;
+	    	if(row.state==0){
+	    		tempState = 1;
+	    	}
+	    	let para = { bookId: row.bookId, state: tempState };
+			this.$store.dispatch('changeState',para).then((res) => {
+				if(res.status==200){
+					this.$message({
+						message: '操作成功！',
+						type: 'success'
+					});
+					this.getBooks();
+				}else{
+					this.$message({
+						message: '操作失败！',
+						type: 'error'
+					});
+				}
+		    });
 	    },
 	},
 	mounted() {
