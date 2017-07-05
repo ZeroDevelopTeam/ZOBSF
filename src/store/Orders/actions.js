@@ -44,6 +44,14 @@ export default {
 	            resolve(res);
 	        })
 	    });
+	},
+	changeOrderState({commit},params) {
+		return new Promise((resolve, reject) => {
+			post('order/changeOrderState',params)
+	        .then(res => {
+	            resolve(res);
+	        })
+	    });
 	}
 }
 
