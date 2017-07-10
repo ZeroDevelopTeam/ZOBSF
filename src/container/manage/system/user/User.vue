@@ -38,7 +38,6 @@
 	export default {
 		computed: {
 		 ...mapGetters([
-			'userList'
 	   		 ])
 	    },
 		data() {
@@ -46,6 +45,7 @@
 					key:1,
 			        label:'用户账号',
 			        prop:'userCode',
+			        width:130,
 			        handelLink:this.clickLick,
 		        },
 		        {
@@ -57,29 +57,24 @@
 			 	 	key:3,
 		          	label:'手机号',
 		          	prop:'phone',
-		          	width:120
+		          	width:130
 		        },
 		        {
 			 	 	key:4,
 		          	label:'邮箱',
 		          	prop:'email',
-		          	width:150
-		        },
-		        {
-				  	key:5,
-		          	label:'创建时间',
-		          	prop:'createDate',
-		          	width:180
+		          	width:170
 		        },
 		        {
 				  	key:6,
 		          	label:'角色名',
-		          	prop:'roleName',
+		          	prop:'roles',
 		        },
 		        {
 				  	key:7,
 		          	label:'状态',
 		          	prop:'state',
+		          	width:90,
 		          	formatter:this.formatState
 		        },
 		        {
@@ -113,6 +108,7 @@
 					keyWord: ''
 		        }
 			return {
+				userList:[],
 				userInfo:'',
 				dialogFormVisible:false,
 				tableConfig:{
@@ -159,9 +155,10 @@
 			},
 			//点击链接显示详情
 			clickLick(row){
+				console.log(this.dialogFormVisible);
 				this.dialogFormVisible=true;
-				let roles = row.roles?row.roles.map(item => item.roleName).toString():'暂无';
-				this.userInfo=Object.assign( row,{roles:roles});
+				console.log(this.dialogFormVisible);
+				this.userInfo=row;
 			},
 			//子组件控制父组件隐藏
 			hiddenInfo(visible){
@@ -189,6 +186,11 @@
 				};
 				this.listLoading = true;
 				this.$store.dispatch('getUserList',this.tableConfig.params).then((res) => {  
+					res.list.map(item => {
+						console.log(item.roles);
+						item.roles = item.roles.length != 0?item.roles.map(item => item.roleName).toString():'暂无';
+					});
+					this.userList = res;
 					this.listLoading = false;
 		        });  
 			},

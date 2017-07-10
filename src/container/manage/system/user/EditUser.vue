@@ -92,24 +92,24 @@
 				colors:'',
 				editFormRules: {
 					userName: [
-						{ required: true, message: '请输入用户名', trigger: 'change' }
+						{ required: true, message: '请输入用户名', trigger: 'blur' }
 					],
 					userPsw: [
-						{ required: true, validator: validatePass, trigger: 'change' },
+						{ required: true, validator: validatePass, trigger: 'blur' },
 					],
 					reUserPsw: [
-						{ required: true, validator: validatePass2, trigger: 'change' },
+						{ required: true, validator: validatePass2, trigger: 'blur' },
 					],
 					phone: [
-						{ required: true, message: '请输入手机号', trigger: 'change' },
-						{ pattern: /^1[3|4|5|7|8][0-9]{9}$/, message: '请输入正确的手机号（例如：13101030301）' , trigger: 'blur,change' }
+						{ required: true, message: '请输入手机号', trigger: 'blur' },
+						{ pattern: /^1[3|4|5|7|8][0-9]{9}$/, message: '请输入正确的手机号（例如：13101030301）' , trigger: 'blur' }
 					],
 					email: [
-						{ required: true, message: '请输入邮箱', trigger: 'change' },
-						{ type: 'email', message: '请输入正确的邮箱地址（例如：123456@163.com）', trigger: 'blur,change' }
+						{ required: true, message: '请输入邮箱', trigger: 'blur' },
+						{ type: 'email', message: '请输入正确的邮箱地址（例如：123456@163.com）', trigger: 'blur' }
 					],
 					state: [
-						{ required: true, message: '请选择状态', trigger: 'change' }
+						{ required: true, message: '请选择状态', trigger: 'blur' }
 					]
 				},
 				//新增界面数据

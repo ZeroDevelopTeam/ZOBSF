@@ -64,16 +64,16 @@
 				},
 				pswRule: {
 			        oldPsw: [
-			            { required: true, message: '请输入旧密码', trigger: 'change' },
-			            { min: 6, max: 16, message: '请输入6 到 16位旧密码'}
+			            { required: true, message: '请输入旧密码', trigger: 'blur' },
+			            { min: 6, max: 16, message: '请输入6 到 16位旧密码', trigger: 'blur'}
 			        ],
 			        newPsw: [
-			            { required: true, validator: validatePass, trigger: 'change' },
-						{ min: 6, max: 16, message: '请输入6 到 16位新密码'}
+			            { required: true, validator: validatePass, trigger: 'blur'},
+						{ min: 6, max: 16, message: '请输入6 到 16位新密码', trigger: 'blur'}
 			        ],
 			        reNewPsw: [
-			            { required: true, validator: validatePass2, trigger: 'change' },
-						{ min: 6, max: 16, message: '请输入6 到 16位确认密码'}
+			            { required: true, validator: validatePass2, trigger: 'blur' },
+						{ min: 6, max: 16, message: '请输入6 到 16位确认密码', trigger: 'blur'}
 			        ]
 		        },
 			}

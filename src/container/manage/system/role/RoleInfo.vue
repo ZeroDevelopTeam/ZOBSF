@@ -1,8 +1,9 @@
 <template>
 	<!--角色详情 -->
-	<el-dialog title="角色详情" :visible.sync="dialogFormVisible1"  size="tiny" class="role-info">
+	<el-dialog title="角色详情" :visible.sync="dialogFormVisible1"  size="tiny" class="role-info" :before-close="hiddenInfo">
+    	<div class="line"></div>
     	<!--角色详情-->
-		<el-form  label-width="50%">
+		<el-form  label-width="32%">
 			<el-form-item label="角色编号：">
 				<div class="content-info">{{roleInfo.roleId}}</div>
 			</el-form-item>
@@ -62,9 +63,14 @@
 
 <style scoped lang="scss">
 .role-info{
+	.line {
+	    border-bottom: 1px solid #e4e4e4;
+        margin-top: -17px;
+        margin-bottom: 20px;
+	}
 	.content-info{
 		border-bottom: 1px solid;
-	    width: 70%;
+	    width: 80%;
 	    text-align: center;
         height: 30px;
 	}

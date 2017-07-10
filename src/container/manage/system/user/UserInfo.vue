@@ -1,7 +1,8 @@
 <template>
 	 <!--用户详情-->
-		<el-dialog title="用户详情" :visible.sync="dialogFormVisible1" size="tiny" class="user-info">
-	        <el-form label-width="50%" >
+		<el-dialog title="用户详情" :visible.sync="dialogFormVisible1" size="tiny" class="user-info" :before-close="hiddenInfo">
+	        <div class="line"></div>
+	        <el-form label-width="32%" >
 	            <el-form-item label="用户账号：">
 					<div class="content-info">{{userInfo.userCode}}</div>
 				</el-form-item>
@@ -65,9 +66,14 @@
 </script>
 <style scoped lang="scss">
 .user-info{
+	.line {
+	    border-bottom: 1px solid #e4e4e4;
+        margin-top: -17px;
+        margin-bottom: 20px;
+	}
 	.content-info{
 		border-bottom: 1px solid;
-	    width: 70%;
+	    width: 80%;
 	    text-align: center;
         height: 30px;
 	}
