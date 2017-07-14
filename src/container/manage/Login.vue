@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import base64 from '../../util/Base64EnCode';//用户账号密码传输加密处理
   export default {
     data() {
     	const valResultFunc = (rule, value, callback) => {
@@ -71,31 +72,34 @@
       };
     },
     methods: {
-      login(ev) {
-        var _this = this;
-        this.$refs.loginForm.validate((valid) => {
-          if (valid) {
-            this.logining = true;
-            var loginParams = { userCode: this.loginForm.userCode, userPsw: this.loginForm.userPsw};
-            this.$store.dispatch('requestLogin',loginParams).then((data) => {  
-	              this.logining = false;
-	              if (data.status == 200) {
-	                sessionStorage.setItem('user', JSON.stringify(data.user));
-	                this.$router.push({ path: '/system/user' });
-	              } else {
-	              	this.renderCode();
-	              	this.$message({
-	                  message: data.msg,
-	                  type: 'error'
-	                });
-	              }
-		        });  
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
+      	login(ev) {
+	        var _this = this;
+	        this.$refs.loginForm.validate((valid) => {
+	          	if (valid) {
+		            this.logining = true;
+		            const codeData = base64.encode64(this.loginForm.userCode);  //对用户名加密  
+            		const passData = base64.encode64(this.loginForm.userPsw);  //对密码加密
+		            //var loginParams = { userCode: codeData, userPsw: passData};
+		            var loginParams = { userCode: this.loginForm.userCode, userPsw: this.loginForm.userPsw};
+		            this.$store.dispatch('requestLogin',loginParams).then((data) => {  
+			            this.logining = false;
+			            if (data.status == 200) {
+			                sessionStorage.setItem('user', JSON.stringify(data.user));
+			                this.$router.push({ path: '/system/user' });
+			            } else {
+			              	this.renderCode();
+			              	this.$message({
+			                  	message: data.msg,
+			                  	type: 'error'
+			                });
+			            }
+				    });  
+	          	} else {
+		            console.log('error submit!!');
+		            return false;
+	          	}
+	        });
+	  	},
       
       //验证码
       renderCode() {

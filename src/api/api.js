@@ -3,7 +3,6 @@ import {Host} from './Host';
 var api = axios.create({
     headers: {'content-type': 'application/json;charset=utf-8'},
     baseURL:`${Host}`,
-    timeout: 3000
 });
 export function post(url, params) {
     return new Promise((resolve, reject) => {
