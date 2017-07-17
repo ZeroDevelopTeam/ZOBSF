@@ -15,14 +15,15 @@
 		<div id="book-middle"></div>
 		<div id="book-right">
 		 	<div class="book-top">
-				<el-button type="primary" @click="addSubmit">新增</el-button>
-				<el-button type="primary" :disabled="this.sels.length===0" @click="batchRemove">删除</el-button>
+				<el-button type="primary" @click="addSubmit" v-if="purview.indexOf('1')>-1">新增</el-button>
+				<el-button type="primary" :disabled="this.sels.length===0" @click="batchRemove" v-if="purview.indexOf('3')>-1">删除</el-button>
 				<el-input
 				  placeholder="请输入关键字"
 				  icon="search"
 				  v-model="searchVaule"
 				  :on-icon-click="handleSearch"
 				  @keyup.enter.native="handleSearch"
+				  v-if="purview.indexOf('4')>-1"
 				  >
 				</el-input>
 			</div>
@@ -75,17 +76,20 @@ import { mapGetters } from 'vuex'
 			  		{
 			          label: '修改',
 			          butType: 'info',
-			          func: this.handleEdit
+			          func: this.handleEdit,
+			          isShow:this.butIsShow,
 		        	},
 		        	{
 			          label: this.labelFun,
 			          butType: 'info',
-			          func: this.handleAction
+			          func: this.handleAction,
+			          isShow:this.butIsShow,
 		        	},
 		        	{
 			          label: '删除',
 			          butType: 'danger',
-			          func: this.handleDelete
+			          func: this.handleDelete,
+			          isShow:this.butIsShow,
 		        	}
 		        ]
 	        }];
@@ -95,7 +99,8 @@ import { mapGetters } from 'vuex'
 			pageSize:10,
 			keyWord: ''
         }
-      return {
+      	return {
+      		purview:'',
       		tableConfig: {
 		      	columns,
 		      	dispatch: 'getByPage',
@@ -124,6 +129,18 @@ import { mapGetters } from 'vuex'
 		}
 	},
 	methods: {
+		//是否在操作列中显示删除(true-显示, false-不显示)
+		butIsShow(index, row,label) {
+			if(label == '修改' && this.purview.indexOf('2')>-1){
+				return true;
+			}else if(label == '删除' && this.purview.indexOf('3')>-1){
+				return true;
+			}else if(typeof(label) == 'function' && this.purview.indexOf('2')>-1){
+				return true;
+			}else{
+				return false;
+			}
+		},
 		//初始化或者刷新表格
 		getBooks() {
 			let para = {
@@ -250,7 +267,20 @@ import { mapGetters } from 'vuex'
 				keyWord: ''
 			};
 		this.$store.dispatch('getBookTypeTree',para);
-		this.getBooks();
+		let user = JSON.parse(sessionStorage.getItem('user'));
+		if(user.purview[1]){
+			let purview = user.purview[1].toString();
+			this.purview = purview;
+			
+			if(user.purview[1].indexOf('4')>-1){
+				this.getBooks();
+			}else{
+				this.$message({
+		          	message: '您没有查询权限，无法查看数据，请联系管理员！',
+		          	type: 'warning'
+		        });
+			}
+		}
 		//分栏拖拽
 		DivideUtil.divideFun("book-container", "book-left", "book-middle", "book-right");
 	},

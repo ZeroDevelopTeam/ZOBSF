@@ -24,13 +24,13 @@
 	        <el-button
 	          size="small"
 	          type="info"
-	          @click="handleEdit(scope.$index, scope.row,scope)">
+	          @click="handleEdit(scope.$index, scope.row,scope)"  v-if="purview.indexOf('2')>-1">
 	            	修改
 	        </el-button>
 	        <el-button
 	          size="small"
 	          type="danger"
-	          @click="handleDelete(scope.$index, scope.row,scope)">
+	          @click="handleDelete(scope.$index, scope.row,scope)"  v-if="purview.indexOf('3')>-1">
 	          		删除
 	        </el-button>
 	      </template>
@@ -62,6 +62,12 @@ export default {
 		EditBookType
 	},
 	props: {
+		purview:{
+			type: String,
+		    default: function () {
+		      return ''
+		    }
+		},
 		rowOptions: {
 			type: Function,
 		},

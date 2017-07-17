@@ -80,7 +80,7 @@ import ChangeuserPsw from './system/user/ChangeUserPsw';
 	export default {
 		data() {
 			return {
-				sysName:'信用数据开放平台',
+				sysName:'友分享书城后台管理',
 				collapsed:false,
 				sysUserName: '',//当前用户名
 				dialogFormVisible: false,

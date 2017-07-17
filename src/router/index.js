@@ -46,6 +46,21 @@ const AddPurview = resolve => require.ensure([], () => resolve(require('../conta
 const EditPurview = resolve => require.ensure([], () => resolve(require('../container/manage/system/purview/EditPurview.vue')), 'group-purview');
 //日志管理
 const Log = resolve => require.ensure([], () => resolve(require('../container/manage/system/log/Log.vue')), 'group-log');
+let user = sessionStorage.getItem('user')?JSON.parse(sessionStorage.getItem('user')):'';
+let purview = [];
+let roles = [];
+if(user){
+	user.roles.map((item)=>{
+		roles.push(item.roleId);
+	});
+	if(JSON.stringify(user.purview).length>2){
+		for(let i=1 ; i<=6 ; i++){
+			if(user.purview[i] != undefined){
+				purview.push(i);
+			}
+		}
+	}
+}
 let routes = [
     {
         path: '/login',
@@ -65,15 +80,16 @@ let routes = [
         name: '货物管理',
         iconCls: 'fa fa-book',//图标样式class
         redirect: '/goods/book',
+        hidden:purview.indexOf(1)>-1 || purview.indexOf(2)>-1?false:true,
 		children: [
-            { path: 'book', component: Content, name: '图书管理',redirect: '/goods/book/list',
+            { path: 'book', component: Content, name: '图书管理',redirect: '/goods/book/list',hidden:purview.indexOf(1)>-1?false:true,
 	            children: [
 		            { path: 'list', component: Book, name: '图书列表' },
 		            { path: 'addBook', component: AddBook, name:'新增图书' },
 		            { path: 'editBook', component: EditBook, name:'修改图书' },
 		        ]
 	        },
-            { path: 'bookType', component: Content, name: '分类管理',redirect: '/goods/bookType/list',
+            { path: 'bookType', component: Content, name: '分类管理',redirect: '/goods/bookType/list',hidden:purview.indexOf(2)>-1?false:true,
             	children: [
 		            { path: 'list', component: BookType, name: '分类列表' },
 		        ]
@@ -86,8 +102,9 @@ let routes = [
         name: '单据管理',
         iconCls: 'fa fa-files-o',//图标样式class
         redirect: '/receipt/order',
+        hidden:purview.indexOf(3)>-1 || purview.indexOf(4)>-1?false:true,
         children: [
-            { path: 'order', component: Content, name: '订单管理',redirect: '/receipt/order/list',
+            { path: 'order', component: Content, name: '订单管理',redirect: '/receipt/order/list',hidden:purview.indexOf(3)>-1?false:true,
             	children: [
 		            { path: 'list', component: Order, name: '订单列表' },
 		            { path: 'editOrder', component: EditOrder, name: '修改订单'},
@@ -95,7 +112,7 @@ let routes = [
 		            {path: 'relateBooks', component: RelateBooks, name: '订单相关图书'}
 		        ]
             },
-            { path: 'reclaim', component: Content, name: '回收管理',redirect: '/receipt/reclaim/list',
+            { path: 'reclaim', component: Content, name: '回收管理',redirect: '/receipt/reclaim/list',hidden:purview.indexOf(4)>-1?false:true,
             	children: [
 		            { path: 'list', component: Reclaim, name: '回收列表' },
 		        ]
@@ -108,35 +125,31 @@ let routes = [
         name: '系统管理',
         iconCls: 'el-icon-setting',//图标样式class
         redirect: '/system/user',
+        hidden:purview.indexOf(5)>-1 || purview.indexOf(6)>-1?false:true,
         children: [
-            { path: 'user', component: Content, name: '用户管理',redirect: '/system/user/list',
+            { path: 'user', component: Content, name: '用户管理',redirect: '/system/user/list',hidden:purview.indexOf(5)>-1?false:true,
             	children:[
             		{ path: 'list', component: User, name: '用户列表' },
 	            	{ path: 'addUser', component: AddUser, name: '新增用户' },
 	            	{ path: 'editUser', component: EditUser, name: '编辑用户' }
             	] 
             },
-            { path: 'role', component: Content, name: '角色管理',redirect: '/system/role/list',
+            { path: 'role', component: Content, name: '角色管理',redirect: '/system/role/list',hidden:purview.indexOf(6)>-1?false:true,
             	children:[
             		{ path: 'list', component: Role, name: '角色列表' },
 	            	{ path: 'addRole', component: AddRole, name: '新增角色' },
             		{ path: 'editRole', component: EditRole, name: '编辑角色' },
             	] 
             },
-            { path: 'purview', component: Content, name: '权限管理',redirect: '/system/purview/list',
+            { path: 'purview', component: Content, name: '权限管理',redirect: '/system/purview/list',hidden:roles.indexOf('5')==-1?true:false,
             	children:[
             		{ path: 'list', component: Purview, name: '权限列表' },
 	            	{ path: 'addPurview', component: AddPurview, name: '新增权限' },
            			{ path: 'editPurview', component: EditPurview, name: '编辑权限' },
             	]
             },
-            { path: 'log', component: Log, name: '日志管理' },
+            { path: 'log', component: Log, name: '日志管理',hidden:roles.indexOf('5')==-1?true:false,},
         ]
-    },
-    {
-        path: '*',
-        hidden: true,
-        redirect: { path: '/404' }
     },
 ];
 

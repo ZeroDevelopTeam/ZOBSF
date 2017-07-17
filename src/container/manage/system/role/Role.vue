@@ -4,10 +4,10 @@
 		<el-col :span="18" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
+					<el-button type="primary" @click="handleAdd" v-if="purview.indexOf('1')>-1">新增</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="batchRemove" :disabled="this.sels.length===0">删除</el-button>
+					<el-button type="primary" @click="batchRemove" :disabled="this.sels.length===0" v-if="purview.indexOf('3')>-1">删除</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -17,7 +17,8 @@
 			  icon="search"
 			  v-model="filters.keyWord"
 			  :on-icon-click="getRoles"
-			  @keyup.enter.native="getRoles">
+			  @keyup.enter.native="getRoles"
+			  v-if="purview.indexOf('4')>-1">
 			</el-input>
 		</el-col>
 		<!--列表-->
@@ -57,11 +58,6 @@
 		          	prop:'roleDesc',
 		        },
 		        {
-				  	key:4,
-		          	label:'创建时间',
-		          	prop:'createDate',
-		        },
-		        {
 				  	key:5,
 		          	label:'状态',
 		          	prop:'state',
@@ -71,21 +67,25 @@
 				  	key:6,
 		          	label:'操作',
 				  	width:200,
+				  	flag:true,
 				  	operations:[
 					  	{
 					  		func :this.handleEdit,
 					  		label:'编辑',
-					  		butType:'info'
+					  		butType:'info',
+					  		isShow:this.butIsShow,
 					  	},
 					  	{
 					  		func :this.handleDel,
 					  		label:'删除',
-					  		butType:'info'
+					  		butType:'info',
+					  		isShow:this.butIsShow,
 					  	},
 					  	{
 					  		func :this.changeState,
 					  		label:this.labelFun,
-					  		butType:'danger'
+					  		butType:'danger',
+					  		isShow:this.butIsShow,
 					  	}
 				  	]
 		        }];
@@ -97,6 +97,7 @@
 		        };
 		        const dispatch='getRoleList';
 			return {
+				purview:[],
 				roleInfo:'',
 				tableConfig:{
 					dataList:[],
@@ -139,6 +140,18 @@
 			handleSelectionChange(val) {
 		        this.sels = val;
 	      	},
+	      	//是否在操作列中显示删除(true-显示, false-不显示)
+			butIsShow(index, row,label) {
+				if(label == '编辑' && this.purview.indexOf('2')>-1){
+					return true;
+				}else if(label == '删除' && this.purview.indexOf('3')>-1){
+					return true;
+				}else if(typeof(label) == 'function' && this.purview.indexOf('2')>-1){
+					return true;
+				}else{
+					return true;
+				}
+			},
 	      	//显示新增界面
 			handleAdd: function () {
 				this.$router.push({ path: '/system/role/addRole' });
@@ -270,7 +283,19 @@
 		  	},
 		},
 		mounted() {
-			this.getRoles();
+			let user = JSON.parse(sessionStorage.getItem('user'));
+			if(user.purview[6]){
+				let purview = user.purview[6].toString();
+				this.purview = purview;
+			}
+			if(user.purview[6].indexOf('4')>-1){
+				this.getRoles();
+			}else{
+				this.$message({
+		          	message: '您没有查询权限，无法查看数据，请联系管理员！',
+		          	type: 'warning'
+		        });
+			}
 		},
 		components: {
 			CommTable,

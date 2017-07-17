@@ -82,6 +82,17 @@ export default {
 	            resolve(res);
 	        })
 	    });
-	}
+	},
+	
+	//根据状态获取用户
+	getUserByState({commit},params){
+		return new Promise((resolve, reject) => {
+			get('user/getUserByState',params)
+	        .then(res => {
+	        	commit(USERLIST, res)
+	            resolve(res);
+	        })
+	    });
+	},
 }
 

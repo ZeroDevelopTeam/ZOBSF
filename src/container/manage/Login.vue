@@ -1,7 +1,10 @@
 <template>
 	<section class="login">
+	  	<div>
+	  		<h3 class="title">友分享书城后台管理平台</h3>
+	  	</div>
 	  <el-form :model="loginForm" :rules="ruleLogin" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
-	    <h3 class="title">信用数据开放平台</h3>
+	   
 	    <el-form-item prop="userCode">
 	      <el-input type="text" v-model="loginForm.userCode" auto-complete="off" placeholder="账号">
 	      	<template slot="prepend">
@@ -85,7 +88,7 @@ import base64 from '../../util/Base64EnCode';//用户账号密码传输加密处
 			            this.logining = false;
 			            if (data.status == 200) {
 			                sessionStorage.setItem('user', JSON.stringify(data.user));
-			                this.$router.push({ path: '/system/user' });
+			                window.location.href='system/user';
 			            } else {
 			              	this.renderCode();
 			              	this.$message({
@@ -126,6 +129,14 @@ import base64 from '../../util/Base64EnCode';//用户账号密码传输加密处
 
 <style lang="scss" scoped>
 .login{
+	.title {
+      margin: 130px auto 40px auto;
+      text-align: center;
+      font-size: 30px;
+      font-weight: 2500;
+      letter-spacing:5px;
+      color: #FFFFFF;
+    }
 	padding: 0px;
 	margin: 0px;
 	float: left;
@@ -139,17 +150,12 @@ import base64 from '../../util/Base64EnCode';//用户账号密码传输加密处
     border-radius: 5px;
     -moz-border-radius: 5px;
     background-clip: padding-box;
-    margin: 180px auto;
+    margin: 0 auto;
     width: 350px;
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
-    .title {
-      margin: 0px auto 40px auto;
-      text-align: center;
-      color: #505458;
-    }
     .remember {
       margin: 0px 0px 35px 0px;
     }

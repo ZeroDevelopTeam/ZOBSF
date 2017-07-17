@@ -83,20 +83,11 @@
 					</el-form-item>
 				 </el-col>
 				 <el-col :span="12">
-				 	<el-form-item label="大图路径：" prop="image_l">
-						<el-input v-model="addBookForm.image_l" auto-complete="off"></el-input>
-					</el-form-item>
-				 </el-col>
-			</el-row>
-			<el-row>
-				 <el-col :span="12">
-				 	<el-form-item label="小图路径：" prop="image_s">
-						<el-input v-model="addBookForm.image_s" auto-complete="off"></el-input>
-					</el-form-item>
-				 </el-col>
-				 <el-col :span="12">
-				 	<el-form-item label="排序：" prop="orderBy">
-						<el-input v-model="addBookForm.orderBy" auto-complete="off"></el-input>
+					<el-form-item label="状态：">
+						<el-select  placeholder="请选择状态" v-model="addBookForm.state">
+					      <el-option label="下架" value=0></el-option>
+					      <el-option label="上架" value=1></el-option>
+					    </el-select>
 					</el-form-item>
 				 </el-col>
 			</el-row>
@@ -113,20 +104,26 @@
 				 </el-col>
 			</el-row>
 			<el-row>
-				 <el-col :span="12">
-					<el-form-item label="状态：">
-						<el-select  placeholder="请选择状态" v-model="addBookForm.state">
-					      <el-option label="下架" value=0></el-option>
-					      <el-option label="上架" value=1></el-option>
-					    </el-select>
-					</el-form-item>
-				 </el-col>
-				 <el-col :span="12">
+				 <el-col :span="24">
 				 	<el-form-item label="图书简介：" prop="bookDesc">
 						<el-input type="textarea" v-model="addBookForm.bookDesc"></el-input>
 					</el-form-item>
 				 </el-col>
 			</el-row>
+			<el-row>
+				 <el-col :span="24">
+				 	<el-form-item label="封面图：" prop="image_l">
+				 		<el-upload
+						  class="upload-demo"
+						  :action="url"
+						  :on-progress="handleProgress"
+						  :on-remove="handleRemove">
+						  <el-button size="small" type="primary">点击上传</el-button>&nbsp;&nbsp;&nbsp;<font slot="tip" size="1" color="#8C939D">只能上传jpg/png文件，且不超过500kb</font>
+						</el-upload>
+					</el-form-item>
+				 </el-col>
+			</el-row>
+			
 		</el-form>
 		<div style="text-align: center;">
 			<el-button type="primary" @click.native="reset">重置</el-button>
@@ -136,10 +133,13 @@
 </template>
 
 <script>
-import util from '../../../../util/util'
+import util from '../../../../util/util';
+import {Host} from '../../../../api/Host';
 export default {
 	data() {
 		return {
+			fileList:[],
+			url:Host+`upload/uploadFile`,
 			addBookForm: {
 				bookId: '',
 				bookName: '',
@@ -183,6 +183,14 @@ export default {
 		}
 	},
 	methods: {
+		//图片上传移除
+		handleRemove(file) {
+	        this.addBookForm.image_l="";
+      	},
+      	//图片上传中
+      	handleProgress(event, file) {
+      		this.addBookForm.image_l=file.name;
+      	},
 		addSubmit() {
 			this.$refs.addBookForm.validate((valid) => {
 				if (valid) {

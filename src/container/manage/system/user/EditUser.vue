@@ -134,8 +134,8 @@
 					if (valid) {
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							let para = Object.assign({}, this.editForm);
-							para.createDate = (!para.createDate || para.createDate == '') ? '' : util.formatDate.format(new Date(para.createDate), 'yyyy-MM-dd');
-							this.$store.dispatch('editUser',para).then((res) => {  
+							para.createDate = (!para.createDate || para.createDate == '') ? '' : new Date(para.createDate);
+							this.$store.dispatch('editUser',para).then((res) => {
 								if(res.status==200){
 									this.$message({
 										message: res.msg,

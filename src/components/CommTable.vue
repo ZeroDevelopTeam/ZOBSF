@@ -19,8 +19,9 @@
 							v-for="tag in item.operations" 
 							:key="tag.label"
 							:type="tag.butType"
+							:disabled="item.flag?(((item.flag==scope.row.userCode && tag.label!='编辑') || scope.row.roles == '超级管理员' || scope.row.roleName == '超级管理员')?true:false):false"
 							@click="tag.func(scope.$index, scope.row,scope)"
-							v-if="tag.isShow?tag.isShow(scope.$index, scope.row,scope):true"
+							v-if="tag.isShow?tag.isShow(scope.$index, scope.row,tag.label):true"
 						>
 							{{typeof(tag.label)== "string"? tag.label: tag.label(scope.$index, scope.row,scope)}}
 						</el-button>

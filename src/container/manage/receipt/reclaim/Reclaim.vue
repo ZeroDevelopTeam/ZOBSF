@@ -1,13 +1,14 @@
 <template>
 	<div class="recl-container">
 		<div class="recl-top">
-			<el-button type="primary" @click="handleAdd">新增</el-button>
-			<el-button type="primary" :disabled="this.sels.length===0" @click="batchRemove">删除</el-button>
+			<el-button type="primary" @click="handleAdd" v-if="purview.indexOf('1')>-1">新增</el-button>
+			<el-button type="primary" :disabled="this.sels.length===0" @click="batchRemove" v-if="purview.indexOf('3')>-1">删除</el-button>
 			<el-input
 			  placeholder="请输入关键字"
 			  icon="search"
 			  v-model="searchVaule"
-			  :on-icon-click="handleSearch">
+			  :on-icon-click="handleSearch"
+			  v-if="purview.indexOf('4')>-1">
 			</el-input>
 		</div>
 		<!--新增界面-->
@@ -81,11 +82,13 @@ export default {
 			  		{
 			          label: '修改',
 			          butType: 'info',
-			          func: this.handleEdit
+			          func: this.handleEdit,
+			          isShow:this.butIsShow,
 		        	},{
 			          label: '删除',
 			          butType: 'danger',
-			          func: this.handleDelete
+			          func: this.handleDelete,
+			          isShow:this.butIsShow,
 		        	}
 		        ]
 	        }];
@@ -96,6 +99,7 @@ export default {
 			keyWord: ''
         }
 		return{
+			purview:'',
       		tableConfig: {
 		      	columns,
 		      	params,
@@ -146,6 +150,16 @@ export default {
 		}
 	},
 	methods: {
+		//是否在操作列中显示删除(true-显示, false-不显示)
+		butIsShow(index, row,label) {
+			if(label == '修改' && this.purview.indexOf('2')>-1){
+				return true;
+			}else if(label == '删除' && this.purview.indexOf('3')>-1){
+				return true;
+			}else{
+				return false;
+			}
+		},
 		//新增
 		addSubmit: function () {
 			this.$refs.addForm.validate((valid) => {
@@ -326,7 +340,20 @@ export default {
 		}
 	},
 	mounted() {
-		this.handleSearch();
+		let user = JSON.parse(sessionStorage.getItem('user'));
+		if(user.purview[4]){
+			let purview = user.purview[4].toString();
+			this.purview = purview;
+			
+			if(user.purview[4].indexOf('4')>-1){
+				this.handleSearch();
+			}else{
+				this.$message({
+		          	message: '您没有查询权限，无法查看数据，请联系管理员！',
+		          	type: 'warning'
+		        });
+			}
+		}
 	},
 }
 

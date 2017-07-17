@@ -1,7 +1,7 @@
 <template>
 	<div class="bookType-container">
 		<div class="bookType-top">
-			<el-dropdown @command="handleAdd" v-if="bookTypeTree.length!=0">
+			<el-dropdown @command="handleAdd"  v-show="purview.indexOf('1')>-1" v-if="bookTypeTree.length!=0">
 			 	<el-button type="primary"> 新增<i class="el-icon-caret-bottom el-icon--right"></i>
 			 </el-button>
 			  <el-dropdown-menu slot="dropdown">
@@ -9,18 +9,18 @@
 			    <el-dropdown-item command=0 :disabled="this.sels.length===0">下级分类</el-dropdown-item>
 			  </el-dropdown-menu>
 			</el-dropdown>
-			<el-button type="primary" @click="addBaseBookType" v-else>新增</el-button>
-			<el-button type="primary" :disabled="this.sels.length===0" @click="batchRemove">删除</el-button>
+			<el-button type="primary" @click="addBaseBookType" v-show="purview.indexOf('1')>-1" v-else>新增</el-button>
+			<el-button type="primary" :disabled="this.sels.length===0" @click="batchRemove" v-if="purview.indexOf('3')>-1">删除</el-button>
 			<el-input
 			  placeholder="请输入关键字"
 			  icon="search"
 			  v-model="searchVaule"
 			  :on-icon-click="handleSearch"
 			  @keyup.enter.native="handleSearch"
-			  >
+			  v-if="purview.indexOf('4')>-1">
 			</el-input>
 		</div>
-		<TreeGrid :columns="columns" :treeStructure="true" :dataSource="dataSource" :rowOptions="handleSelectionChange" @refresh="getBookType"></TreeGrid>
+		<TreeGrid :columns="columns" :treeStructure="true" :dataSource="dataSource" :rowOptions="handleSelectionChange" @refresh="getBookType" :purview="purview"></TreeGrid>
 		<!--新增界面-->
 	  	<AddBookType :isVisible='addFormVisible' @close="closeDialog" :baseBookTypeId='baseBookTypeId' :addLevel="addLevel" ></AddBookType>
 	</div>
@@ -37,6 +37,7 @@ export default {
 	},
 	data() {
 		return {
+			purview:'',
 			searchVaule:null,//检索值
     		sels: [],//列表选中列
     		addFormVisible: false,
@@ -126,7 +127,21 @@ export default {
 		}
 	},
 	mounted() {
-		this.getBookType();
+		let user = JSON.parse(sessionStorage.getItem('user'));
+		let purview = '';
+		if(user.purview[2]){
+			let purview = user.purview[2].toString();
+			this.purview = purview;
+			
+			if(user.purview[2].indexOf('4')>-1){
+				this.getBookType();
+			}else{
+				this.$message({
+		          	message: '您没有查询权限，无法查看数据，请联系管理员！',
+		          	type: 'warning'
+		        });
+			}
+		}
 	},
 }
 </script>

@@ -4,10 +4,10 @@
 		<el-col :span="18"  class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" >
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
+					<el-button type="primary" @click="handleAdd" v-if="purview.indexOf('1')>-1">新增</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="batchRemove" :disabled="this.sels.length===0">删除</el-button>
+					<el-button type="primary" @click="batchRemove" :disabled="this.sels.length===0" v-if="purview.indexOf('3')>-1">删除</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -17,7 +17,8 @@
 			  icon="search"
 			  v-model="filters.keyWord"
 			  :on-icon-click="getUsers"
-			  @keyup.enter.native="getUsers">
+			  @keyup.enter.native="getUsers"
+			  v-if="purview.indexOf('4')>-1">
 			</el-input>
 		</el-col>
 		<!--列表-->
@@ -41,6 +42,7 @@
 	   		 ])
 	    },
 		data() {
+			const user = JSON.parse(sessionStorage.getItem('user')); 
 		       const columns = [{
 					key:1,
 			        label:'用户账号',
@@ -75,27 +77,31 @@
 		          	label:'状态',
 		          	prop:'state',
 		          	width:90,
-		          	formatter:this.formatState
+		          	formatter:this.formatState,
 		        },
 		        {
 				  	key:8,
 		          	label:'操作',
 		          	width:200,
+					flag:user.userCode,		          	
 				  	operations:[
 					  	{
 					  		func :this.handleEdit,
 					  		label:'编辑',
-					  		butType:'info'
+					  		butType:'info',
+					  		isShow:this.butIsShow,
 					  	},
 					  	{
 					  		func :this.handleDel,
 					  		label:'删除',
-					  		butType:'info'
+					  		butType:'info',
+					  		isShow:this.butIsShow,
 					  	},
 					  	{
 					  		func :this.changeState,
 					  		label:this.labelFun,
-					  		butType:'danger'
+					  		butType:'danger',
+					  		isShow:this.butIsShow,
 					  	}
 				  	]
 		        }];
@@ -108,6 +114,7 @@
 					keyWord: ''
 		        }
 			return {
+				purview:'',//权限
 				userList:[],
 				userInfo:'',
 				dialogFormVisible:false,
@@ -155,9 +162,7 @@
 			},
 			//点击链接显示详情
 			clickLick(row){
-				console.log(this.dialogFormVisible);
 				this.dialogFormVisible=true;
-				console.log(this.dialogFormVisible);
 				this.userInfo=row;
 			},
 			//子组件控制父组件隐藏
@@ -168,6 +173,18 @@
 			handleSelectionChange(val) {
 		        this.sels = val;
 	      	},
+	      	//是否在操作列中显示删除(true-显示, false-不显示)
+			butIsShow(index, row,label) {
+				if(label == '编辑' && this.purview.indexOf('2')>-1){
+					return true;
+				}else if(label == '删除' && this.purview.indexOf('3')>-1){
+					return true;
+				}else if(typeof(label) == 'function' && this.purview.indexOf('2')>-1){
+					return true;
+				}else{
+					return false;
+				}
+			},
 		   //显示新增界面
 			handleAdd: function () {
 				this.$router.push({ path: '/system/user/addUser' });
@@ -187,8 +204,7 @@
 				this.listLoading = true;
 				this.$store.dispatch('getUserList',this.tableConfig.params).then((res) => {  
 					res.list.map(item => {
-						console.log(item.roles);
-						item.roles = item.roles.length != 0?item.roles.map(item => item.roleName).toString():'暂无';
+						item.roles = item.roles.length != 0?item.roles.map(item => item.roleName).toString():'--';
 					});
 					this.userList = res;
 					this.listLoading = false;
@@ -304,7 +320,20 @@
 		  	}
 		},
 		mounted() {
-			this.getUsers();
+			let user = JSON.parse(sessionStorage.getItem('user'));
+			if(user.purview[5]){
+				let purview =  user.purview[5].toString();
+				this.purview = purview;
+				
+				if(user.purview[5].indexOf('4')>-1){
+					this.getUsers();
+				}else{
+					this.$message({
+			          	message: '您没有查询权限，无法查看数据，请联系管理员！',
+			          	type: 'warning'
+			        });
+				}
+			}
 		},
 		components: {
 			CommTable,
