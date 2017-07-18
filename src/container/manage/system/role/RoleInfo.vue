@@ -11,7 +11,7 @@
 				<div class="content-info">{{roleInfo.roleName}}</div>
 			</el-form-item>
 			<el-form-item label="角色权限：">
-				<div class="content-info">{{roleInfo.purviews}}</div>
+				<div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" class="content-info" :title="roleInfo.purviews">{{roleInfo.purviews}}</div>
 			</el-form-item>
 			<el-form-item label="角色状态：">
 				<div class="content-info">{{roleInfo.state==1?'启用':'停用'}}</div>

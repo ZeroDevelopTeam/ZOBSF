@@ -27,7 +27,7 @@
 				  >
 				</el-input>
 			</div>
-			<CommTable  :tableConfig="tableConfig"></CommTable>{{bookInfo}}
+			<CommTable  :tableConfig="tableConfig"></CommTable>
 			<BookInfo :dialogFormVisible="dialogFormVisible" :bookInfo="bookInfo" @hiddenInfo="hiddenInfo"></BookInfo>
 		</div>
 	</div>

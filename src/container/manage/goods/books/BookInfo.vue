@@ -70,7 +70,7 @@
 			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="印刷时间：">
-						<div class="content-info">{{bookInfo.printTime}}</div>
+						<div class="content-info">{{bookInfo.printtime}}</div>
 					</el-form-item>
 				 </el-col>
 				 <el-col :span="12">
@@ -94,12 +94,12 @@
 			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="仓库位置：">
-						<div class="content-info">{{bookInfo.storeHouse}}</div>
+						<div class="content-info">{{bookInfo.storehouse}}</div>
 					</el-form-item>
 				 </el-col>
 				 <el-col :span="12">
 				 	<el-form-item label="库存量：">
-						<div class="content-info">{{bookInfo.storeNum}}</div>
+						<div class="content-info">{{bookInfo.bookNum}}</div>
 					</el-form-item>
 				 </el-col>
 			</el-row>
