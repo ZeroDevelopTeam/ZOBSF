@@ -27,23 +27,27 @@
 				  >
 				</el-input>
 			</div>
-			<CommTable  :tableConfig="tableConfig"></CommTable>
+			<CommTable  :tableConfig="tableConfig"></CommTable>{{bookInfo}}
+			<BookInfo :dialogFormVisible="dialogFormVisible" :bookInfo="bookInfo" @hiddenInfo="hiddenInfo"></BookInfo>
 		</div>
 	</div>
 </template>
 
 <script>
-import CommTable from '../../../../components/CommTable'
-import DivideUtil from '../../../../util/divideUtil'
+import CommTable from '../../../../components/CommTable';
+import BookInfo from './BookInfo';
+import DivideUtil from '../../../../util/divideUtil';
 import { mapGetters } from 'vuex'
  export default {
  	components:{
- 		CommTable
+ 		CommTable,
+ 		BookInfo
  	},
     data() {
     	const columns = [{
 		        label:'图书编号',
 		        prop:'bookId',
+		        handelLink:this.clickLick,
 	        },
 	        {
 	          	label:'图书名称',
@@ -59,15 +63,15 @@ import { mapGetters } from 'vuex'
 	        },
 	        {
 	          	label:'入库时间',
-	          	prop:'storeDate',
+	          	prop:'createDate',
 	        },
 	        {
 	          	label:'入库位置',
-	          	prop:'storeHose',
+	          	prop:'storehouse',
 	        },
 	        {
 	          	label:'库存量(册)',
-	          	prop:'storeNum',
+	          	prop:'bookNum',
 	        },
 	        {
 	          	label: "操作",
@@ -100,6 +104,8 @@ import { mapGetters } from 'vuex'
 			keyWord: ''
         }
       	return {
+      		bookInfo:'',
+      		dialogFormVisible:false,//详情
       		purview:'',
       		tableConfig: {
 		      	columns,
@@ -129,6 +135,15 @@ import { mapGetters } from 'vuex'
 		}
 	},
 	methods: {
+		//子组件控制父组件隐藏
+		hiddenInfo(visible){
+			this.dialogFormVisible = visible;
+		},
+		//点击链接显示详情
+		clickLick(row){
+			this.dialogFormVisible=true;
+			this.bookInfo=row;
+		},
 		//是否在操作列中显示删除(true-显示, false-不显示)
 		butIsShow(index, row,label) {
 			if(label == '修改' && this.purview.indexOf('2')>-1){

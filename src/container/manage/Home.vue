@@ -109,7 +109,7 @@ import ChangeuserPsw from './system/user/ChangeUserPsw';
 					//type: 'warning'
 				}).then(() => {
 					sessionStorage.removeItem('user');
-					_this.$router.push('/login');
+					window.location.href='/login';
 				}).catch(() => {
 
 				});

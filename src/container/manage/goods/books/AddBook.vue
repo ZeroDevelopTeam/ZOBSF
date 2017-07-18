@@ -66,8 +66,8 @@
 			</el-row>
 			<el-row>
 				 <el-col :span="12">
-				 	<el-form-item label="印刷时间：" prop="printTime">
-						<el-date-picker type="date" placeholder="选择日期" v-model="addBookForm.printTime"></el-date-picker>
+				 	<el-form-item label="印刷时间：" prop="printtime">
+						<el-date-picker type="date" placeholder="选择日期" v-model="addBookForm.printtime"></el-date-picker>
 					</el-form-item>
 				 </el-col>
 				 <el-col :span="12">
@@ -93,13 +93,13 @@
 			</el-row>
 			<el-row>
 				 <el-col :span="12">
-				 	<el-form-item label="仓库位置：" prop="storeHose">
-						<el-input v-model="addBookForm.storeHose" auto-complete="off"></el-input>
+				 	<el-form-item label="仓库位置：" prop="storehose">
+						<el-input v-model="addBookForm.storehose" auto-complete="off"></el-input>
 					</el-form-item>
 				 </el-col>
 				 <el-col :span="12">
-				 	<el-form-item label="库存量：" prop="storeNum">
-						<el-input v-model="addBookForm.storeNum" auto-complete="off"></el-input>
+				 	<el-form-item label="库存量：" prop="bookNum">
+						<el-input v-model="addBookForm.bookNum" auto-complete="off"></el-input>
 					</el-form-item>
 				 </el-col>
 			</el-row>
@@ -116,9 +116,10 @@
 				 		<el-upload
 						  class="upload-demo"
 						  :action="url"
-						  :on-progress="handleProgress"
-						  :on-remove="handleRemove">
-						  <el-button size="small" type="primary">点击上传</el-button>&nbsp;&nbsp;&nbsp;<font slot="tip" size="1" color="#8C939D">只能上传jpg/png文件，且不超过500kb</font>
+						  :on-success="handleSuccess"
+						  :on-remove="handleRemove"
+						  :disabled="addBookForm.image_l==''?false:true">
+						  <el-button size="small" type="primary" :disabled="addBookForm.image_l==''?false:true">点击上传</el-button>&nbsp;&nbsp;&nbsp;<font slot="tip" size="1" color="#8C939D">只能上传jpg/png文件，且不超过500kb</font>
 						</el-upload>
 					</el-form-item>
 				 </el-col>
@@ -151,14 +152,14 @@ export default {
 				edition: '',
 				pageNum: '',
 				wordNum: '',
-				printTime: '',
+				printtime: '',
 				bookSize: '',
 				paper: '',
 				image_l: '',
 				image_s: '',
 				orderBy: '',
-				storeHose: '',
-				storeNum: '',
+				storehose: '',
+				bookNum: '',
 				state: '',
 				bookDesc: ''
 			},
@@ -176,7 +177,7 @@ export default {
 				state: [
 					{ type: 'number', required: true, message: '请选择状态', trigger: 'blur' }
 				],
-				storeHose: [
+				storehose: [
 					{ required: true, message: '请选输入仓库位置', trigger: 'blur' }
 				]
 			},
@@ -188,8 +189,8 @@ export default {
 	        this.addBookForm.image_l="";
       	},
       	//图片上传中
-      	handleProgress(event, file) {
-      		this.addBookForm.image_l=file.name;
+      	handleSuccess(response, file) {
+      		this.addBookForm.image_l=response.msg.fileName;
       	},
 		addSubmit() {
 			this.$refs.addBookForm.validate((valid) => {
@@ -198,7 +199,7 @@ export default {
 					let typeId=this.$route.query.typeId;
 					let para = Object.assign({}, {typeId: typeId}, this.addBookForm);
 					para.publishTime = (!para.publishTime || para.publishTime == '') ? '' : util.formatDate.format(new Date(para.publishTime), 'yyyy-MM-dd');
-					para.printTime = (!para.printTime || para.printTime == '') ? '' : util.formatDate.format(new Date(para.printTime), 'yyyy-MM-dd');
+					para.printtime = (!para.printtime || para.printtime == '') ? '' : util.formatDate.format(new Date(para.printtime), 'yyyy-MM-dd');
 					this.$store.dispatch('addBook',para).then((res) => {
 						this.addLoading = false;
 						if(res.status==200){

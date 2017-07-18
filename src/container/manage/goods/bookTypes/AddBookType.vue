@@ -60,6 +60,7 @@ export default {
 						});
 						this.$refs['bookTypeForm'].resetFields();
 						this.closeDialog();
+						this.$router.push({ path: '/goods/book'});
 					});
 				}
 			});

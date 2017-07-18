@@ -151,6 +151,11 @@ let routes = [
             { path: 'log', component: Log, name: '日志管理',hidden:roles.indexOf('5')==-1?true:false,},
         ]
     },
+    {
+        path: '*',
+        hidden: true,
+        redirect: { path: '/404' }
+    },
 ];
 
 export default routes;
