@@ -4,19 +4,21 @@
 		    <strong style="line-height: 5px;">新增图书</strong>
 		</div>
 		<el-form :model="addBookForm" label-width="100px" :rules="formRules" ref="addBookForm">
-			<el-col :span="12">
-			 	<el-form-item label="图书编号：" prop="bookId">
-					<el-input v-model="addBookForm.bookId" disabled></el-input>
-				</el-form-item>
-			 </el-col>
-			  <el-col :span="12">
+			<el-row>
+				<el-col :span="12">
+				 	<el-form-item label="图书编号：" prop="bookId">
+						<el-input v-model="addBookForm.bookId" disabled></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="12">
 					<el-form-item label="状态：">
 						<el-select  placeholder="请选择状态" v-model="addBookForm.state">
 					      <el-option label="下架" value=0></el-option>
 					      <el-option label="上架" value=1></el-option>
 					    </el-select>
 					</el-form-item>
-				 </el-col>
+				</el-col>
+			</el-row>
 			<el-row>
 				 <el-col :span="12">
 				 	<el-form-item label="图书名称：" prop="bookName">
@@ -91,8 +93,8 @@
 			</el-row>
 			<el-row>
 				 <el-col :span="12">
-				 	<el-form-item label="仓库位置：" prop="storehose">
-						<el-input v-model="addBookForm.storehose" auto-complete="off"></el-input>
+				 	<el-form-item label="仓库位置：" prop="storehouse">
+						<el-input v-model="addBookForm.storehouse" auto-complete="off"></el-input>
 					</el-form-item>
 				 </el-col>
 				 <el-col :span="12">
@@ -156,7 +158,7 @@ export default {
 				image_l: '',
 				image_s: '',
 				orderBy: '',
-				storehose: '',
+				storehouse: '',
 				bookNum: '',
 				state: '',
 				bookDesc: ''
@@ -175,7 +177,7 @@ export default {
 				state: [
 					{ type: 'number', required: true, message: '请选择状态', trigger: 'blur' }
 				],
-				storehose: [
+				storehouse: [
 					{ required: true, message: '请选输入仓库位置', trigger: 'blur' }
 				]
 			},
