@@ -10,11 +10,12 @@
 		</el-col>
 		<el-col :span="6" class="toolbar" style="padding-bottom: 0px;">
 			<el-input
-			  placeholder="关键字查询"
-			  icon="search"
-			  v-model="filters.keyWord"
-			  :on-icon-click="getLogs"
-			  @keyup.enter.native="getLogs">
+				title="关键字查询（操作用户，日志级别，日志内容）"
+			  	placeholder="关键字查询（操作用户，日志级别，日志内容）"
+			  	icon="search"
+			  	v-model="filters.keyWord"
+			  	:on-icon-click="getLogs"
+			  	@keyup.enter.native="getLogs">
 			</el-input>
 		</el-col>
 		<!--列表-->

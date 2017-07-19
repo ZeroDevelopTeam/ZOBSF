@@ -13,12 +13,13 @@
 		</el-col>
 		<el-col :span="6" class="toolbar" style="padding-bottom: 0px;">
 			<el-input
-			  placeholder="关键字查询"
-			  icon="search"
-			  v-model="filters.keyWord"
-			  :on-icon-click="getRoles"
-			  @keyup.enter.native="getRoles"
-			  v-if="purview.indexOf('4')>-1">
+			  	title="请输入关键字（角色编号，角色名称，创建者，备注）"
+			  	placeholder="请输入关键字（角色编号，角色名称，创建者，备注）"
+			  	icon="search"
+			  	v-model="filters.keyWord"
+			  	:on-icon-click="getRoles"
+			  	@keyup.enter.native="getRoles"
+			  	v-if="purview.indexOf('4')>-1">
 			</el-input>
 		</el-col>
 		<!--列表-->

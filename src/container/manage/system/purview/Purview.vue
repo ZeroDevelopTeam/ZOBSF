@@ -13,11 +13,12 @@
 		</el-col>
 		<el-col :span="6" class="toolbar" style="padding-bottom: 0px;">
 			<el-input
-			  placeholder="关键字查询"
-			  icon="search"
-			  v-model="filters.keyWord"
-			  :on-icon-click="getPurviews"
-			  @keyup.enter.native="getPurviews">
+				title="请输入关键字（权限编号，权限名称，权限状态，备注）"
+			  	placeholder="请输入关键字（权限编号，权限名称，权限状态，备注）"
+			  	icon="search"
+			  	v-model="filters.keyWord"
+			  	:on-icon-click="getPurviews"
+			  	@keyup.enter.native="getPurviews">
 			</el-input>
 		</el-col>
 		<!--列表-->

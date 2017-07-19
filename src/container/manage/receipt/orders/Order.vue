@@ -3,10 +3,11 @@
 		<div class="order-top">
 			<el-button type="primary" :disabled="this.sels.length===0" @click="batchRemove">删除</el-button>
 			<el-input
-			  placeholder="请输入关键字"
-			  icon="search"
-			  v-model="searchVaule"
-			  :on-icon-click="handleSearch">
+				title="请输入关键字（订单编号，收货人，收货人电话，收货地址，送货人）"
+			  	placeholder="请输入关键字（订单编号，收货人，收货人电话，收货地址，送货人）"
+			  	icon="search"
+			  	v-model="searchVaule"
+			  	:on-icon-click="handleSearch">
 			</el-input>
 		</div>
 		<CommTable  :tableConfig="tableConfig"></CommTable>

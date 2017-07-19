@@ -12,12 +12,13 @@
 			<el-button type="primary" @click="addBaseBookType" v-show="purview.indexOf('1')>-1" v-else>新增</el-button>
 			<el-button type="primary" :disabled="this.sels.length===0" @click="batchRemove" v-if="purview.indexOf('3')>-1">删除</el-button>
 			<el-input
-			  placeholder="请输入关键字"
-			  icon="search"
-			  v-model="searchVaule"
-			  :on-icon-click="handleSearch"
-			  @keyup.enter.native="handleSearch"
-			  v-if="purview.indexOf('4')>-1">
+				title="请输入关键字（分类编号，分类名称,分类描述）"
+			  	placeholder="请输入关键字（分类编号，分类名称,分类描述）"
+			  	icon="search"
+			  	v-model="searchVaule"
+			  	:on-icon-click="handleSearch"
+			  	@keyup.enter.native="handleSearch"
+			  	v-if="purview.indexOf('4')>-1">
 			</el-input>
 		</div>
 		<TreeGrid :columns="columns" :treeStructure="true" :dataSource="dataSource" :rowOptions="handleSelectionChange" @refresh="getBookType" :purview="purview"></TreeGrid>

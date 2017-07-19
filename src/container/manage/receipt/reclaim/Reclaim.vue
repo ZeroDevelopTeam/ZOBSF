@@ -4,11 +4,12 @@
 			<el-button type="primary" @click="handleAdd" v-if="purview.indexOf('1')>-1">新增</el-button>
 			<el-button type="primary" :disabled="this.sels.length===0" @click="batchRemove" v-if="purview.indexOf('3')>-1">删除</el-button>
 			<el-input
-			  placeholder="请输入关键字"
-			  icon="search"
-			  v-model="searchVaule"
-			  :on-icon-click="handleSearch"
-			  v-if="purview.indexOf('4')>-1">
+				title="请输入关键字（回收单编号，回收人，回收人电话，回收人地址）"
+			  	placeholder="请输入关键字（回收单编号，回收人，回收人电话，回收人地址）"
+			  	icon="search"
+			  	v-model="searchVaule"
+			  	:on-icon-click="handleSearch"
+			  	v-if="purview.indexOf('4')>-1">
 			</el-input>
 		</div>
 		<!--新增界面-->
