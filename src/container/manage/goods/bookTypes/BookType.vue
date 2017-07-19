@@ -16,8 +16,8 @@
 			  	placeholder="请输入关键字（分类编号，分类名称,分类描述）"
 			  	icon="search"
 			  	v-model="searchVaule"
-			  	:on-icon-click="handleSearch"
-			  	@keyup.enter.native="handleSearch"
+			  	:on-icon-click="getBookType"
+			  	@keyup.enter.native="getBookType"
 			  	v-if="purview.indexOf('4')>-1">
 			</el-input>
 		</div>
@@ -84,7 +84,7 @@ export default {
 				pageSize: this.bookTypeTree.pageSize ? this.getByPage.pageSize : 10,
 				keyWord: this.searchVaule
 			};
-			this.$store.dispatch('getBookTypeTree',para);
+			this.$store.dispatch('getBookType',para);
 		},
 		handleAdd(command) {
 			if(this.sels.length != 1){
@@ -104,10 +104,6 @@ export default {
 			this.baseBookTypeId = '';
 			this.addLevel = -1;
 			this.addFormVisible = true;
-		},
-		//关键字检索
-		handleSearch(ev) {
-			console.log(this.searchVaule);
 		},
 		//列表勾选的行
 		handleSelectionChange(val) {

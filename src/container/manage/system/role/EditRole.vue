@@ -51,10 +51,10 @@
 			return {
 				editFormRules: {
 					roleName: [
-						{ required: true, message: '请输入角色名称', trigger: 'change' }
+						{ required: true, message: '请输入角色名称', trigger: 'blur' }
 					],
 					state: [
-						{ required: true, message: '请选择状态', trigger: 'change' }
+						{ required: true, message: '请选择状态', trigger: 'blur' }
 					]
 				},
 				//修改界面数据

@@ -4,5 +4,8 @@ export default {
 	},
 	bookTypeById: (state)=> {
 		return state.bookTypeById;
+	},
+	bookTypeList: (state)=> {
+		return state.bookTypeList;
 	}
 }

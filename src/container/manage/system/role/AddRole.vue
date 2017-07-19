@@ -67,17 +67,27 @@
 		        	isPass? callback(new Error('角色编号已存在！')): callback();
 		        }
 		    };
+		    //角色名称限制
+			const validateRoleName = (rule, value, callback) => {
+		        if (value === '') {
+		          	callback(new Error('请输入角色名称'));
+		        }
+		        if (value == '超级管理员'){
+		        	callback(new Error('角色名称不能是超级管理员'));
+		        }
+		        callback();
+		    };
 			return {
 				addLoading:false,
 				addFormRules: {
 					roleId: [
-						{ required: true, validator: validateRoleId, trigger: 'change' }
+						{ required: true, validator: validateRoleId, trigger: 'blur' }
 					],
 					roleName: [
-						{ required: true, message: '请输入角色名称', trigger: 'change' }
+						{ required: true,  validator: validateRoleName, trigger: 'blur' },
 					],
 					state: [
-						{ required: true, message: '请选择状态', trigger: 'change' }
+						{ required: true, message: '请选择状态', trigger: 'blur' }
 					]
 				},
 				//新增界面数据

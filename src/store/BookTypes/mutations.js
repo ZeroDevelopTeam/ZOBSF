@@ -1,4 +1,4 @@
-import {GETTREE, GETBYID} from './mutation_types'
+import {GETTREE, GETBYID,BOOKTYPELIST} from './mutation_types'
 	  
 export default {
 		[GETTREE](state,data) {
@@ -6,5 +6,8 @@ export default {
 		},
 		[GETBYID](state,data) {
 			state.bookTypeById = data;
+		},
+		[BOOKTYPELIST](state,data) {
+			state.bookTypeList = data;
 		}
 }

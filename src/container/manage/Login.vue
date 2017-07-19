@@ -6,31 +6,31 @@
 	  <el-form :model="loginForm" :rules="ruleLogin" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
 	   
 	    <el-form-item prop="userCode">
-	      <el-input type="text" v-model="loginForm.userCode" auto-complete="off" placeholder="账号">
+	      <el-input type="text" v-model="loginForm.userCode" auto-complete="off" placeholder="账号" @keyup.enter.native="login">
 	      	<template slot="prepend">
 						<i class="fa fa-user-o" aria-hidden="true"></i>
 					</template>
 	      </el-input>
 	    </el-form-item>
 	    <el-form-item prop="userPsw">
-	      <el-input type="password" v-model="loginForm.userPsw" auto-complete="off" placeholder="密码">
+	      <el-input type="password" v-model="loginForm.userPsw" auto-complete="off" placeholder="密码" @keyup.enter.native="login">
 	      	<template slot="prepend">
 						<i class="fa fa-lock" aria-hidden="true"></i>
 					</template>
 	      </el-input>
 	    </el-form-item>
 	    <el-form-item prop="valResult">
-	      <el-input v-model="loginForm.valResult" auto-complete="off" placeholder="验证码">
+	      <el-input v-model="loginForm.valResult" auto-complete="off" placeholder="验证码" @keyup.enter.native="login">
 	      	<template slot="prepend">
-						<i class="fa fa-qrcode" aria-hidden="true"></i>
-					</template>
+				<i class="fa fa-qrcode" aria-hidden="true"></i>
+			</template>
 	      	<template slot="append">
-						<el-button type="primary" style="width:80px;" @click.native.prevent="renderCode" >{{expression}}</el-button>
-					</template>
+				<el-button type="primary" style="width:80px;" @click.native.prevent="renderCode" >{{expression}}</el-button>
+			</template>
 	      </el-input>
 	    </el-form-item>
 	    <el-form-item style="width:100%;">
-	      <el-button type="primary" style="width:100%;" @click.native.prevent="login" :loading="logining">登录</el-button>
+	      <el-button type="primary" style="width:100%;" @click="login" :loading="logining">登录</el-button>
 	    </el-form-item>
 	  </el-form>
   </section>
@@ -41,6 +41,9 @@ import base64 from '../../util/Base64EnCode';//用户账号密码传输加密处
   export default {
     data() {
     	const valResultFunc = (rule, value, callback) => {
+    		if(value === ''){
+    			callback(new Error('请输入验证码'));
+    		}
 		    const validateCode = this.validate;
 		    if(value!= undefined){
 		    	if (value.toString().toLowerCase() == validateCode.toString().toLowerCase()) {
