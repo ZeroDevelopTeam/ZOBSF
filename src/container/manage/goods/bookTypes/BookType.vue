@@ -82,7 +82,7 @@ export default {
 			let para = {
 				pageNum: this.bookTypeTree.pageNum ? this.getByPage.pageNum : 1,
 				pageSize: this.bookTypeTree.pageSize ? this.getByPage.pageSize : 10,
-				keyWord: this.searchVaule
+				keyWord: this.searchVaule,
 			};
 			this.$store.dispatch('getBookType',para);
 		},
