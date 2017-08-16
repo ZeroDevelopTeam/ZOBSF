@@ -4,9 +4,11 @@ let user = sessionStorage.getItem('user')?JSON.parse(sessionStorage.getItem('use
 var api = axios.create({
     headers: {
     	'user_id':user.userCode,
-    	'content-type': 'application/json;charset=utf-8'
+    	'content-type': 'application/json;charset=utf-8',
+    	'token':user.token,
     },
     baseURL:`${Host}`,
+    timeout: 3000,
 });
 export function post(url, params) {
     return new Promise((resolve, reject) => {
